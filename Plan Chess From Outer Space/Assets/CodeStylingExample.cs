@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour //<--- Class Names are capital
+public class CodeStylingExample : MonoBehaviour //<--- Class Names are capital
 {
     public List<GameObject> ListOfSpaces; //<--- Capitals for public variables
     private bool _boolName; //<--- _underscore for private variables
