@@ -1,6 +1,6 @@
-# UoL-PlanChessFromOuterSpace
+# Code Style
 
-Code style:
+```cs
 public class BoardManager : MonoBehaviour //<--- Class Names are capital
 {
     public List<GameObject> ListOfSpaces; //<--- Capitals for public variables
@@ -16,3 +16,4 @@ public class BoardManager : MonoBehaviour //<--- Class Names are capital
     
     //Group ideas with new line
 }
+```
