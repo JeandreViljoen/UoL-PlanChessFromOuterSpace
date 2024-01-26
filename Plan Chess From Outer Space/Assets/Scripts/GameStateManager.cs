@@ -1,29 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Services;
 using UnityEngine;
 
-public class GameStateManager : MonoBehaviour
+public class GameStateManager : MonoService
 {
-    public static GameStateManager Instance;
-
     public GameState GameState;
 
     public event Action<GameState> OnStateChanged;
 
-    void Awake()
-    {
-        //Assign instance or destroy other instances
-        if (Instance != null || Instance != this)
-        {
-            Destroy(this);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
-    
     void Start()
     {
         SetGameState(GameState.START);

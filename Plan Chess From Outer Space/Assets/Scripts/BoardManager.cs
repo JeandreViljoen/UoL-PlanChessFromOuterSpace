@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using DG.Tweening;
+using Services;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour
@@ -29,6 +31,12 @@ public class BoardManager : MonoBehaviour
     [SerializeField, Tooltip("Pawn Chess Piece")]
     private GameObject _pawnPrefab;
     
+    // Tweens
+    private Tween _bounceAnimate;
+    
+    // Services
+    private EasyService<GameStateManager> _gameStateManager;
+
     void Start()
     {
         // Initialize unassigned member variables
@@ -38,11 +46,22 @@ public class BoardManager : MonoBehaviour
         
         // Pawn creation for testing
         CreateChessPieceAtIndex(4, 4, ChessPieceType.Pawn);
+
+        _gameStateManager.Value.OnStateChanged += BounceSquaresOnStateChange;
     }
     
     void Update()
     {
         // Empty for now
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            _gameStateManager.Value.SetGameState(GameState.COMBAT);
+            
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            _gameStateManager.Value.SetGameState(GameState.WIN);
+        }
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -177,5 +196,20 @@ public class BoardManager : MonoBehaviour
     {
         return (xIndex >= _boardDepth || zIndex >= _boardWidth);
     }
-    
+
+    //TEMP
+    private IEnumerator DelayedBounce()
+    {
+        foreach (var block in _boardSquares)
+        {
+            block.BounceAnimate();
+            yield return new WaitForSeconds(0.02f);
+        }
+    }
+
+    private void BounceSquaresOnStateChange(GameState state)
+    {
+        StartCoroutine(DelayedBounce());
+    }
+
 }
