@@ -18,6 +18,8 @@ public class BoardManager : MonoBehaviour
     private Vector3 _centerPosition;
     // This list contains every board square generated on initialization
     private List<BoardSquare> _boardSquares;
+    // This list contains every chess piece on the board
+    private List<ChessPiece> _chessPiecesOnBoard;
 
     // BoardSquare Settings
     [Header("Board Squares")]
