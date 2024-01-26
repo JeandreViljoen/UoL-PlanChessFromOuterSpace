@@ -23,7 +23,6 @@ public class BoardManager : MonoBehaviour
     private GameObject _squareBoardPrefab;
     [SerializeField, Tooltip("Materials for the board squares")]
     private Material[] _materialsArray;
-    private int _materialCount;
     
     // Chess pieces information
     [Header("Chess Pieces Information and Properties")] 
@@ -32,8 +31,7 @@ public class BoardManager : MonoBehaviour
     
     void Start()
     {
-        // Initialize unassigned member varialbes
-        _materialCount = 2;
+        // Initialize unassigned member variables
         _boardSquares = new List<BoardSquare>();
         // Chess Board Initialization
         GenerateChessBoard();
@@ -81,7 +79,7 @@ public class BoardManager : MonoBehaviour
                 
                 // Add material to the square board
                 MeshRenderer meshRenderer = squareBoard.GetComponent<MeshRenderer>();
-                if (materialIteration >= _materialCount)
+                if (materialIteration >= _materialsArray.Length)
                     materialIteration = 0;
                 Material materialToApply = _materialsArray[materialIteration];
                 meshRenderer.material = materialToApply;
