@@ -7,28 +7,51 @@ public enum ChessPieceType
 {
     Pawn,
     Knight,
-    Bishop
+    Bishop,
+    Rook,
+    Queen,
+    King
 }
 
 public class ChessPiece : MonoBehaviour
 {
     // --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
-    public int Speed = 1;
+    public int DefaultSpeed = 1;
     public int Level = 1;
-    public int Range = 2;
-    public List<Vector2> RelativeMoveset;
+    public int DefaultRange = 2;
+    public List<Vector2> RelativeMoveset; // [ (0,1) , (1,0) , (-1,0), (0,-1) ]
 
+    private string _indexCodePosition;
 
-
-    // Start is called before the first frame update
+    public string IndexCodePosition
+    {
+        get
+        {
+            return _indexCodePosition;
+        }
+        set
+        {
+            if (value.Length != 2)
+            {
+                Debug.LogError("[ChessPiece.cs] - Tried to set IndexCodePosition but code was not 2 characters (E.g. F7). returning early");
+                return;
+            }
+            _indexCodePosition = value;
+        }
+    }
+    
     void Start()
     {
         
     }
-
-    // Update is called once per frame
+    
     void Update()
+    {
+        
+    }
+
+    public void MoveToBlock()
     {
         
     }

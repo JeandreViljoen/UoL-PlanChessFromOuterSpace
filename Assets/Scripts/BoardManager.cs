@@ -5,7 +5,7 @@ using DG.Tweening;
 using Services;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : MonoService
 {
     // --------------- Member variables and data --------------- //
     // ChessBoard Settings
@@ -19,7 +19,7 @@ public class BoardManager : MonoBehaviour
     // This list contains every board square generated on initialization
     private List<BoardSquare> _boardSquares;
     // This list contains every chess piece on the board
-    private List<ChessPiece> _chessPiecesOnBoard;
+    public List<ChessPiece> ChessPiecesOnBoard;
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -48,22 +48,12 @@ public class BoardManager : MonoBehaviour
         
         // Pawn creation for testing
         CreateChessPieceAtIndex(4, 4, ChessPieceType.Pawn);
-
-        _gameStateManager.Value.OnStateChanged += BounceSquaresOnStateChange;
+        
     }
     
     void Update()
     {
-        // Empty for now
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            _gameStateManager.Value.SetGameState(GameState.COMBAT);
-            
-        }
-        else if (Input.GetKeyDown(KeyCode.W))
-        {
-            _gameStateManager.Value.SetGameState(GameState.WIN);
-        }
+       
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -94,6 +84,7 @@ public class BoardManager : MonoBehaviour
                 BoardSquare boardSquareComponent = squareBoard.GetComponent<BoardSquare>();
                 boardSquareComponent.IndexX = i;
                 boardSquareComponent.IndexZ = j;
+                boardSquareComponent.SetIndexCodeFromCartesian();
                 
                 // Add the newly created squareBoard to the list containing all board squares
                 _boardSquares.Add(boardSquareComponent);
@@ -199,7 +190,9 @@ public class BoardManager : MonoBehaviour
         return (xIndex >= _boardDepth || zIndex >= _boardWidth);
     }
 
-    //TEMP
+    
+    
+    //TEMP - DELETE THIS LATER
     private IEnumerator DelayedBounce()
     {
         foreach (var block in _boardSquares)
