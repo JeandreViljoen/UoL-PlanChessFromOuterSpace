@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DG.Tweening;
@@ -19,7 +20,9 @@ public class BoardManager : MonoService
     // This list contains every board square generated on initialization
     private List<BoardSquare> _boardSquares;
     // This list contains every chess piece on the board
-    public List<ChessPiece> ChessPiecesOnBoard;
+    public List<ChessPiece> TotalChessPiecesOnBoard;
+    public List<ChessPiece> FriendlyPiecesOnBoard { get; private set; }
+    public List<ChessPiece> EnemyPiecesOnBoard { get; private set; }
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -53,7 +56,10 @@ public class BoardManager : MonoService
     
     void Update()
     {
-       
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            CreateChessPieceAtIndexCode(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
+        }
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -190,6 +196,55 @@ public class BoardManager : MonoService
 
 
         // Creation of the chess piece was successful
+        return true;
+    }
+
+    public bool CreateChessPieceAtIndexCode(ChessPieceType type, IndexCode code, Team team)
+    {
+
+        BoardSquare square = GetBoardSquareByIndexCode(code);
+
+        ChessPiece newPieceToSpawn = null;
+
+        switch (type)
+        {
+            case ChessPieceType.Pawn:
+                newPieceToSpawn = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                break;
+            case ChessPieceType.Knight:
+                break;
+            case ChessPieceType.Bishop:
+                break;
+            case ChessPieceType.Rook:
+                break;
+            case ChessPieceType.Queen:
+                break;
+            case ChessPieceType.King:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+        
+        if (newPieceToSpawn == null)
+        {
+            return false;
+        }
+
+        newPieceToSpawn.gameObject.transform.position = square.CenterSurfaceTransform.position;
+        square.ChessPieceAssigned = newPieceToSpawn;
+
+        switch (team)
+        {
+            case Team.Friendly:
+                FriendlyPiecesOnBoard.Add(newPieceToSpawn);
+                break;
+            case Team.Enemy:
+                EnemyPiecesOnBoard.Add(newPieceToSpawn);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(team), team, null);
+        }
+
         return true;
     }
     

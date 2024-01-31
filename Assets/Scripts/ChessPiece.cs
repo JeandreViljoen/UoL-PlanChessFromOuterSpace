@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -14,15 +14,23 @@ public enum ChessPieceType
     King
 }
 
+public enum Team
+{
+    Friendly,
+    Enemy
+}
+
 public class ChessPiece : MonoBehaviour
 {
     // --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
     public int DefaultSpeed = 1;
+    public int Speed = 1;
     public int Level = 1;
     public int DefaultRange = 2;
     public List<Vector2> RelativeMoveset; // [ (0,1) , (1,0) , (-1,0), (0,-1) ]
     public float AnimateSpeed = 1;
+    public Team Team;
 
     private IndexCode _indexCodePosition;
 
@@ -48,6 +56,10 @@ public class ChessPiece : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// Moves Piece to given BoardSquare position in parameters
+    /// </summary>
+    /// <param name="BoardSquare"></param>
     public void MoveToBlock(BoardSquare square)
     {
         transform.DOMove(square.CenterSurfaceTransform.position, AnimateSpeed).SetEase(Ease.InOutSine);

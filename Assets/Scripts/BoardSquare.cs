@@ -14,7 +14,21 @@ public class BoardSquare : MonoBehaviour
     
     public int IndexX;
     public int IndexZ;
-    public GameObject ChessPieceAssigned;
+
+    private ChessPiece _chessPieceAssigned;
+    public ChessPiece ChessPieceAssigned
+    {
+        get
+        {
+            return _chessPieceAssigned;
+        }
+        set
+        {
+            _chessPieceAssigned = value;
+            _chessPieceAssigned.IndexCodePosition = _indexCode;
+        }
+    }
+
     public TextMeshPro IndexCodeTextField;
     public Transform CenterSurfaceTransform;
     

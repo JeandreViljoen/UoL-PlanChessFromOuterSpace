@@ -138,10 +138,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7d29915940f82d458a0f6d165872e02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IndexCodeTextField: {fileID: 3045731776478121210}
   IndexX: 0
   IndexZ: 0
-  ChessPieceAssigned: {fileID: 2093646963546026641}
+  IndexCodeTextField: {fileID: 3045731776478121210}
+  CenterSurfaceTransform: {fileID: 81747571191998378}
 --- !u!1 &8859705889172472149
 GameObject:
   m_ObjectHideFlags: 0
