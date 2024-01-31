@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GlobalDebug
   m_EditorClassIdentifier: 
   ShowIndexCodes: 1
+  ShowGameState: 1
