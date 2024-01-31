@@ -14,8 +14,11 @@ public class StateTextOverlay : MonoBehaviour
     {
         _textField = GetComponent<TextMeshProUGUI>();
         gameObject.SetActive(false);
+        
+        //Check debug flag whether to enable or not.
         if (GlobalDebug.Instance.ShowGameState)
         {
+            //Subscribe to state change event and update the text if the state changes
             _gameStateManager.Value.OnStateChanged += UpdateState;
             UpdateState(_gameStateManager.Value.GameState);
         }

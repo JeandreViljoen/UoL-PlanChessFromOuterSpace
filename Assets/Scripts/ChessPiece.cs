@@ -20,6 +20,18 @@ public enum Team
     Enemy
 }
 
+public enum ChessPieceState
+{
+    INACTIVE,
+    START,
+    VALIDATE_BEST_MOVE,
+    MOVE,
+    ATTACK,
+    DEAD,
+    END
+
+}
+
 public class ChessPiece : MonoBehaviour
 {
     // --------------- Member variables and data --------------- //

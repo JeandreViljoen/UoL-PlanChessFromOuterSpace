@@ -9,8 +9,6 @@ public class BoardSquare : MonoBehaviour
 {
 
     // --------------- Member variables and data --------------- //
-
-    
     
     public int IndexX;
     public int IndexZ;
@@ -90,10 +88,14 @@ public class BoardSquare : MonoBehaviour
         Destroy(ChessPieceAssigned);
     }
 
+    //Converts cartesian coordinates to index code. e.g. F7
     public void SetIndexCodeFromCartesian()
     {
         IndexCode indexCode;
-        string indexCodeString = GetLetter(IndexX) + GetNumberString(IndexZ);
+        
+        //Build the string
+        string indexCodeString = GetLetter(IndexZ) + GetNumberString(IndexX);
+        //Convert to enum
         bool successfulEnumConvert = Enum.TryParse(indexCodeString, out indexCode);
         
         if (!successfulEnumConvert)
@@ -122,11 +124,12 @@ public class BoardSquare : MonoBehaviour
         _bounceAnimateTween = s;
     }
 
-    private string GetLetter(int x)
+    //Returns corresponding Letter for Z
+    private string GetLetter(int z)
     {
         string letter = "";
         
-        switch (x)
+        switch (z)
         {
             case 0:
                 letter = "A";
@@ -160,15 +163,16 @@ public class BoardSquare : MonoBehaviour
         return letter;
     }
 
-    private string GetNumberString(int z)
+    //Returns to corresponding number for X
+    private string GetNumberString(int x)
     {
-        if (z > 7)
+        if (x > 7)
         {
             Debug.LogError("[BoardSquare.cs] - GetLetter() - Z index out of bounds, make sure index Z stays from 0-7 range.");
             return "";
         }
         
-        return (z + 1).ToString();
+        return (x + 1).ToString();
     }
     
     

@@ -60,6 +60,12 @@ public class BoardManager : MonoService
         {
             CreateChessPieceAtIndexCode(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
         }
+        
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            GetBoardSquareByIndexCode(IndexCode.A8).ChessPieceAssigned.MoveToBlock(GetBoardSquareByIndexCode(IndexCode.H1));
+        }
+
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -140,8 +146,7 @@ public class BoardManager : MonoService
     }
     
     public BoardSquare GetBoardSquareByIndexCode(IndexCode code)
-    { 
-        
+    {
         BoardSquare querySquareBoard =
             _boardSquares.Find(square => square.IndexCode == code);
 
@@ -202,10 +207,12 @@ public class BoardManager : MonoService
     public bool CreateChessPieceAtIndexCode(ChessPieceType type, IndexCode code, Team team)
     {
 
+        //Get square to spawn at
         BoardSquare square = GetBoardSquareByIndexCode(code);
 
         ChessPiece newPieceToSpawn = null;
 
+        //Instantiate given piece
         switch (type)
         {
             case ChessPieceType.Pawn:
@@ -225,14 +232,20 @@ public class BoardManager : MonoService
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
         
+        //Return false if something went wrong in switch case.
         if (newPieceToSpawn == null)
         {
+            Debug.Log("[BoardManager.cs] - CreateChessPieceAtIndexCode() - Something went wrong in the switch case, could not find piece to spawn");
             return false;
         }
 
+        //Set new piece to squares surface position and assign piece to square
         newPieceToSpawn.gameObject.transform.position = square.CenterSurfaceTransform.position;
         square.ChessPieceAssigned = newPieceToSpawn;
+        
+        //TODO: More initialisation required on the chess piece
 
+        //Add piece to list depending on which team it is on
         switch (team)
         {
             case Team.Friendly:

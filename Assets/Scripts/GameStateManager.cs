@@ -69,3 +69,24 @@ public enum GameState
     WIN,
     LOSE
 }
+
+/*
+TODO:
+Set up data objects for different chess pieces and figure out movement mechanics + range upgrades
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*/
