@@ -111,7 +111,7 @@ public class BoardManager : MonoService
     // --------------- Public Functions and Methods ---------------
     
     // Returns the corresponding square board given X and Z values
-    public BoardSquare GetSquareBoardByIndex(int xIndex, int zIndex)
+    public BoardSquare GetBoardSquareByIndex(int xIndex, int zIndex)
     { 
         // Notify the user if the query is out of bounds
         if (IndexOutsideBounds(xIndex, zIndex))
@@ -132,6 +132,22 @@ public class BoardManager : MonoService
 
         return querySquareBoard;
     }
+    
+    public BoardSquare GetBoardSquareByIndexCode(IndexCode code)
+    { 
+        
+        BoardSquare querySquareBoard =
+            _boardSquares.Find(square => square.IndexCode == code);
+
+        // If for some reason the square board does not exist, notify user and return a null object
+        if (querySquareBoard == null)
+        {
+            Debug.Log($"There is no square board with index code {code}");
+            return null;
+        }
+
+        return querySquareBoard;
+    }
 
     // Creates a chess piece at a given location. Returns true if the piece was successfully created in the board
     public bool CreateChessPieceAtIndex(int xIndex, int zIndex, ChessPieceType pieceType)
@@ -143,7 +159,7 @@ public class BoardManager : MonoService
             return false;
         }
 
-        BoardSquare squareBoard = GetSquareBoardByIndex(xIndex, zIndex);
+        BoardSquare squareBoard = GetBoardSquareByIndex(xIndex, zIndex);
         
         // Handle exception if the square board could not be queried for some reason
         if (!squareBoard)
@@ -190,8 +206,6 @@ public class BoardManager : MonoService
         return (xIndex >= _boardDepth || zIndex >= _boardWidth);
     }
 
-    
-    
     //TEMP - DELETE THIS LATER
     private IEnumerator DelayedBounce()
     {

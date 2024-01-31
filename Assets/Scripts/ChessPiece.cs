@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 // Enum containing all the possible chess pieces
@@ -21,10 +22,11 @@ public class ChessPiece : MonoBehaviour
     public int Level = 1;
     public int DefaultRange = 2;
     public List<Vector2> RelativeMoveset; // [ (0,1) , (1,0) , (-1,0), (0,-1) ]
+    public float AnimateSpeed = 1;
 
-    private string _indexCodePosition;
+    private IndexCode _indexCodePosition;
 
-    public string IndexCodePosition
+    public IndexCode IndexCodePosition
     {
         get
         {
@@ -32,11 +34,6 @@ public class ChessPiece : MonoBehaviour
         }
         set
         {
-            if (value.Length != 2)
-            {
-                Debug.LogError("[ChessPiece.cs] - Tried to set IndexCodePosition but code was not 2 characters (E.g. F7). returning early");
-                return;
-            }
             _indexCodePosition = value;
         }
     }
@@ -51,8 +48,9 @@ public class ChessPiece : MonoBehaviour
         
     }
 
-    public void MoveToBlock()
+    public void MoveToBlock(BoardSquare square)
     {
-        
+        transform.DOMove(square.CenterSurfaceTransform.position, AnimateSpeed).SetEase(Ease.InOutSine);
+        IndexCodePosition = square.IndexCode;
     }
 }

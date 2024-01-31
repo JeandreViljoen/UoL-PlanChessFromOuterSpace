@@ -10,15 +10,18 @@ public class BoardSquare : MonoBehaviour
 
     // --------------- Member variables and data --------------- //
 
-    public TextMeshPro IndexCodeTextField;
+    
     
     public int IndexX;
     public int IndexZ;
     public GameObject ChessPieceAssigned;
-
+    public TextMeshPro IndexCodeTextField;
+    public Transform CenterSurfaceTransform;
+    
     private Tween _bounceAnimateTween;
 
     private IndexCode _indexCode;
+    
 
     public IndexCode IndexCode
     {
