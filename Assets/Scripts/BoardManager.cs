@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DG.Tweening;
@@ -20,7 +21,7 @@ namespace PlanChess
         // This list contains every board square generated on initialization
         private List<BoardSquare> _boardSquares;
         // This list contains every chess piece on the board
-        private List<ChessPiece> _chessPiecesOnBoard;
+        private Dictionary<(int, int), GameObject> _pieces;
 
         // BoardSquare Settings
         [Header("Board Squares")]
@@ -48,7 +49,7 @@ namespace PlanChess
             GenerateChessBoard();
         
             // Pawn creation for testing
-            CreateChessPieceAtIndex(4, 4, ChessPieceType.Pawn);
+            CreatePiece(4, 4, ChessPieceType.Pawn);
 
             _gameStateManager.Value.OnStateChanged += BounceSquaresOnStateChange;
         }
@@ -117,50 +118,57 @@ namespace PlanChess
                 squareBoardPosition.z += squareBoardSize.z;
             }
         }
+
+        /// <summary>
+        /// Get the piece at a specific tile.
+        /// </summary>
+        /// <param name="x">The file of the tile.</param>
+        /// <param name="y">The rank of the tile.</param>
+        /// <returns>
+        /// The <see cref="GameObject"/> referring to the piece at the
+        /// tile, or <c>null</c> if the tile is empty.
+        /// </returns>
+        public GameObject GetPiece(int x, int y)
+        {
+            if (_pieces.TryGetValue((x, y), out var piece))
+                return piece;
+            return null;
+        }
+
+        /// <summary>
+        /// Move a piece to the specified tile. If the destination tile
+        /// has a piece, that piece is destroyed.
+        /// </summary>
+        /// <param name="piece">The piece to move.</param>
+        /// <param name="dstx">The file of the tile to move to.</param>
+        /// <param name="dsty">The rank of the tile to move to.</param>
+        public void MovePiece(GameObject piece, int dstx, int dsty)
+        {
+        }
     
-        // --------------- Public Functions and Methods ---------------
-    
-        // Returns the corresponding square board given X and Z values
-        public BoardSquare GetSquareBoardByIndex(int xIndex, int zIndex)
+        /// <summary>
+        /// Get a tile.
+        /// </summary>
+        /// <param name="x">The file of the tile.</param>
+        /// <param name="y">The rank of the tile.</param>
+        /// <returns>The <see cref="BoardSquare"/> representing the tile.</returns>
+        public BoardSquare GetTile(int x, int y)
         { 
             // Notify the user if the query is out of bounds
-            if (IndexOutsideBounds(xIndex, zIndex))
+            if (IndexOutsideBounds(x, y))
             {
-                Debug.Log("The index provided are out of the bounds of the chess board.");
-                return null;
+                throw new IndexOutOfRangeException();
             }
 
             BoardSquare querySquareBoard =
-                _boardSquares.Find((square => square.IndexX == xIndex && square.IndexZ == zIndex));
-
-            // If for some reason the square board does not exist, notify user and return a null object
-            if (querySquareBoard == null)
-            {
-                Debug.Log("There is no square board with index X = " + xIndex.ToString() + ", and index Z = " + zIndex.ToString());
-                return null;
-            }
+                _boardSquares.Find((square => square.IndexX == x && square.IndexZ == y)) ?? throw new NullReferenceException();
 
             return querySquareBoard;
         }
 
-        // Creates a chess piece at a given location. Returns true if the piece was successfully created in the board
-        public bool CreateChessPieceAtIndex(int xIndex, int zIndex, ChessPieceType pieceType)
+        public GameObject CreatePiece(int x, int y, ChessPieceType pieceType)
         {
-            // If position is not valid, chess piece cannot be created
-            if (IndexOutsideBounds(xIndex, zIndex))
-            {
-                Debug.Log("Chess piece cannot be created because the position given is invalid in the chess board.");
-                return false;
-            }
-
-            BoardSquare squareBoard = GetSquareBoardByIndex(xIndex, zIndex);
-        
-            // Handle exception if the square board could not be queried for some reason
-            if (!squareBoard)
-            {
-                Debug.Log("Chess piece cannot be created because querying by index was not successful.");
-                return false;
-            }
+            BoardSquare squareBoard = GetTile(x, y);
         
             // TODO: Create chess piece, its properties and add it to the given square board
             if (squareBoard.IsEmpty())
@@ -182,18 +190,10 @@ namespace PlanChess
                 }
             }
 
-
-            // Creation of the chess piece was successful
-            return true;
+            return null;
         }
     
         // --------------- Private Helpers ---------------
-        // Returns true if index is within the bounds of the chess board
-        private bool IndexWithinBounds(int xIndex, int zIndex)
-        {
-            return !(xIndex >= _boardDepth || zIndex >= _boardWidth);
-        }
-    
         // Returns true if the index is outside the bounds of the chess board
         private bool IndexOutsideBounds(int xIndex, int zIndex)
         {
