@@ -57,7 +57,9 @@ public class ChessPiece : MonoBehaviour
             _indexCodePosition = value;
         }
     }
-    
+
+    public event Action OnStateEnd; 
+
     void Start()
     {
         
@@ -76,5 +78,29 @@ public class ChessPiece : MonoBehaviour
     {
         transform.DOMove(square.CenterSurfaceTransform.position, AnimateSpeed).SetEase(Ease.InOutSine);
         IndexCodePosition = square.IndexCode;
+    }
+
+    public void RunStateLogic(ChessPieceState state)
+    {
+        switch (state)
+        {
+            case ChessPieceState.INACTIVE:
+                break;
+            case ChessPieceState.START:
+                break;
+            case ChessPieceState.VALIDATE_BEST_MOVE:
+                break;
+            case ChessPieceState.MOVE:
+                break;
+            case ChessPieceState.ATTACK:
+                break;
+            case ChessPieceState.DEAD:
+                break;
+            case ChessPieceState.END:
+                OnStateEnd?.Invoke();
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        }
     }
 }
