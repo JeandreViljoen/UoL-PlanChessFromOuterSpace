@@ -2,20 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
+namespace PlanChess
 {
-    static T instance;
-
-    public static T Instance
+    public abstract class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = Resources.Load<T>(typeof(T).Name);
-            }
+        static T instance;
 
-            return instance;
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = Resources.Load<T>(typeof(T).Name);
+                }
+
+                return instance;
+            }
         }
     }
 }
+
