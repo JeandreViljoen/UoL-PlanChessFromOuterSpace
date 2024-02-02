@@ -17,7 +17,6 @@ namespace PlanChess
         [SerializeField, Tooltip("Chess board depth.")]
         private int _boardDepth = 8;
         [SerializeField, Tooltip("Chess board center position.")]
-        private Vector3 _centerPosition;
         // This list contains every board square generated on initialization
         private List<BoardSquare> _boardSquares;
         // This list contains every chess piece on the board
@@ -79,8 +78,8 @@ namespace PlanChess
             }
 
             Vector3 squareBoardSize = _squareBoardPrefab.GetComponent<Renderer>().bounds.size;
-            Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x * _boardDepth, 0,
-                _centerPosition.z - squareBoardSize.z * _boardWidth);
+            Vector3 firstSquarePosition = new Vector3(-squareBoardSize.x * _boardDepth, 0,
+                -squareBoardSize.z * _boardWidth);
 
             // Create the game objects based on the prefab assigned
             Vector3 squareBoardPosition = firstSquarePosition;
@@ -91,8 +90,8 @@ namespace PlanChess
                 for (int j = 0; j < _boardWidth; ++j)
                 {
                     // Instantiate square board and set properties
-                    GameObject squareBoard = Instantiate(_squareBoardPrefab);
-                    squareBoard.transform.position = squareBoardPosition;
+                    GameObject squareBoard = Instantiate(_squareBoardPrefab, transform);
+                    squareBoard.transform.localPosition = squareBoardPosition;
                     BoardSquare boardSquareComponent = squareBoard.GetComponent<BoardSquare>();
                     boardSquareComponent.IndexX = i;
                     boardSquareComponent.IndexZ = j;
