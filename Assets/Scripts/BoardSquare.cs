@@ -53,6 +53,7 @@ public class BoardSquare : MonoBehaviour
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
             IndexCodeTextField.gameObject.SetActive(true);
+            IndexCodeTextField.color = GlobalDebug.Instance.HighlightColor;
         }
         else
         {

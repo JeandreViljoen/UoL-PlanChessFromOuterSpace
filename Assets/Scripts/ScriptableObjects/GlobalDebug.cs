@@ -7,4 +7,6 @@ public class GlobalDebug : ScriptableObjectSingleton<GlobalDebug>
 {
    public bool ShowIndexCodes;
    public bool ShowGameState;
+
+   public Color HighlightColor;
 }

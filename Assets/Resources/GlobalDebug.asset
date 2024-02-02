@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowIndexCodes: 1
   ShowGameState: 1
+  HighlightColor: {r: 0.3066038, g: 0.5207743, b: 1, a: 0.89411765}
