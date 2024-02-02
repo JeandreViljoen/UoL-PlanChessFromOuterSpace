@@ -4,14 +4,6 @@ using UnityEngine;
 
 namespace PlanChess
 {
-    // Enum containing all the possible chess pieces
-    public enum ChessPieceType
-    {
-        Pawn,
-        Knight,
-        Bishop
-    }
-
     public class ChessPiece : MonoBehaviour
     {
         // --------------- Member variables and data --------------- //
