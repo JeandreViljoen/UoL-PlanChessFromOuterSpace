@@ -1,11 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DG.Tweening;
 using Services;
 using UnityEngine;
 
-public class BoardManager : MonoBehaviour
+public class BoardManager : MonoService
 {
     // --------------- Member variables and data --------------- //
     // ChessBoard Settings
@@ -19,7 +20,9 @@ public class BoardManager : MonoBehaviour
     // This list contains every board square generated on initialization
     private List<BoardSquare> _boardSquares;
     // This list contains every chess piece on the board
-    private List<ChessPiece> _chessPiecesOnBoard;
+    public List<ChessPiece> TotalChessPiecesOnBoard;
+    public List<ChessPiece> FriendlyPiecesOnBoard { get; private set; }
+    public List<ChessPiece> EnemyPiecesOnBoard { get; private set; }
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -48,22 +51,21 @@ public class BoardManager : MonoBehaviour
         
         // Pawn creation for testing
         CreateChessPieceAtIndex(4, 4, ChessPieceType.Pawn);
-
-        _gameStateManager.Value.OnStateChanged += BounceSquaresOnStateChange;
+        
     }
     
     void Update()
     {
-        // Empty for now
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.P))
         {
-            _gameStateManager.Value.SetGameState(GameState.COMBAT);
-            
+            CreateChessPieceAtIndexCode(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
         }
-        else if (Input.GetKeyDown(KeyCode.W))
+        
+        if (Input.GetKeyDown(KeyCode.M))
         {
-            _gameStateManager.Value.SetGameState(GameState.WIN);
+            GetBoardSquareByIndexCode(IndexCode.A8).ChessPieceAssigned.MoveToBlock(GetBoardSquareByIndexCode(IndexCode.H1));
         }
+
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -94,6 +96,7 @@ public class BoardManager : MonoBehaviour
                 BoardSquare boardSquareComponent = squareBoard.GetComponent<BoardSquare>();
                 boardSquareComponent.IndexX = i;
                 boardSquareComponent.IndexZ = j;
+                boardSquareComponent.SetIndexCodeFromCartesian();
                 
                 // Add the newly created squareBoard to the list containing all board squares
                 _boardSquares.Add(boardSquareComponent);
@@ -120,7 +123,7 @@ public class BoardManager : MonoBehaviour
     // --------------- Public Functions and Methods ---------------
     
     // Returns the corresponding square board given X and Z values
-    public BoardSquare GetSquareBoardByIndex(int xIndex, int zIndex)
+    public BoardSquare GetBoardSquareByIndex(int xIndex, int zIndex)
     { 
         // Notify the user if the query is out of bounds
         if (IndexOutsideBounds(xIndex, zIndex))
@@ -141,6 +144,21 @@ public class BoardManager : MonoBehaviour
 
         return querySquareBoard;
     }
+    
+    public BoardSquare GetBoardSquareByIndexCode(IndexCode code)
+    {
+        BoardSquare querySquareBoard =
+            _boardSquares.Find(square => square.IndexCode == code);
+
+        // If for some reason the square board does not exist, notify user and return a null object
+        if (querySquareBoard == null)
+        {
+            Debug.Log($"There is no square board with index code {code}");
+            return null;
+        }
+
+        return querySquareBoard;
+    }
 
     // Creates a chess piece at a given location. Returns true if the piece was successfully created in the board
     public bool CreateChessPieceAtIndex(int xIndex, int zIndex, ChessPieceType pieceType)
@@ -152,7 +170,7 @@ public class BoardManager : MonoBehaviour
             return false;
         }
 
-        BoardSquare squareBoard = GetSquareBoardByIndex(xIndex, zIndex);
+        BoardSquare squareBoard = GetBoardSquareByIndex(xIndex, zIndex);
         
         // Handle exception if the square board could not be queried for some reason
         if (!squareBoard)
@@ -185,6 +203,63 @@ public class BoardManager : MonoBehaviour
         // Creation of the chess piece was successful
         return true;
     }
+
+    public bool CreateChessPieceAtIndexCode(ChessPieceType type, IndexCode code, Team team)
+    {
+
+        //Get square to spawn at
+        BoardSquare square = GetBoardSquareByIndexCode(code);
+
+        ChessPiece newPieceToSpawn = null;
+
+        //Instantiate given piece
+        switch (type)
+        {
+            case ChessPieceType.Pawn:
+                newPieceToSpawn = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                break;
+            case ChessPieceType.Knight:
+                break;
+            case ChessPieceType.Bishop:
+                break;
+            case ChessPieceType.Rook:
+                break;
+            case ChessPieceType.Queen:
+                break;
+            case ChessPieceType.King:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+        
+        //Return false if something went wrong in switch case.
+        if (newPieceToSpawn == null)
+        {
+            Debug.Log("[BoardManager.cs] - CreateChessPieceAtIndexCode() - Something went wrong in the switch case, could not find piece to spawn");
+            return false;
+        }
+
+        //Set new piece to squares surface position and assign piece to square
+        newPieceToSpawn.gameObject.transform.position = square.CenterSurfaceTransform.position;
+        square.ChessPieceAssigned = newPieceToSpawn;
+        
+        //TODO: More initialisation required on the chess piece
+
+        //Add piece to list depending on which team it is on
+        switch (team)
+        {
+            case Team.Friendly:
+                FriendlyPiecesOnBoard.Add(newPieceToSpawn);
+                break;
+            case Team.Enemy:
+                EnemyPiecesOnBoard.Add(newPieceToSpawn);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(team), team, null);
+        }
+
+        return true;
+    }
     
     // --------------- Private Helpers ---------------
     // Returns true if index is within the bounds of the chess board
@@ -199,7 +274,7 @@ public class BoardManager : MonoBehaviour
         return (xIndex >= _boardDepth || zIndex >= _boardWidth);
     }
 
-    //TEMP
+    //TEMP - DELETE THIS LATER
     private IEnumerator DelayedBounce()
     {
         foreach (var block in _boardSquares)
