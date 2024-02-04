@@ -20,9 +20,8 @@ public class BoardManager : MonoService
     // This list contains every board square generated on initialization
     private List<BoardSquare> _boardSquares;
     // This list contains every chess piece on the board
-    public List<ChessPiece> TotalChessPiecesOnBoard;
-    public List<ChessPiece> FriendlyPiecesOnBoard { get; private set; }
-    public List<ChessPiece> EnemyPiecesOnBoard { get; private set; }
+    private Dictionary<(int, int), ChessPiece> _pieces;
+    public IReadOnlyDictionary<(int, int), ChessPiece> Pieces => _pieces;
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -186,13 +185,13 @@ public class BoardManager : MonoService
         //Get square to spawn at
         BoardSquare square = GetTile(pos);
 
-        ChessPiece newPiece;
+        ChessPiece piece;
 
         //Instantiate given piece
         switch (type)
         {
             case ChessPieceType.Pawn:
-                newPiece = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                piece = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Knight:
                 throw new NotImplementedException();
@@ -208,29 +207,17 @@ public class BoardManager : MonoService
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
         
-        if (newPiece == null)
+        if (piece == null)
             throw new NullReferenceException($"Prefab for piece type ${type} is broken");
 
         //Set new piece to squares surface position and assign piece to square
-        newPiece.gameObject.transform.position = square.CenterSurfaceTransform.position;
-        square.ChessPieceAssigned = newPiece;
+        piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
+        piece.Team = team;
+        square.ChessPieceAssigned = piece;
         
         //TODO: More initialisation required on the chess piece
-
-        //Add piece to list depending on which team it is on
-        switch (team)
-        {
-            case Team.Friendly:
-                FriendlyPiecesOnBoard.Add(newPiece);
-                break;
-            case Team.Enemy:
-                EnemyPiecesOnBoard.Add(newPiece);
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(team), team, null);
-        }
-
-        return newPiece;
+        _pieces.Add(pos, piece);
+        return piece;
     }
 
     /// <summary>
