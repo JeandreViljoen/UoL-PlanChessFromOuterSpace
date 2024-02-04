@@ -50,7 +50,7 @@ public class BoardManager : MonoService
         GenerateChessBoard();
         
         // Pawn creation for testing
-        CreateChessPieceAtIndex(4, 4, ChessPieceType.Pawn);
+        CreatePiece(ChessPieceType.Pawn, 4, 4, Team.Friendly);
         
     }
     
@@ -58,7 +58,7 @@ public class BoardManager : MonoService
     {
         if (Input.GetKeyDown(KeyCode.P))
         {
-            CreateChessPieceAtIndexCode(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
+            CreatePiece(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
         }
         
         if (Input.GetKeyDown(KeyCode.M))
@@ -157,89 +157,63 @@ public class BoardManager : MonoService
     /// </exception>
     public BoardSquare GetTile(IndexCode code)
         => GetTile((int)code % 8, (int)code / 8);
+    
+    
+    /// <summary>
+    /// Get a tile with the specified position.
+    /// </summary>
+    /// <param name="tile">The position of the tile.</param>
+    /// <returns>The tile at the specified location.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// The position is outside the chessboard, or the tile does not exist.
+    /// </exception>
+    public BoardSquare GetTile((int, int) tile)
+        => GetTile(tile.Item1, tile.Item2);
 
-    // Creates a chess piece at a given location. Returns true if the piece was successfully created in the board
-    public bool CreateChessPieceAtIndex(int xIndex, int zIndex, ChessPieceType pieceType)
-    {
-        // If position is not valid, chess piece cannot be created
-        if (IndexOutsideBounds(xIndex, zIndex))
-        {
-            Debug.Log("Chess piece cannot be created because the position given is invalid in the chess board.");
-            return false;
-        }
-
-        BoardSquare squareBoard = GetTile(xIndex, zIndex);
-        
-        // Handle exception if the square board could not be queried for some reason
-        if (!squareBoard)
-        {
-            Debug.Log("Chess piece cannot be created because querying by index was not successful.");
-            return false;
-        }
-        
-        // TODO: Create chess piece, its properties and add it to the given square board
-        if (squareBoard.IsEmpty())
-        {
-            // Set variables to create the chess piece in an appropriate position
-            Vector3 squareBoardSize = _squareBoardPrefab.GetComponent<Renderer>().bounds.size;
-            Vector3 squareBoardPosition = squareBoard.transform.position;
-            Vector3 newPiecePosition = new Vector3(squareBoardPosition.x,
-                squareBoardPosition.y + squareBoardSize.y / 2, squareBoardPosition.z);
-            switch (pieceType)
-            {
-                case ChessPieceType.Pawn:
-                    GameObject newPiece = Instantiate(_pawnPrefab);
-                    newPiece.transform.position = newPiecePosition;
-                    break;
-                default:
-                    // Do nothing
-                    break;
-            }
-        }
-
-
-        // Creation of the chess piece was successful
-        return true;
-    }
-
-    public bool CreateChessPieceAtIndexCode(ChessPieceType type, IndexCode code, Team team)
+    /// <summary>
+    /// Create a chess piece at the specified location.
+    /// </summary>
+    /// <param name="type">The type of the piece.</param>
+    /// <param name="pos">The position of the piece.</param>
+    /// <param name="team">The faction of the piece.</param>
+    /// <returns>The newly created chess piece.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The piece type or team is invalid.
+    /// </exception>
+    public ChessPiece CreatePiece(ChessPieceType type, (int, int) pos, Team team)
     {
 
         //Get square to spawn at
-        BoardSquare square = GetTile(code);
+        BoardSquare square = GetTile(pos);
 
-        ChessPiece newPieceToSpawn = null;
+        ChessPiece newPiece;
 
         //Instantiate given piece
         switch (type)
         {
             case ChessPieceType.Pawn:
-                newPieceToSpawn = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                newPiece = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Knight:
-                break;
+                throw new NotImplementedException();
             case ChessPieceType.Bishop:
-                break;
+                throw new NotImplementedException();
             case ChessPieceType.Rook:
-                break;
+                throw new NotImplementedException();
             case ChessPieceType.Queen:
-                break;
+                throw new NotImplementedException();
             case ChessPieceType.King:
-                break;
+                throw new NotImplementedException();
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
         
-        //Return false if something went wrong in switch case.
-        if (newPieceToSpawn == null)
-        {
-            Debug.Log("[BoardManager.cs] - CreateChessPieceAtIndexCode() - Something went wrong in the switch case, could not find piece to spawn");
-            return false;
-        }
+        if (newPiece == null)
+            throw new NullReferenceException($"Prefab for piece type ${type} is broken");
 
         //Set new piece to squares surface position and assign piece to square
-        newPieceToSpawn.gameObject.transform.position = square.CenterSurfaceTransform.position;
-        square.ChessPieceAssigned = newPieceToSpawn;
+        newPiece.gameObject.transform.position = square.CenterSurfaceTransform.position;
+        square.ChessPieceAssigned = newPiece;
         
         //TODO: More initialisation required on the chess piece
 
@@ -247,18 +221,45 @@ public class BoardManager : MonoService
         switch (team)
         {
             case Team.Friendly:
-                FriendlyPiecesOnBoard.Add(newPieceToSpawn);
+                FriendlyPiecesOnBoard.Add(newPiece);
                 break;
             case Team.Enemy:
-                EnemyPiecesOnBoard.Add(newPieceToSpawn);
+                EnemyPiecesOnBoard.Add(newPiece);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(team), team, null);
         }
 
-        return true;
+        return newPiece;
     }
-    
+
+    /// <summary>
+    /// Create a chess piece at the specified location.
+    /// </summary>
+    /// <param name="type">The type of the piece.</param>
+    /// <param name="pos">The position of the piece.</param>
+    /// <param name="team">The faction of the piece.</param>
+    /// <returns>The newly created chess piece.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The piece type or team is invalid.
+    /// </exception>
+    public ChessPiece CreatePiece(ChessPieceType type, IndexCode pos, Team team)
+        => CreatePiece(type, ((int)pos % 8, (int)pos / 8), team);
+
+    /// <summary>
+    /// Create a chess piece at the specified location.
+    /// </summary>
+    /// <param name="type">The type of the piece.</param>
+    /// <param name="x">The file of the piece.</param>
+    /// <param name="y">The rank of the piece.</param>
+    /// <param name="team">The faction of the piece.</param>
+    /// <returns>The newly created chess piece.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">
+    /// The piece type or team is invalid.
+    /// </exception>
+    public ChessPiece CreatePiece(ChessPieceType type, int x, int y, Team team)
+        => CreatePiece(type, (x, y), team);
+
     // --------------- Private Helpers ---------------
     // Returns true if index is within the bounds of the chess board
     private bool IndexWithinBounds(int xIndex, int zIndex)
