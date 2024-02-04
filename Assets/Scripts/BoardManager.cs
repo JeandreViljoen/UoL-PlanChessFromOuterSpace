@@ -63,7 +63,7 @@ public class BoardManager : MonoService
         
         if (Input.GetKeyDown(KeyCode.M))
         {
-            GetBoardSquareByIndexCode(IndexCode.A8).ChessPieceAssigned.MoveToBlock(GetBoardSquareByIndexCode(IndexCode.H1));
+            GetTile(IndexCode.A8).ChessPieceAssigned.MoveToBlock(GetTile(IndexCode.H1));
         }
 
     }
@@ -122,43 +122,41 @@ public class BoardManager : MonoService
     
     // --------------- Public Functions and Methods ---------------
     
-    // Returns the corresponding square board given X and Z values
-    public BoardSquare GetBoardSquareByIndex(int xIndex, int zIndex)
+    /// <summary>
+    /// Get a tile with the specified position.
+    /// </summary>
+    /// <param name="x">The file of the tile.</param>
+    /// <param name="y">The rank of the tile.</param>
+    /// <returns>The tile at the specified location.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// The position is outside the chessboard, or the tile does not exist.
+    /// </exception>
+    public BoardSquare GetTile(int x, int y)
     { 
-        // Notify the user if the query is out of bounds
-        if (IndexOutsideBounds(xIndex, zIndex))
-        {
-            Debug.Log("The index provided are out of the bounds of the chess board.");
-            return null;
-        }
+        if (IndexOutsideBounds(x, y))
+            throw new IndexOutOfRangeException($"Tile (${x}, ${y}) is out of range");
 
         BoardSquare querySquareBoard =
-            _boardSquares.Find((square => square.IndexX == xIndex && square.IndexZ == zIndex));
+            _boardSquares.Find((square => square.IndexX == x && square.IndexZ == y));
 
         // If for some reason the square board does not exist, notify user and return a null object
         if (querySquareBoard == null)
-        {
-            Debug.Log("There is no square board with index X = " + xIndex.ToString() + ", and index Z = " + zIndex.ToString());
-            return null;
-        }
+            throw new IndexOutOfRangeException($"Tile object at (${x}, ${y}) does not exist");
 
         return querySquareBoard;
     }
     
-    public BoardSquare GetBoardSquareByIndexCode(IndexCode code)
-    {
-        BoardSquare querySquareBoard =
-            _boardSquares.Find(square => square.IndexCode == code);
-
-        // If for some reason the square board does not exist, notify user and return a null object
-        if (querySquareBoard == null)
-        {
-            Debug.Log($"There is no square board with index code {code}");
-            return null;
-        }
-
-        return querySquareBoard;
-    }
+    
+    /// <summary>
+    /// Get a tile with the specified position.
+    /// </summary>
+    /// <param name="code">The position code of the tile.</param>
+    /// <returns>The tile at the specified location.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// The position is invalid, or the tile does not exist.
+    /// </exception>
+    public BoardSquare GetTile(IndexCode code)
+        => GetTile((int)code % 8, (int)code / 8);
 
     // Creates a chess piece at a given location. Returns true if the piece was successfully created in the board
     public bool CreateChessPieceAtIndex(int xIndex, int zIndex, ChessPieceType pieceType)
@@ -170,7 +168,7 @@ public class BoardManager : MonoService
             return false;
         }
 
-        BoardSquare squareBoard = GetBoardSquareByIndex(xIndex, zIndex);
+        BoardSquare squareBoard = GetTile(xIndex, zIndex);
         
         // Handle exception if the square board could not be queried for some reason
         if (!squareBoard)
@@ -208,7 +206,7 @@ public class BoardManager : MonoService
     {
 
         //Get square to spawn at
-        BoardSquare square = GetBoardSquareByIndexCode(code);
+        BoardSquare square = GetTile(code);
 
         ChessPiece newPieceToSpawn = null;
 
