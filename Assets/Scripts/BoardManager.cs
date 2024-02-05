@@ -266,8 +266,7 @@ public class BoardManager : MonoService
     /// </exception>
     public ChessPiece GetPiece(int x, int y)
     {
-        if (CheckIndex(x, y))
-            throw new ArgumentOutOfRangeException($"Tile (${x}, ${y}) is out of range");
+        CheckIndex(x, y);
 
         if (_pieces.TryGetValue((x, y), out var piece))
         {
@@ -380,16 +379,15 @@ public class BoardManager : MonoService
     // --------------- Private Helpers ---------------
 
     // Returns true if the index is outside the bounds of the chess board
-    private bool CheckIndex(int x, int y)
+    private void CheckIndex(int x, int y)
     {
         if (x >= _boardDepth || y >= _boardWidth)
         {
             throw new ArgumentOutOfRangeException($"Tile (${x}, ${y}) is out of range");
         }
-        return false;
     }
 
-    private bool CheckIndex((int x, int y) pos)
+    private void CheckIndex((int x, int y) pos)
         => CheckIndex(pos.x, pos.y);
 
     //TEMP - DELETE THIS LATER
