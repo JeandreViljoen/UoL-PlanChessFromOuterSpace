@@ -43,9 +43,9 @@ public class BoardManager : MonoService
 
     void Start()
     {
-        // Initialize unassigned member variables
         _boardSquares = new List<BoardSquare>();
-        // Chess Board Initialization
+        _pieces = new Dictionary<(int, int), ChessPiece>();
+
         GenerateChessBoard();
 
         // Pawn creation for testing
@@ -62,7 +62,7 @@ public class BoardManager : MonoService
 
         if (Input.GetKeyDown(KeyCode.M))
         {
-            GetTile(IndexCode.A8).ChessPieceAssigned.MoveToBlock(GetTile(IndexCode.H1));
+            MovePiece((7, 0), (0, 7));
         }
 
     }
@@ -322,8 +322,9 @@ public class BoardManager : MonoService
         _pieces.Remove(src);
         _pieces.Add(dst, piece);
 
-        // TODO: update visual location and animate update
-
+        // update visual location
+        var dstTile = GetTile(dst);
+        piece.MoveToBlock(dstTile);
         return true;
     }
 
