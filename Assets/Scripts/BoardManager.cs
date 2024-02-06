@@ -60,6 +60,11 @@ public class BoardManager : MonoService
             CreatePiece(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
         }
 
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            CreatePiece(ChessPieceType.Pawn, (0, 7), Team.Enemy);
+        }
+
         if (Input.GetKeyDown(KeyCode.M))
         {
             MovePiece((7, 0), (0, 7));
@@ -189,8 +194,6 @@ public class BoardManager : MonoService
     /// </exception>
     public ChessPiece CreatePiece(ChessPieceType type, (int, int) pos, Team team)
     {
-
-        //Get square to spawn at
         BoardSquare square = GetTile(pos);
 
         ChessPiece piece;
@@ -218,12 +221,11 @@ public class BoardManager : MonoService
         if (piece == null)
             throw new NullReferenceException($"Prefab for piece type ${type} is broken");
 
-        //Set new piece to squares surface position and assign piece to square
+        // TODO: More initialisation required on the chess piece
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
         piece.Team = team;
         square.ChessPieceAssigned = piece;
 
-        //TODO: More initialisation required on the chess piece
         _pieces.Add(pos, piece);
         return piece;
     }
@@ -315,6 +317,8 @@ public class BoardManager : MonoService
             // destination is occupied, try to capture
             if (capture.Team == piece.Team)
                 return false; // friendly fire is disallowed
+            // TODO: Animate
+            Destroy(capture.gameObject);
             _pieces.Remove(dst);
         }
 
