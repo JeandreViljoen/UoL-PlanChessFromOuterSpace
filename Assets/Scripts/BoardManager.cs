@@ -317,9 +317,9 @@ public class BoardManager : MonoService
             // destination is occupied, try to capture
             if (capture.Team == piece.Team)
                 return false; // friendly fire is disallowed
+            _pieces.Remove(dst);
             // TODO: Animate
             Destroy(capture.gameObject);
-            _pieces.Remove(dst);
         }
 
         // do the logical move
