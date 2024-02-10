@@ -49,7 +49,7 @@ public class BoardManager : MonoService
         GenerateChessBoard();
 
         // Pawn creation for testing
-        CreatePiece(ChessPieceType.Pawn, 4, 4, Team.Friendly);
+        //CreatePiece(ChessPieceType.Pawn, 4, 4, Team.Friendly);
 
     }
 
@@ -115,6 +115,12 @@ public class BoardManager : MonoService
 
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
+
+                if (GlobalDebug.Instance.PopulateBoardOnStart)
+                {
+                    CreatePiece(ChessPieceType.Pawn, i, j, Team.Friendly);
+                }
+
             }
             // Reset X position
             squareBoardPosition.x = firstSquarePosition.x;
