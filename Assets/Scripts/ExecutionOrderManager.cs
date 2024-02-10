@@ -7,7 +7,7 @@ using UnityEngine;
 public class ExecutionOrderManager : MonoService
 {
     private EasyService<BoardManager> _boardManager;
-    public List<ChessPiece> UnitOrderList;
+    public IEnumerable<ChessPiece> UnitOrderList;
 
     void Start()
     {
@@ -21,16 +21,8 @@ public class ExecutionOrderManager : MonoService
 
     public void RefreshTimelineOrder()
     {
-        List<ChessPiece> friendlyUnitList = _boardManager.Value.FriendlyPiecesOnBoard;
-        List<ChessPiece> orderedFriendlyUnitList = friendlyUnitList.OrderByDescending( unit => unit.Speed).ToList();
-        
-        List<ChessPiece> enemyUnitList = _boardManager.Value.EnemyPiecesOnBoard;
-        List<ChessPiece> orderedEnemyUnitList = enemyUnitList.OrderByDescending(unit => unit.Speed).ToList();
-
-        List<ChessPiece> unitOrderList = new List<ChessPiece>();
-        
-        //TODO: sorting logic between lists
-
-        
+        UnitOrderList = _boardManager.Value.Pieces.Values
+            .OrderByDescending(piece => piece.Speed)
+            .ThenBy(piece => piece.Team);
     }
 }
