@@ -1,0 +1,52 @@
+{
+  "TeamBehaviors": [
+    {
+      "Behavior": 0,
+      "ChessPieces": [
+        {
+          "ChessPieceName": "Pawn",
+          "Movesets": [
+            { "x": 0, "y": 1 }
+          ]
+        },
+        {
+          "ChessPieceName": "Knight",
+          "Movesets": [
+            { "x":  -1, "y": 2},
+            { "x":  1, "y": 2},
+            { "x":  2, "y": 1},
+            { "x":  2, "y": -1},
+            { "x":  1, "y": -2},
+            { "x":  -1, "y": -2},
+            { "x":  -2, "y": -1},
+            { "x":  -2, "y": 1}
+          ]
+        }
+      ]
+    },
+    {
+      "Behavior": 1,
+      "ChessPieces": [
+        {
+          "ChessPieceName": "Pawn",
+          "Movesets": [
+            { "x": 0, "y": -1 }
+          ]
+        },
+        {
+          "ChessPieceName": "Knight",
+          "Movesets": [
+            { "x":  -1, "y": 2},
+            { "x":  1, "y": 2},
+            { "x":  2, "y": 1},
+            { "x":  2, "y": -1},
+            { "x":  1, "y": -2},
+            { "x":  -1, "y": -2},
+            { "x":  -2, "y": -1},
+            { "x":  -2, "y": 1}
+          ]
+        }
+      ]
+    }
+  ]
+}

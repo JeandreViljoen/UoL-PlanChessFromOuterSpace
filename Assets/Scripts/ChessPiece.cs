@@ -62,12 +62,29 @@ public class ChessPiece : MonoBehaviour
 
     void Start()
     {
-        
+        SetRelativeMoveset();
     }
     
     void Update()
     {
         
+    }
+
+    // Sets the relative moveset
+    // If no parameters are provided, the moveset corresponding to the team and the chessPieceType is set
+    // Parameters can be provided for custom relative movesets, such as an upgraded piece that handles more movesets than usual
+    public void SetRelativeMoveset(bool customRelativeMoveset = false, string customRelativeMovesetType = "")
+    {
+        // TODO: Change this to match a RelativeMoveset service
+        RelativeMovesets relativeMovesetController = GameObject.Find("Temporary_RelativeMovesets").GetComponent<RelativeMovesets>();
+        if (customRelativeMoveset)
+        {
+            RelativeMoveset = relativeMovesetController.GetChessPieceMoveset(Team, customRelativeMovesetType);
+        }
+        else
+        {
+            RelativeMoveset = relativeMovesetController.GetChessPieceMoveset(Team, PieceType.ToString());
+        }
     }
 
     /// <summary>
