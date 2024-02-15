@@ -28,15 +28,14 @@ public class PauseMenu : MonoBehaviour
         if (Time.timeScale == 0f) // If the game is already paused, resume it
         {
             Time.timeScale = 1f;
-            Debug.Log("Resumes the game");
+            Debug.Log("Resumes the game"); //Game Resumes
         }
         else // If the game is not paused, pause it
         {
             
             Time.timeScale = 0f;
-            Debug.Log("Pauses the game");
+            Debug.Log("Pauses the game"); //Game pauses
         }
-        Debug.Log("Pauses the game"); //Game pauses
     }
 
 }
