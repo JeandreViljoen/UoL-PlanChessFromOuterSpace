@@ -7,6 +7,7 @@ public class MainMenu : MonoBehaviour
 {
     public void OnPlayGame()
     {
-        SceneManager.LoadSceneAsync(1); //Loads Level 1
+        SceneManager.LoadSceneAsync(1); 
+        Debug.Log("Loads Level 1"); //Loads Level 1
     }
 }
