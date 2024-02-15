@@ -25,5 +25,7 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         //run pause logic.
+        Debug.Log("Pauses the game") //Game pauses
     }
+
 }
