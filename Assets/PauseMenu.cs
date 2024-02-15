@@ -25,7 +25,18 @@ public class PauseMenu : MonoBehaviour
     public void PauseGame()
     {
         //run pause logic.
-        Debug.Log("Pauses the game") //Game pauses
+        if (Time.timeScale == 0f) // If the game is already paused, resume it
+        {
+            Time.timeScale = 1f;
+            Debug.Log("Resumes the game");
+        }
+        else // If the game is not paused, pause it
+        {
+            
+            Time.timeScale = 0f;
+            Debug.Log("Pauses the game");
+        }
+        Debug.Log("Pauses the game"); //Game pauses
     }
 
 }

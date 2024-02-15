@@ -6,16 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoService
 {
-    
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
     public void OnPlayGame()
     {
         SceneManager.LoadSceneAsync(1); 
