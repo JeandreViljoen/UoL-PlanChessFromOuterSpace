@@ -21,7 +21,6 @@ public class PauseMenu : MonoBehaviour
         //logic here
         return;
     }
-
     public void PauseGame()
     {
         //run pause logic.
@@ -37,5 +36,6 @@ public class PauseMenu : MonoBehaviour
             Debug.Log("Pauses the game"); //Game pauses
         }
     }
+    
 
 }
