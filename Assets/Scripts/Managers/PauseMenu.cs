@@ -7,6 +7,9 @@ using DG.Tweening;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] RectTransform pausemenupanel;
+    [SerializeField] float posTopY, posMidY; 
+    [SerializeField] float tweentime;
     // Start is called before the first frame update
     public void Pause()
     {
@@ -36,11 +39,11 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseMenuIn()
     {
-
+        pausemenupanel.DOAnchorPosY(posMidY, tweentime);
     }
 
     public void PauseMenuOut()
     {
-
+        pausemenupanel.DOAnchorPosY(posTopY, tweentime);
     }
 }
