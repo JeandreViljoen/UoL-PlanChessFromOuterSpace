@@ -65,7 +65,7 @@ public class BoardManager : MonoService
             CreatePiece(ChessPieceType.Pawn, (0, 7), Team.Enemy);
         }
 
-        if (Input.GetKeyDown(KeyCode.M))
+        if (Input.GetKeyDown(KeyCode.N))
         {
             MovePiece((7, 0), (0, 7));
         }
