@@ -14,13 +14,13 @@ public class MenuManager : MonoService
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) // On Hitting the escape key the MainMenu shows up
+        if (Input.GetKeyDown(KeyCode.M)) // On Hitting the escape key the MainMenu shows up
         {
             GoToMainMenu();
         }
     }
     private void GoToMainMenu() // Loads the MainMenu
     {
-        SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        SceneManager.LoadScene("MainMenu", LoadSceneMode.Additive);
     }
 }
