@@ -32,10 +32,9 @@ public enum ChessPieceState
 
 }
 
-public class ChessPiece : MonoBehaviour
+public abstract class ChessPiece : MonoBehaviour
 {
     // --------------- Member variables and data --------------- //
-    public ChessPieceType PieceType;
     public int DefaultSpeed = 1;
     public int Speed = 1;
     public int Level = 1;
@@ -80,10 +79,13 @@ public class ChessPiece : MonoBehaviour
         IndexCodePosition = square.IndexCode;
     }
 
-    public IEnumerable<(int, int)> GetMoves(BoardManager board, (int, int) pos)
-    {
-        throw new NotImplementedException();
-    }
+    /// <summary>
+    /// Get a set of positions the piece can move to.
+    /// </summary>
+    /// <param name="board">The chess board.</param>
+    /// <param name="pos">The position of this piece.</param>
+    /// <returns>A set of positions this piece can move to.</returns>
+    public abstract IEnumerable<(int, int)> GetMoves(BoardManager board, (int, int) pos);
 
     public void RunStateLogic(ChessPieceState state)
     {
