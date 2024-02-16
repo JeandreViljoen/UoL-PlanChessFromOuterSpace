@@ -74,7 +74,7 @@ public class ChessPiece : MonoBehaviour
     /// Moves Piece to given BoardSquare position in parameters
     /// </summary>
     /// <param name="BoardSquare"></param>
-    public void MoveToBlock(BoardSquare square)
+    public void MoveTo(BoardSquare square)
     {
         transform.DOMove(square.CenterSurfaceTransform.position, AnimateSpeed).SetEase(Ease.InOutSine);
         IndexCodePosition = square.IndexCode;

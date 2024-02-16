@@ -334,7 +334,7 @@ public class BoardManager : MonoService
 
         // update visual location
         var dstTile = GetTile(dst);
-        piece.MoveToBlock(dstTile);
+        piece.MoveTo(dstTile);
         return true;
     }
 
