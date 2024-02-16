@@ -39,7 +39,6 @@ public abstract class ChessPiece : MonoBehaviour
     public int Speed = 1;
     public int Level = 1;
     public int DefaultRange = 2;
-    public List<Vector2> RelativeMoveset; // [ (0,1) , (1,0) , (-1,0), (0,-1) ]
     public float AnimateSpeed = 1;
     public Team Team;
 
@@ -85,7 +84,7 @@ public abstract class ChessPiece : MonoBehaviour
     /// <param name="board">The chess board.</param>
     /// <param name="pos">The position of this piece.</param>
     /// <returns>A set of positions this piece can move to.</returns>
-    public abstract IEnumerable<(int, int)> GetMoves(BoardManager board, (int, int) pos);
+    public abstract IEnumerable<(int, int)> GetMoves(BoardManager board, (int x, int y) pos);
 
     public void RunStateLogic(ChessPieceState state)
     {
@@ -109,5 +108,21 @@ public abstract class ChessPiece : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
+    }
+
+    /// <summary>
+    /// Convert a player-view-relative offset to absolute offset.
+    /// </summary>
+    /// <param name="pos">
+    /// The offset relative to the player's view; negative Y is forward.
+    /// </param>
+    /// <returns>The absolute offset.</returns>
+    protected (int, int) ViewOffsetToAbsolute((int x, int y) pos)
+    {
+        if (Team == Team.Enemy) {
+            return (pos.x, -pos.y);
+        }
+
+        return pos;
     }
 }
