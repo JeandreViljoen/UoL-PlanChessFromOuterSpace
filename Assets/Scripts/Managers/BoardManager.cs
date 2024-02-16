@@ -387,6 +387,15 @@ public class BoardManager : MonoService
     public bool MovePiece(int srcX, int srcY, int dstX, int dstY)
         => MovePiece((srcX, srcY), (dstX, dstY));
 
+    public IEnumerable<(int, int)> GetMoves((int x, int y) pos)
+    {
+        var piece = GetPiece(pos);
+        if (!piece)
+            throw new KeyNotFoundException(
+                $"No piece at tile (${pos.x}, ${pos.y})");
+        return piece.GetMoves(this, pos);
+    }
+
     // --------------- Private Helpers ---------------
 
     // Returns true if the index is outside the bounds of the chess board

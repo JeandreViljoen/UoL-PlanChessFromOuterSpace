@@ -1,4 +1,4 @@
-﻿using System;using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
@@ -78,6 +78,11 @@ public class ChessPiece : MonoBehaviour
     {
         transform.DOMove(square.CenterSurfaceTransform.position, AnimateSpeed).SetEase(Ease.InOutSine);
         IndexCodePosition = square.IndexCode;
+    }
+
+    public IEnumerable<(int, int)> GetMoves(BoardManager board, (int, int) pos)
+    {
+        throw new NotImplementedException();
     }
 
     public void RunStateLogic(ChessPieceState state)
