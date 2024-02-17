@@ -8,8 +8,8 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     
     public void OnOpenGame(){
-        SceneManager.LoadSceneAsync(1); //Loads Level 1
-        Debug.Log("Loads Game on Level 1"); 
+        SceneManager.LoadSceneAsync(2); //Loads scene 2 Test Board Manager
+        Debug.Log("Loads Game with scene 2"); 
     }
 
     public void OnPauseGame(){
