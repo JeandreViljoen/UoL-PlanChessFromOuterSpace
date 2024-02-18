@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Services;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 // Enum containing all the possible chess pieces
 public enum ChessPieceType
@@ -44,8 +46,12 @@ public class ChessPiece : MonoBehaviour
     public BoardSquare AssignedSquare;
 
     private int _range;
+    private Coroutine _highlightRoutine;
 
-   public int Range
+    private Tween _highlightMoveTween;
+    private Vector3 _spritePosition;
+
+    public int Range
     {
         get
         {
@@ -87,9 +93,8 @@ public class ChessPiece : MonoBehaviour
         Sprite.sprite = _data.Sprite;
         Speed = _data.DefaultSpeed;
         BaseRelativeMoveset = _data.BaseRelativeMoveset;
-        Range = _data.DefaultRange; // Has to be retrieved after BaseRelativeMoveSet as it updates the moveset on this set method
-        
-        HighlightTiles(GetAbsoluteMovesetTiles());
+        Range = _data.DefaultRange; // Has to be retrieved after BaseRelativeMoveSet as it updates the moveset on this set metho
+
     }
 
     private void UpdateMoveset()
@@ -139,12 +144,38 @@ public class ChessPiece : MonoBehaviour
     {
         List<BoardSquare> tiles = new List<BoardSquare>();
 
+        List < Vector2 > movesetVectors = GetAbsoluteMovesetVectors();
+
+        for (int i = 0; i < movesetVectors.Count; i++)
+        {
+            int vectorOffset = 4;
+            
+            BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)movesetVectors[i].x,(int)movesetVectors[i].y));
+            if (tile != null)
+            {
+                if (tile.ChessPieceAssigned == null)
+                {
+                    tiles.Add(tile);
+                }
+                else
+                {
+                    tiles.Add(tile);
+                    i += vectorOffset;
+                }
+                
+            }
+        }
+
         foreach (var index in GetAbsoluteMovesetVectors())
         {
             BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)index.x,(int)index.y));
             if (tile != null)
             {
-                tiles.Add(tile);
+                if (tile.ChessPieceAssigned == null)
+                {
+                    tiles.Add(tile);
+                }
+                
             }
         }
 
@@ -155,13 +186,56 @@ public class ChessPiece : MonoBehaviour
     {
         _animateSpeed = GlobalGameAssets.Instance.ChessPieceAnimateSpeed;
         Init();
+
+        _spritePosition = Sprite.transform.localPosition;
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
+        {
+            HighlightTiles(GetAbsoluteMovesetTiles());
+        };
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
+        {
+            UnHighlightTiles(GetAbsoluteMovesetTiles());
+        };
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseDown += (_) =>
+        {
+            ServiceLocator.GetService<CameraManager>().FocusTile(AssignedSquare);
+        };
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseUp += (_) =>
+        {
+           
+        };
     }
 
     public void HighlightTiles(List<BoardSquare> tiles)
     {
+        _highlightMoveTween?.Kill();
+        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
+        _highlightRoutine = StartCoroutine(DelayedHighlight(tiles));
+        _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
+    }
+
+    private IEnumerator DelayedHighlight(List<BoardSquare> tiles)
+    {
+        float totalAnimationTime = 0.2f;
+        float incrementTiming = totalAnimationTime / tiles.Count;
+        
         foreach (var tile in tiles)
         {
             tile.Highlight();
+            yield return new WaitForSeconds(incrementTiming);
+        }
+    }
+    
+    public void UnHighlightTiles(List<BoardSquare> tiles)
+    {
+        _highlightMoveTween?.Kill();
+        _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition, 0.2f).SetEase(Ease.InOutSine);
+        
+        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
+        
+        foreach (var tile in tiles)
+        {
+            tile.UnHighlight();
         }
     }
     
@@ -235,4 +309,5 @@ public class ChessPiece : MonoBehaviour
 
         return data;
     }
+    
 }

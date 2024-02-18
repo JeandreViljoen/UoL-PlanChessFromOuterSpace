@@ -45,11 +45,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boardWidth: 8
   _boardDepth: 8
-  _centerPosition: {x: 0, y: 0, z: 0}
+  _centerPosition: {x: 4, y: 0, z: 4}
   _squareBoardPrefab: {fileID: 5130928637590477960, guid: 476b24e6a17cc854e9fba56103598869,
     type: 3}
   _materialsArray:
   - {fileID: 2100004, guid: 691c8b080d8f55744a58f5e86b96915d, type: 3}
   - {fileID: 2100000, guid: a0427cf339e5891468d5f2b433b2d44a, type: 2}
-  _pawnPrefab: {fileID: 3750793848618957480, guid: f34a908e5bfe66d49bace2aae65a89d5,
-    type: 3}

@@ -5,6 +5,7 @@ using System.ComponentModel;
 using DG.Tweening;
 using Services;
 using UnityEngine;
+using Random = System.Random;
 
 public class BoardManager : MonoService
 {
@@ -61,7 +62,7 @@ public class BoardManager : MonoService
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            CreatePiece(ChessPieceType.Rook, (4, 4), Team.Friendly);
+            CreatePiece(ChessPieceType.Rook, (5, 4), Team.Friendly);
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -102,8 +103,8 @@ public class BoardManager : MonoService
         }
 
         Vector3 squareBoardSize = _squareBoardPrefab.GetComponent<Renderer>().bounds.size;
-        Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x * _boardDepth, 0,
-            _centerPosition.z - squareBoardSize.z * _boardWidth);
+        Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x/2 * _boardDepth, 0,
+            _centerPosition.z - squareBoardSize.z/2 * _boardWidth);
 
         // Create the game objects based on the prefab assigned
         Vector3 squareBoardPosition = firstSquarePosition;
@@ -137,7 +138,17 @@ public class BoardManager : MonoService
 
                 if (GlobalDebug.Instance.PopulateBoardOnStart)
                 {
-                    CreatePiece(ChessPieceType.Pawn, i, j, Team.Friendly);
+                    float rng = UnityEngine.Random.Range(0f, 1f);
+
+                    if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
+                    {
+                        int randomPiece = UnityEngine.Random.Range(0, 6);
+                        
+                        ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
+                        
+                        CreatePiece(type, i, j, Team.Friendly);
+                    }
+                    
                 }
 
             }
