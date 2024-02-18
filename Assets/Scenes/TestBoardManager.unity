@@ -1067,6 +1067,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4489694427569626939, guid: 95fb60085f21660479a310a7c8238ed2,
+        type: 3}
+      propertyPath: _rookPrefab
+      value: 
+      objectReference: {fileID: 3750793848618957480, guid: f34a908e5bfe66d49bace2aae65a89d5,
+        type: 3}
+    - target: {fileID: 4489694427569626939, guid: 95fb60085f21660479a310a7c8238ed2,
+        type: 3}
+      propertyPath: BishopPrefab
+      value: 
+      objectReference: {fileID: 3750793848618957480, guid: f4136426131ce6740ac33cddd58caa89,
+        type: 3}
     - target: {fileID: 8496016936583495748, guid: 95fb60085f21660479a310a7c8238ed2,
         type: 3}
       propertyPath: m_Name

@@ -29,11 +29,10 @@ public class BoardManager : MonoService
     private GameObject _squareBoardPrefab;
     [SerializeField, Tooltip("Materials for the board squares")]
     private Material[] _materialsArray;
-
+ 
     // Chess pieces information
     [Header("Chess Pieces Information and Properties")]
-    [SerializeField, Tooltip("Pawn Chess Piece")]
-    private GameObject _pawnPrefab;
+    
 
     // Tweens
     private Tween _bounceAnimate;
@@ -49,26 +48,46 @@ public class BoardManager : MonoService
         GenerateChessBoard();
 
         // Pawn creation for testing
-        //CreatePiece(ChessPieceType.Pawn, 4, 4, Team.Friendly);
+        //CreatePiece(ChessPieceType.Rook, 4, 4, Team.Friendly);
 
     }
 
     void Update()
     {
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     CreatePiece(ChessPieceType.Rook, IndexCode.A8, Team.Friendly);
+        // }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CreatePiece(ChessPieceType.Rook, (4, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CreatePiece(ChessPieceType.Bishop, (4, 4), Team.Friendly);
+        }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            CreatePiece(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
+            CreatePiece(ChessPieceType.Pawn, (4, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            CreatePiece(ChessPieceType.King, (4, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            CreatePiece(ChessPieceType.Queen, (4, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            CreatePiece(ChessPieceType.Knight, (4, 4), Team.Friendly);
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            CreatePiece(ChessPieceType.Pawn, (0, 7), Team.Enemy);
-        }
-
-        if (Input.GetKeyDown(KeyCode.M))
-        {
-            MovePiece((7, 0), (0, 7));
-        }
+        // if (Input.GetKeyDown(KeyCode.M))
+        // {
+        //     MovePiece((7, 0), (0, 7));
+        // }
 
     }
 
@@ -208,18 +227,23 @@ public class BoardManager : MonoService
         switch (type)
         {
             case ChessPieceType.Pawn:
-                piece = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.PawnPrefab).GetComponentInChildren<ChessPiece>();
                 break;
             case ChessPieceType.Knight:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.KnightPrefab).GetComponentInChildren<ChessPiece>();
+                break;
             case ChessPieceType.Bishop:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.BishopPrefab).GetComponentInChildren<ChessPiece>();
+                break;
             case ChessPieceType.Rook:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.RookPrefab).GetComponentInChildren<ChessPiece>();
+                break;
             case ChessPieceType.Queen:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.QueenPrefab).GetComponentInChildren<ChessPiece>();
+                break;
             case ChessPieceType.King:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.KingPrefab).GetComponentInChildren<ChessPiece>();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
