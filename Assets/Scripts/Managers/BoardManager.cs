@@ -227,22 +227,22 @@ public class BoardManager : MonoService
         switch (type)
         {
             case ChessPieceType.Pawn:
-                piece = Instantiate(GlobalGameAssets.Instance.PawnPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.PawnPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Knight:
-                piece = Instantiate(GlobalGameAssets.Instance.KnightPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.KnightPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Bishop:
-                piece = Instantiate(GlobalGameAssets.Instance.BishopPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.BishopPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Rook:
-                piece = Instantiate(GlobalGameAssets.Instance.RookPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.RookPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Queen:
-                piece = Instantiate(GlobalGameAssets.Instance.QueenPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.QueenPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.King:
-                piece = Instantiate(GlobalGameAssets.Instance.KingPrefab).GetComponentInChildren<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.KingPrefab).GetComponent<ChessPiece>();
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
