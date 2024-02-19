@@ -23,7 +23,7 @@ public class BoardSquare : MonoBehaviour
         set
         {
             _chessPieceAssigned = value;
-            _chessPieceAssigned.IndexCodePosition = _indexCode;
+            _chessPieceAssigned.AssignedSquare = this;
         }
     }
 
@@ -33,6 +33,12 @@ public class BoardSquare : MonoBehaviour
     private Tween _bounceAnimateTween;
 
     private IndexCode _indexCode;
+
+    private Tween _tweenHighlightMove;
+    private Tween _tweenHighlightFade;
+    private Vector3 _highlightWorldPosition;
+
+    public SpriteRenderer HighlightSprite;
     
 
     public IndexCode IndexCode
@@ -47,9 +53,13 @@ public class BoardSquare : MonoBehaviour
             IndexCodeTextField.text = _indexCode.ToString();
         }
     }
+    
 
     void Start()
     {
+        _highlightWorldPosition = HighlightSprite.transform.localPosition;
+        HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
+
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
             IndexCodeTextField.gameObject.SetActive(true);
@@ -174,6 +184,22 @@ public class BoardSquare : MonoBehaviour
         }
         
         return (x + 1).ToString();
+    }
+
+    public void Highlight()
+    {
+        _tweenHighlightMove?.Kill();
+        _tweenHighlightFade?.Kill();
+        _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition + Vector3.up*5f, 0.3f).SetEase(Ease.InOutSine, 3f);
+        _tweenHighlightFade = HighlightSprite.DOFade(1f, 0.3f).SetEase(Ease.InOutSine, 3f);
+    }
+    
+    public void UnHighlight()
+    {
+        _tweenHighlightMove?.Kill();
+        _tweenHighlightFade?.Kill();
+        _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition, 0.3f).SetEase(Ease.InOutSine);
+        _tweenHighlightFade = HighlightSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
     }
     
     

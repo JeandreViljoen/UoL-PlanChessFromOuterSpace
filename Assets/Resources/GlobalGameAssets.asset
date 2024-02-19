@@ -9,7 +9,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
+  m_Script: {fileID: 11500000, guid: c67fffe46a43d5240928dd8eac041d50, type: 3}
   m_Name: GlobalGameAssets
-  m_EditorClassIdentifier: Assembly-CSharp::GlobalGameAssets
-  StartCurrency: 200
+  m_EditorClassIdentifier: 
+  CurrencyBalanceData: {fileID: 11400000, guid: 4777d843a85a72843956c38c71597eb7,
+    type: 2}
+  PawnData: {fileID: 11400000, guid: c8d4456e6c2df7445b9d6be92808ac54, type: 2}
+  PawnPrefab: {fileID: 8061312533904500267, guid: e88d18c91d5724944a6e175930070f32,
+    type: 3}
+  RookData: {fileID: 11400000, guid: 2cbf92ef84898b043a9b7a74f0177a77, type: 2}
+  RookPrefab: {fileID: 8626242024160412746, guid: 1d769a6c7f8750e43992403b5e3a5718,
+    type: 3}
+  BishopData: {fileID: 11400000, guid: 212306ab9aa3a344ba141571dd679728, type: 2}
+  BishopPrefab: {fileID: 5353906460319856747, guid: 44433452c8eea8046bd246d015331ff8,
+    type: 3}
+  KnightData: {fileID: 11400000, guid: acc38c0c2ae9e264fae1fae99890554e, type: 2}
+  KnightPrefab: {fileID: 7593874674708199532, guid: 065bd78e6b66604459459547eb598a2d,
+    type: 3}
+  QueenData: {fileID: 11400000, guid: f361cd7ecdd8aa44aa5ff70ceae1dd3f, type: 2}
+  QueenPrefab: {fileID: 2583223021557287775, guid: 0632244d0a4fc484e97f07d6e4f4d261,
+    type: 3}
+  KingData: {fileID: 11400000, guid: aa6a198830a33a94dae9409391e74048, type: 2}
+  KingPrefab: {fileID: 7960528148421452470, guid: c9ed32979c41b9746b27a3a0dec52a6e,
+    type: 3}
+  ChessPieceAnimateSpeed: 1

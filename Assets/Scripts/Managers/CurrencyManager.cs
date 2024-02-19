@@ -11,9 +11,14 @@ public class CurrencyManager : MonoService
     public event Action<int> OnCurrencyAdded; 
     public event Action<int> OnCurrencyRemoved;
 
-     void Start()
+    private void Awake()
+    {
+        Currency = GlobalGameAssets.Instance.CurrencyBalanceData.StartCurrency;
+    }
+
+    void Start()
      {
-         Currency = GlobalGameAssets.Instance.StartCurrency;
+         
      }
 
     /// <summary>

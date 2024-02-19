@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b61663d76c487a4e908639e55b866e2, type: 3}
+  m_Name: CurrencyBalanceData
+  m_EditorClassIdentifier: 
+  StartCurrency: 300
+  CurrencyEarnedPerRound: 50
+  QueenReward: 50
+  RookReward: 25
+  KnightReward: 35
+  BishopReward: 25
+  PawnReward: 10
+  KingReward: 0
+  QueenCost: 100
+  RookCost: 50
+  KnightCost: 70
+  BishopCost: 50
+  PawnCost: 20
+  KingCost: 0
+  UpgradeSpeedCost: 50
+  UpgradeRangeCost: 50
+  UpgradeSpecialCost: 50
+  PowerUp1Cost: 0
+  PowerUp2Cost: 0
+  PowerUp3Cost: 0

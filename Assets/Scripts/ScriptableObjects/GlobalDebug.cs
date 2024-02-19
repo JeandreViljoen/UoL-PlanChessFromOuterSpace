@@ -8,6 +8,7 @@ public class GlobalDebug : ScriptableObjectSingleton<GlobalDebug>
    public bool ShowIndexCodes;
    public bool ShowGameState;
    public bool PopulateBoardOnStart;
+   [Range(0,1)] public float ChanceToPopulateTile;
 
    public Color HighlightColor;
 }

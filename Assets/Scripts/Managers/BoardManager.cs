@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DG.Tweening;
+using DG.Tweening.Core;
 using Services;
 using UnityEngine;
+using Random = System.Random;
 
 public class BoardManager : MonoService
 {
@@ -29,11 +31,10 @@ public class BoardManager : MonoService
     private GameObject _squareBoardPrefab;
     [SerializeField, Tooltip("Materials for the board squares")]
     private Material[] _materialsArray;
-
+ 
     // Chess pieces information
     [Header("Chess Pieces Information and Properties")]
-    [SerializeField, Tooltip("Pawn Chess Piece")]
-    private GameObject _pawnPrefab;
+    
 
     // Tweens
     private Tween _bounceAnimate;
@@ -49,26 +50,49 @@ public class BoardManager : MonoService
         GenerateChessBoard();
 
         // Pawn creation for testing
-        //CreatePiece(ChessPieceType.Pawn, 4, 4, Team.Friendly);
+        //CreatePiece(ChessPieceType.Rook, 4, 4, Team.Friendly);
 
     }
 
     void Update()
     {
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     CreatePiece(ChessPieceType.Rook, IndexCode.A8, Team.Friendly);
+        // }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            CreatePiece(ChessPieceType.Rook, (5, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            CreatePiece(ChessPieceType.Bishop, (4, 4), Team.Friendly);
+        }
         if (Input.GetKeyDown(KeyCode.P))
         {
-            CreatePiece(ChessPieceType.Pawn, IndexCode.A8, Team.Friendly);
+            CreatePiece(ChessPieceType.Pawn, (4, 4), Team.Friendly);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            CreatePiece(ChessPieceType.King, (4, 4), Team.Friendly);
         }
 
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            CreatePiece(ChessPieceType.Pawn, (0, 7), Team.Enemy);
-        }
 
         if (Input.GetKeyDown(KeyCode.N))
+
         {
-            MovePiece((7, 0), (0, 7));
+            CreatePiece(ChessPieceType.Queen, (4, 4), Team.Friendly);
         }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            CreatePiece(ChessPieceType.Knight, (4, 4), Team.Friendly);
+        }
+
+        // if (Input.GetKeyDown(KeyCode.M))
+        // {
+        //     MovePiece((7, 0), (0, 7));
+        // }
 
     }
 
@@ -83,8 +107,8 @@ public class BoardManager : MonoService
         }
 
         Vector3 squareBoardSize = _squareBoardPrefab.GetComponent<Renderer>().bounds.size;
-        Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x * _boardDepth, 0,
-            _centerPosition.z - squareBoardSize.z * _boardWidth);
+        Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x/2 * _boardDepth, 0,
+            _centerPosition.z - squareBoardSize.z/2 * _boardWidth);
 
         // Create the game objects based on the prefab assigned
         Vector3 squareBoardPosition = firstSquarePosition;
@@ -116,10 +140,7 @@ public class BoardManager : MonoService
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
 
-                if (GlobalDebug.Instance.PopulateBoardOnStart)
-                {
-                    CreatePiece(ChessPieceType.Pawn, i, j, Team.Friendly);
-                }
+               ExecuteDebugCode(i,j);
 
             }
             // Reset X position
@@ -127,6 +148,25 @@ public class BoardManager : MonoService
 
             // Update Z position
             squareBoardPosition.z += squareBoardSize.z;
+        }
+    }
+
+    private void ExecuteDebugCode(int i, int j)
+    {
+        if (GlobalDebug.Instance.PopulateBoardOnStart)
+        {
+            float rng = UnityEngine.Random.Range(0f, 1f);
+
+            if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
+            {
+                int randomPiece = UnityEngine.Random.Range(0, 6);
+                        
+                ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
+                        
+                ChessPiece piece = CreatePiece(type, i, j, Team.Friendly);
+                piece.Speed = UnityEngine.Random.Range(0, 5);
+            }
+                    
         }
     }
 
@@ -208,18 +248,23 @@ public class BoardManager : MonoService
         switch (type)
         {
             case ChessPieceType.Pawn:
-                piece = Instantiate(_pawnPrefab).GetComponent<ChessPiece>();
+                piece = Instantiate(GlobalGameAssets.Instance.PawnPrefab).GetComponent<ChessPiece>();
                 break;
             case ChessPieceType.Knight:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.KnightPrefab).GetComponent<ChessPiece>();
+                break;
             case ChessPieceType.Bishop:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.BishopPrefab).GetComponent<ChessPiece>();
+                break;
             case ChessPieceType.Rook:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.RookPrefab).GetComponent<ChessPiece>();
+                break;
             case ChessPieceType.Queen:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.QueenPrefab).GetComponent<ChessPiece>();
+                break;
             case ChessPieceType.King:
-                throw new NotImplementedException();
+                piece = Instantiate(GlobalGameAssets.Instance.KingPrefab).GetComponent<ChessPiece>();
+                break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
@@ -386,6 +431,14 @@ public class BoardManager : MonoService
     /// </exception>
     public bool MovePiece(int srcX, int srcY, int dstX, int dstY)
         => MovePiece((srcX, srcY), (dstX, dstY));
+
+
+
+    public int GetDistanceBetweenTiles(BoardSquare t1, BoardSquare t2)
+    {
+        //TODO: Implement
+        return 0;
+    }
 
     // --------------- Private Helpers ---------------
 
