@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 public class MouseEventHandler : MonoBehaviour, IPointerDownHandler, IPointerUpHandler ,IPointerEnterHandler, IPointerExitHandler
 {
+    //GENERIC CLASS TO HOOK INTO MOUSE EVENTS
     public event Action<PointerEventData> OnMouseDown;
     public event Action<PointerEventData> OnMouseUp;
     public event Action<PointerEventData> OnMouseEnter;

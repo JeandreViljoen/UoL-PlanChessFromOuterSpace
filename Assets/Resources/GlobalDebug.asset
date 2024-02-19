@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GlobalDebug
   m_EditorClassIdentifier: 
   ShowIndexCodes: 0
-  ShowGameState: 1
+  ShowGameState: 0
   PopulateBoardOnStart: 1
-  ChanceToPopulateTile: 0.159
+  ChanceToPopulateTile: 0.098
   HighlightColor: {r: 0.3066038, g: 0.5207743, b: 1, a: 0.89411765}

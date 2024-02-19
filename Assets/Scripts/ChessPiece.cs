@@ -41,7 +41,23 @@ public class ChessPiece : MonoBehaviour
     public ChessPieceType PieceType;
     public SpriteRenderer Sprite;
     private ChessPieceData _data;
-    public int Speed;
+    private int _speed;
+    public int Speed
+    {
+        get
+        {
+            return _speed;
+        }
+        set
+        {
+            _speed = value;
+            if (_speedIconUIController == null)
+            {
+                _speedIconUIController = GetComponentInChildren<SpeedIconUIController>();
+            }
+            _speedIconUIController.Speed = _speed;
+        }
+    }
     public int Level;
     public BoardSquare AssignedSquare;
 
@@ -50,6 +66,11 @@ public class ChessPiece : MonoBehaviour
 
     private Tween _highlightMoveTween;
     private Vector3 _spritePosition;
+
+    private SpeedIconUIController _speedIconUIController;
+    private UpgradeButtonUIController _upgradeButtonUIController;
+
+    private EasyService<CurrencyManager> _currencyManager;
 
     public int Range
     {
@@ -85,6 +106,49 @@ public class ChessPiece : MonoBehaviour
     // }
 
     public event Action OnStateEnd;
+
+    private void OnEnable()
+    {
+        _upgradeButtonUIController = GetComponentInChildren<UpgradeButtonUIController>();
+        _upgradeButtonUIController.SpeedButton.OnMouseDown += OnSpeedUpgradePressed;
+        _upgradeButtonUIController.RangeButton.OnMouseDown += OnRangeUpgradePressed;
+    }
+
+    private void OnSpeedUpgradePressed(PointerEventData _)
+    {
+        //TODO: Validation checks & limits
+        
+        if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
+        {
+            Speed++;
+        }
+        else
+        {
+            //TODO: SHow feedback for not enough currency
+        }
+        
+    }
+    
+    private void OnRangeUpgradePressed(PointerEventData _)
+    {
+        //TODO: Validation checks & limits
+        
+        if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
+        {
+            Range++;
+        }
+        else
+        {
+            //TODO: SHow feedback for not enough currency
+        }
+        
+    }
+
+    private void OnDestroy()
+    {
+        _upgradeButtonUIController.SpeedButton.OnMouseDown -= OnSpeedUpgradePressed;
+        _upgradeButtonUIController.RangeButton.OnMouseDown -= OnRangeUpgradePressed;
+    }
 
     private void Init()
     {
@@ -140,15 +204,68 @@ public class ChessPiece : MonoBehaviour
         return absoluteMoves;
     }
 
+    public List<BoardSquare> GetAbsoluteMovesetTilesDirect()
+    {
+        List<BoardSquare> tiles = new List<BoardSquare>();
+
+        for (int i = 0; i < RelativeMoveset.Count; i++)
+        {
+            int rangeOffset = Range - (i % Range);
+            if (rangeOffset == Range) rangeOffset = 0;
+            
+            Vector2 position = new Vector2(AssignedSquare.IndexX, AssignedSquare.IndexZ);
+            Vector2 absolute = RelativeMoveset[i] + position;
+
+            if (absolute.x >= 0 && absolute.x <= 7 && absolute.y >= 0 && absolute.y <= 7)
+            {
+                BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)absolute.x,(int)absolute.y));
+
+                if (tile != null)
+                {
+                    if (tile.ChessPieceAssigned == this)
+                    {
+                        tiles.Add(tile);
+                    }
+                    if (tile.ChessPieceAssigned == null)
+                    {
+                        tiles.Add(tile);
+                    }
+                    else
+                    {
+                        tiles.Add(tile);
+                        i += rangeOffset;
+                    }
+                }
+            }
+        }
+        
+        // foreach (var relative in RelativeMoveset)
+        // {
+        //     Vector2 position = new Vector2(AssignedSquare.IndexX, AssignedSquare.IndexZ);
+        //     Vector2 absolute = relative + position;
+        //
+        //     if (absolute.x < 0 || absolute.x > 7 || absolute.y < 0 || absolute.y > 7)
+        //     {
+        //         continue;
+        //     }
+        //     
+        //     absoluteMoves.Add(absolute);
+        // }
+
+        return tiles;
+    }
+
     public List<BoardSquare> GetAbsoluteMovesetTiles()
     {
         List<BoardSquare> tiles = new List<BoardSquare>();
 
         List < Vector2 > movesetVectors = GetAbsoluteMovesetVectors();
+        
+        //int baseDirections = BaseRelativeMoveset.Count;
 
-        for (int i = 0; i < movesetVectors.Count; i++)
+        for (int i = 1; i < movesetVectors.Count; i++)
         {
-            int vectorOffset = 4;
+            int rangeOffset = i % Range;
             
             BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)movesetVectors[i].x,(int)movesetVectors[i].y));
             if (tile != null)
@@ -160,24 +277,24 @@ public class ChessPiece : MonoBehaviour
                 else
                 {
                     tiles.Add(tile);
-                    i += vectorOffset;
+                    i += rangeOffset;
                 }
                 
             }
         }
 
-        foreach (var index in GetAbsoluteMovesetVectors())
-        {
-            BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)index.x,(int)index.y));
-            if (tile != null)
-            {
-                if (tile.ChessPieceAssigned == null)
-                {
-                    tiles.Add(tile);
-                }
-                
-            }
-        }
+        // foreach (var index in GetAbsoluteMovesetVectors())
+        // {
+        //     BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)index.x,(int)index.y));
+        //     if (tile != null)
+        //     {
+        //         if (tile.ChessPieceAssigned == null)
+        //         {
+        //             tiles.Add(tile);
+        //         }
+        //         
+        //     }
+        // }
 
         return tiles;
     }
@@ -190,11 +307,11 @@ public class ChessPiece : MonoBehaviour
         _spritePosition = Sprite.transform.localPosition;
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
-            HighlightTiles(GetAbsoluteMovesetTiles());
+            HighlightTiles(GetAbsoluteMovesetTilesDirect());
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
         {
-            UnHighlightTiles(GetAbsoluteMovesetTiles());
+            UnHighlightTiles(GetAbsoluteMovesetTilesDirect());
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseDown += (_) =>
         {

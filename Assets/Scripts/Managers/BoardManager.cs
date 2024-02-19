@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using DG.Tweening;
+using DG.Tweening.Core;
 using Services;
 using UnityEngine;
 using Random = System.Random;
@@ -136,20 +137,7 @@ public class BoardManager : MonoService
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
 
-                if (GlobalDebug.Instance.PopulateBoardOnStart)
-                {
-                    float rng = UnityEngine.Random.Range(0f, 1f);
-
-                    if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
-                    {
-                        int randomPiece = UnityEngine.Random.Range(0, 6);
-                        
-                        ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
-                        
-                        CreatePiece(type, i, j, Team.Friendly);
-                    }
-                    
-                }
+               ExecuteDebugCode(i,j);
 
             }
             // Reset X position
@@ -157,6 +145,25 @@ public class BoardManager : MonoService
 
             // Update Z position
             squareBoardPosition.z += squareBoardSize.z;
+        }
+    }
+
+    private void ExecuteDebugCode(int i, int j)
+    {
+        if (GlobalDebug.Instance.PopulateBoardOnStart)
+        {
+            float rng = UnityEngine.Random.Range(0f, 1f);
+
+            if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
+            {
+                int randomPiece = UnityEngine.Random.Range(0, 6);
+                        
+                ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
+                        
+                ChessPiece piece = CreatePiece(type, i, j, Team.Friendly);
+                piece.Speed = UnityEngine.Random.Range(0, 5);
+            }
+                    
         }
     }
 
@@ -421,6 +428,14 @@ public class BoardManager : MonoService
     /// </exception>
     public bool MovePiece(int srcX, int srcY, int dstX, int dstY)
         => MovePiece((srcX, srcY), (dstX, dstY));
+
+
+
+    public int GetDistanceBetweenTiles(BoardSquare t1, BoardSquare t2)
+    {
+        //TODO: Implement
+        return 0;
+    }
 
     // --------------- Private Helpers ---------------
 
