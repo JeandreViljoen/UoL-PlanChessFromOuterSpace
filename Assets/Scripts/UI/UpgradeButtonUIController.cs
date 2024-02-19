@@ -1,24 +1,43 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Services;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class UpgradeButtonUIController : MonoBehaviour
 {
-    public MouseEventHandler SpeedButton;
-    public MouseEventHandler RangeButton;
-    public MouseEventHandler Button3;
+    public UpgradeButton SpeedButton;
+    public UpgradeButton RangeButton;
+    public UpgradeButton Button3;
+
+    private EasyService<CameraManager> _cameraManager;
 
     void Start()
     {
-
+        // _cameraManager.Value.OnCameraFocus += Show;
+         _cameraManager.Value.OnCameraTopDown += Hide;
+        Hide();
     }
 
 
     void Update()
     {
 
+    }
+
+    public void Show()
+    {
+        SpeedButton.gameObject.SetActive(true);
+        RangeButton.gameObject.SetActive(true);
+        Button3.gameObject.SetActive(true);
+    }
+
+    public void Hide()
+    {
+        SpeedButton.gameObject.SetActive(false);
+        RangeButton.gameObject.SetActive(false);
+        Button3.gameObject.SetActive(false);
     }
 
 //     public void SubscribeToButtonPress(ButtonType type, Action<PointerEventData> callback)

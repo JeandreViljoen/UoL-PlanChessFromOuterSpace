@@ -22,6 +22,10 @@ public class CameraManager : MonoService
     public float FocusHeight;
     public float FocusXRotation;
     public float FocusFOV;
+
+    public event Action<BoardSquare> OnCameraFocus;
+    public event Action OnCameraTopDown;
+    
     
     private void Awake()
     {
@@ -50,12 +54,16 @@ public class CameraManager : MonoService
         _tweenPosition = _mainCam.transform.DOMove(ResetPosition, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenRotation = _mainCam.transform.DORotate(ResetRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
+        
+        OnCameraTopDown?.Invoke();
 
     }
 
-    public void FocusTile(BoardSquare tile)
+    public void FocusTile(ChessPiece piece)
     {
-        Vector3 focusPosition = new Vector3(tile.IndexZ, FocusHeight, tile.IndexX - 0.25f);
+        BoardSquare tile = piece.AssignedSquare;
+        
+        Vector3 focusPosition = new Vector3(tile.IndexZ, FocusHeight, tile.IndexX - 0.6f);
         Vector3 focusRotation = new Vector3(FocusXRotation, 0f, 0f);
         
         _tweenPosition?.Kill();
@@ -65,5 +73,7 @@ public class CameraManager : MonoService
         _tweenPosition = _mainCam.transform.DOMove(focusPosition, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenRotation = _mainCam.transform.DORotate(focusRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(FocusFOV, TransitionSpeed).SetEase(Ease.InOutSine);
+
+        OnCameraFocus?.Invoke(tile);
     }
 }

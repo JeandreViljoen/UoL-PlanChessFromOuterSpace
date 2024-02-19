@@ -38,7 +38,12 @@ public class BoardSquare : MonoBehaviour
     private Tween _tweenHighlightFade;
     private Vector3 _highlightWorldPosition;
 
+    public SpriteRenderer Floor;
+
     public SpriteRenderer HighlightSprite;
+
+    public Color WhiteTileColor;
+    public Color BlackTileColor;
     
 
     public IndexCode IndexCode
@@ -51,6 +56,18 @@ public class BoardSquare : MonoBehaviour
         {
             _indexCode = value;
             IndexCodeTextField.text = _indexCode.ToString();
+        }
+    }
+
+    public void SetTileColor(bool isWhiteTile)
+    {
+        if (isWhiteTile)
+        {
+            Floor.color = WhiteTileColor;
+        }
+        else
+        {
+            Floor.color = BlackTileColor;
         }
     }
     
@@ -191,7 +208,7 @@ public class BoardSquare : MonoBehaviour
         _tweenHighlightMove?.Kill();
         _tweenHighlightFade?.Kill();
         _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition + Vector3.up*5f, 0.3f).SetEase(Ease.InOutSine, 3f);
-        _tweenHighlightFade = HighlightSprite.DOFade(1f, 0.3f).SetEase(Ease.InOutSine, 3f);
+        _tweenHighlightFade = HighlightSprite.DOFade(0.5f, 0.3f).SetEase(Ease.InOutSine, 3f);
     }
     
     public void UnHighlight()
