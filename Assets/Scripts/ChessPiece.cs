@@ -117,11 +117,11 @@ public class ChessPiece : MonoBehaviour
         {
             _range = value;
             UpdateMoveset();
-            AbsoluteMovesetTiles = GetAbsoluteMovesetTilesDirect();
+            //AbsoluteMovesetTiles = GetAbsoluteMovesetTilesDirect();
         }
     }
     public List<Vector2> RelativeMoveset;
-    public List<BoardSquare> AbsoluteMovesetTiles;
+   // public List<BoardSquare> AbsoluteMovesetTiles;
     public List<Vector2> BaseRelativeMoveset;
 
     private float _animateSpeed;

@@ -107,7 +107,10 @@ public class BoardManager : MonoService
         {
             CreatePiece(ChessPieceType.King, (4, 4), Team.Friendly);
         }
-        if (Input.GetKeyDown(KeyCode.Q))
+
+
+        if (Input.GetKeyDown(KeyCode.N))
+
         {
             CreatePiece(ChessPieceType.Queen, (4, 4), Team.Friendly);
         }
