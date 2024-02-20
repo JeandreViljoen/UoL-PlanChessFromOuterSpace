@@ -142,22 +142,6 @@ public class BoardSquare : MonoBehaviour
         IndexCode = indexCode;
         
     }
-    
-    //TEMP
-    public void BounceAnimate()
-    {
-        if (_bounceAnimateTween.IsPlaying())
-        {
-            return;
-        }
-        
-        
-        Sequence s = DOTween.Sequence();
-        s.Append(transform.DOMove( transform.position + Vector3.up *3 , 1f).SetEase(Ease.InOutSine));
-        s.Append(transform.DOMove( transform.position , 1f).SetEase(Ease.InOutSine));
-
-        _bounceAnimateTween = s;
-    }
 
     //Returns corresponding Letter for Z
     private string GetLetter(int z)
@@ -259,8 +243,6 @@ public class BoardSquare : MonoBehaviour
         {
             HideAttackSignal();
         }
-        
-
     }
 
     private void ShowAttackSignal()
@@ -280,9 +262,8 @@ public class BoardSquare : MonoBehaviour
         _tweenAttackSignalMove = AttackSignalSprite.transform.DOLocalMove(_attackSignalPosition, 0.2f).SetEase(Ease.InOutSine);
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
     }
-    
-    
-    
+
+
 }
 
 public enum IndexCode

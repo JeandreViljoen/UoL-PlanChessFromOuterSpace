@@ -213,7 +213,7 @@ public class ChessPiece : MonoBehaviour
         
     }
     
-    private void Init()
+    public void Init()
     {
         //Fetch Data as assigned in inspector
         _data = GetStartData(PieceType);
@@ -231,6 +231,7 @@ public class ChessPiece : MonoBehaviour
     private void RequestSelection()
     {
         ServiceLocator.GetService<BoardManager>().SelectedUnit = this;
+        Debug.Log("SPEED OF SELECTED UNIT: " + Speed);
     }
 
     private void UpdateMoveset()
@@ -378,7 +379,7 @@ public class ChessPiece : MonoBehaviour
     void Start()
     {
         _animateSpeed = GlobalGameAssets.Instance.ChessPieceAnimateSpeed;
-        Init();
+        //Init();
 
         _spritePosition = Sprite.transform.localPosition;
         
