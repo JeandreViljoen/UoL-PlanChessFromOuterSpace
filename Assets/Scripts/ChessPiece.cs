@@ -70,11 +70,10 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
-
     public int Level { get; private set; }
     public BoardSquare AssignedSquare;
 
-    public float UnitValue;// => Level, type
+    private float UnitValue;// => Level, type
 
     private bool _isSelected;
     public bool IsSelected
@@ -120,13 +119,11 @@ public class ChessPiece : MonoBehaviour
             _range = value;
             UpdateMoveset();
             UpdateLevel();
-            //AbsoluteMovesetTiles = GetAbsoluteMovesetTilesDirect();
         }
     }
     public List<Vector2> RelativeMoveset;
-   // public List<BoardSquare> AbsoluteMovesetTiles;
     public List<Vector2> BaseRelativeMoveset;
-
+    public List<BoardSquare> PossibleInteractableTiles;
     private float _animateSpeed;
     public Team Team;
 
@@ -220,6 +217,13 @@ public class ChessPiece : MonoBehaviour
 
     private void UpdateMoveset()
     {
+        //Temporary, used for testing
+        if (IsBuilding)
+        {
+            return;
+        }
+        //--------------------------
+        
         List<Vector2> newMoves = new List<Vector2>();
         //Add bas tile
         newMoves.Add(new Vector2(0,0));
@@ -230,10 +234,6 @@ public class ChessPiece : MonoBehaviour
         {
             //TODO: KING logic 
         }
-        // if (PieceType == ChessPieceType.Knight)
-        // {
-        //     //TODO: Knight logic 
-        // }
         else
         {
             //Each direction vector in base moveset (i.e. up, down, diagonal, etc.)
@@ -248,8 +248,10 @@ public class ChessPiece : MonoBehaviour
         }
 
         RelativeMoveset = newMoves;
+        PossibleInteractableTiles = GetAbsoluteMovesetTilesDirect();
     }
 
+    //Not used for now.
     public List<Vector2> GetAbsoluteMovesetVectors()
     {
         List<Vector2> absoluteMoves = new List<Vector2>();
@@ -359,11 +361,11 @@ public class ChessPiece : MonoBehaviour
         _spritePosition = Sprite.transform.localPosition;
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
-            HighlightTiles(GetAbsoluteMovesetTilesDirect());
+            HighlightTiles(PossibleInteractableTiles);
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
         {
-            UnHighlightTiles(GetAbsoluteMovesetTilesDirect());
+            UnHighlightTiles(PossibleInteractableTiles);
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseDown += (_) =>
         {
