@@ -65,11 +65,13 @@ public class ChessPiece : MonoBehaviour
             if (_speedIconUIController != null)
             {
                 _speedIconUIController.Speed = _speed;
+                UpdateLevel();
             }
-            
         }
     }
-    public int Level; //TODO ASAP
+
+
+    public int Level { get; private set; }
     public BoardSquare AssignedSquare;
 
     public float UnitValue;// => Level, type
@@ -117,6 +119,7 @@ public class ChessPiece : MonoBehaviour
         {
             _range = value;
             UpdateMoveset();
+            UpdateLevel();
             //AbsoluteMovesetTiles = GetAbsoluteMovesetTilesDirect();
         }
     }
@@ -156,6 +159,13 @@ public class ChessPiece : MonoBehaviour
        
     }
 
+    private void UpdateLevel()
+    {
+        //Takes into account Range and Speed to determine level
+        //Will not return less than 1
+        Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+    }
+
     //Handles Speed Upgrade Logic
     private void OnSpeedUpgradePressed(PointerEventData _)
     {
@@ -171,7 +181,7 @@ public class ChessPiece : MonoBehaviour
         }
         
     }
-    
+
     //Handles Range Upgrade Logic
     private void OnRangeUpgradePressed(PointerEventData _)
     {
