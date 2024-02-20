@@ -147,6 +147,11 @@ public class ChessPiece : MonoBehaviour
 
     private void OnEnable()
     {
+        if (Team == Team.Enemy)
+        {
+            return;
+        }
+        
         _upgradeButtonUIController = GetComponentInChildren<UpgradeButtonUIController>();
         if (_upgradeButtonUIController!= null)
         {
@@ -306,14 +311,17 @@ public class ChessPiece : MonoBehaviour
                         //tiles.Add(tile);
                     }
                     //If tile is empty add tile
-                    if (tile.ChessPieceAssigned == null)
+                    if (tile.IsEmpty())
                     {
                         tiles.Add(tile);
                     }
                     //If tile is occupied, add it, but skip the rest of the tiles behind the blocked tile.
                     else
                     {
-                        tiles.Add(tile);
+                        if (tile.ChessPieceAssigned.Team != Team) 
+                        {
+                            tiles.Add(tile);
+                        }
                         i += rangeOffset;
                     }
                 }
@@ -359,6 +367,11 @@ public class ChessPiece : MonoBehaviour
         Init();
 
         _spritePosition = Sprite.transform.localPosition;
+        
+        if (Team == Team.Enemy)
+        {
+            Sprite.color = GlobalDebug.Instance.EnemyTintColor;
+        }
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
             HighlightTiles(PossibleInteractableTiles);
@@ -452,13 +465,13 @@ public class ChessPiece : MonoBehaviour
     private void Selected()
     {
         ServiceLocator.GetService<CameraManager>().FocusTile(this);
-        _upgradeButtonUIController.Show();
+        if(Team == Team.Friendly) _upgradeButtonUIController.Show();
     }
 
     //Deselect State Logic
     private void Deselected()
     {
-        _upgradeButtonUIController.Hide();
+        if(Team == Team.Friendly) _upgradeButtonUIController.Hide();
     }
 
     /// <summary>
@@ -477,9 +490,14 @@ public class ChessPiece : MonoBehaviour
         float totalAnimationTime = 0.2f;
         float incrementTiming = totalAnimationTime / tiles.Count;
         
+        //Highlight own square
+        AssignedSquare.Highlight(Team);
+        yield return new WaitForSeconds(incrementTiming);
+        
         foreach (var tile in tiles)
         {
-            tile.Highlight();
+            tile.Highlight(Team);
+            tile.EvaluateAttackSignal(this);
             yield return new WaitForSeconds(incrementTiming);
         }
     }
@@ -494,6 +512,9 @@ public class ChessPiece : MonoBehaviour
         
         if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
         
+        //UnHighlight own square
+        AssignedSquare.UnHighlight();
+        
         foreach (var tile in tiles)
         {
             tile.UnHighlight();
@@ -502,7 +523,7 @@ public class ChessPiece : MonoBehaviour
     
     private void OnDestroy()
     {
-        if (_upgradeButtonUIController != null)
+        if (_upgradeButtonUIController != null && Team == Team.Friendly)
         {
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;

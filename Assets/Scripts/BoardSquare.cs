@@ -34,13 +34,18 @@ public class BoardSquare : MonoBehaviour
 
     private IndexCode _indexCode;
 
+    public SpriteRenderer HighlightSprite;
     private Tween _tweenHighlightMove;
     private Tween _tweenHighlightFade;
     private Vector3 _highlightWorldPosition;
 
     public SpriteRenderer Floor;
 
-    public SpriteRenderer HighlightSprite;
+    
+    public SpriteRenderer AttackSignalSprite;
+    private Tween _tweenAttackSignalMove;
+    private Tween _tweenAttackSignalFade;
+    private Vector3 _attackSignalPosition;
 
     public Color WhiteTileColor;
     public Color BlackTileColor;
@@ -75,8 +80,9 @@ public class BoardSquare : MonoBehaviour
     void Start()
     {
         _highlightWorldPosition = HighlightSprite.transform.localPosition;
-        HighlightSprite.color = GlobalGameAssets.Instance.HighlightColor;
-        HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
+        _attackSignalPosition = AttackSignalSprite.transform.localPosition;
+        _tweenHighlightFade = HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
+        _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.000001f).SetUpdate(true);
 
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
@@ -204,8 +210,21 @@ public class BoardSquare : MonoBehaviour
         return (x + 1).ToString();
     }
 
-    public void Highlight()
+    public void Highlight(Team team)
     {
+        if (team == Team.Friendly)
+        {
+            Color c = GlobalGameAssets.Instance.HighlightColor;
+            c.a = 0f;
+            HighlightSprite.color = c;
+        }
+        else
+        {
+            Color c = GlobalDebug.Instance.EnemyTintColor;
+            c.a = 0f;
+            HighlightSprite.color = c;
+        }
+
         _tweenHighlightMove?.Kill();
         _tweenHighlightFade?.Kill();
         _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition + Vector3.up*5f, 0.3f).SetEase(Ease.InOutSine, 3f);
@@ -218,6 +237,48 @@ public class BoardSquare : MonoBehaviour
         _tweenHighlightFade?.Kill();
         _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition, 0.3f).SetEase(Ease.InOutSine);
         _tweenHighlightFade = HighlightSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
+        
+        HideAttackSignal();
+    }
+
+    public void EvaluateAttackSignal(ChessPiece attackingPiece)
+    {
+        if (attackingPiece == _chessPieceAssigned)
+        {
+            return;
+        }
+
+        if (_chessPieceAssigned != null)
+        {
+            if (_chessPieceAssigned.Team != attackingPiece.Team)
+            {
+                ShowAttackSignal();
+            }
+        }
+        else
+        {
+            HideAttackSignal();
+        }
+        
+
+    }
+
+    private void ShowAttackSignal()
+    {
+        _tweenAttackSignalFade?.Kill();
+        _tweenAttackSignalMove?.Kill();
+
+        _tweenAttackSignalMove = AttackSignalSprite.transform.DOLocalMove(_attackSignalPosition + Vector3.up*10f, 0.3f).SetEase(Ease.InOutSine);
+        _tweenAttackSignalFade = AttackSignalSprite.DOFade(0.75f, 0.3f).SetEase(Ease.InOutSine);
+    }
+    
+    private void HideAttackSignal()
+    {
+        _tweenAttackSignalFade?.Kill();
+        _tweenAttackSignalMove?.Kill();
+
+        _tweenAttackSignalMove = AttackSignalSprite.transform.DOLocalMove(_attackSignalPosition, 0.2f).SetEase(Ease.InOutSine);
+        _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
     }
     
     

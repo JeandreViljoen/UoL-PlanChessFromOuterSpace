@@ -196,11 +196,24 @@ public class BoardManager : MonoService
 
             if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
             {
-                int randomPiece = UnityEngine.Random.Range(0, 6);
+                int randomPiece = UnityEngine.Random.Range(0, 5);
                         
                 ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
-                        
-                ChessPiece piece = CreatePiece(type, i, j, Team.Friendly);
+
+
+                Team randomTeam;
+                if (UnityEngine.Random.Range(0,2) == 0)
+                {
+                    randomTeam = Team.Friendly;
+                }
+                else
+                {
+                    randomTeam = Team.Enemy;
+                }
+                
+                ChessPiece piece = CreatePiece(type, i, j, randomTeam);
+                
+                
                 piece.Speed = UnityEngine.Random.Range(0, 5);
             }
                     

@@ -11,4 +11,5 @@ public class GlobalDebug : ScriptableObjectSingleton<GlobalDebug>
    [Range(0,1)] public float ChanceToPopulateTile;
 
    public Color HighlightColor;
+   public Color EnemyTintColor;
 }
