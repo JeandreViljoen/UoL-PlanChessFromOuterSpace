@@ -19,6 +19,7 @@ public class HUDManager : MonoService
     private void RefreshCurrencyDisplay(int amount)
     {
         CurrencyDisplay.text = $"CURRENCY: {_currencyManager.Value.Currency}";
+        CurrencyDisplay.color = GlobalGameAssets.Instance.HighlightColor;
     }
 
     private void SubscribeCurrencyEvents()

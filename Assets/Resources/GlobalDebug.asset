@@ -15,5 +15,5 @@ MonoBehaviour:
   ShowIndexCodes: 0
   ShowGameState: 0
   PopulateBoardOnStart: 1
-  ChanceToPopulateTile: 0.098
+  ChanceToPopulateTile: 0.228
   HighlightColor: {r: 0.3066038, g: 0.5207743, b: 1, a: 0.89411765}

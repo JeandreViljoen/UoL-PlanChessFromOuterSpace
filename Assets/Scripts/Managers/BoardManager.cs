@@ -34,6 +34,36 @@ public class BoardManager : MonoService
  
     // Chess pieces information
     [Header("Chess Pieces Information and Properties")]
+
+    private ChessPiece _selectedUnit;
+
+    public ChessPiece SelectedUnit
+    {
+        get
+        {
+            return _selectedUnit;
+        }
+        set
+        {
+            if (_selectedUnit != null)
+            {
+                _selectedUnit.IsSelected = false;
+            }
+            
+            _selectedUnit = value;
+            _selectedUnit.IsSelected = true;
+        }
+    }
+
+    public void ClearUnitSelection()
+    {
+        foreach (var unit in _pieces)
+        {
+            unit.Value.IsSelected = false;
+        }
+
+        _selectedUnit = null;
+    }
     
 
     // Tweens
@@ -113,8 +143,12 @@ public class BoardManager : MonoService
         // Create the game objects based on the prefab assigned
         Vector3 squareBoardPosition = firstSquarePosition;
         int materialIteration = 0;
+        bool isWhiteTile = true;
+        
         for (int i = 0; i < _boardDepth; ++i)
         {
+            isWhiteTile = !isWhiteTile;
+            
             materialIteration = (i + 1) % 2;
             for (int j = 0; j < _boardWidth; ++j)
             {
@@ -125,6 +159,9 @@ public class BoardManager : MonoService
                 boardSquareComponent.IndexX = i;
                 boardSquareComponent.IndexZ = j;
                 boardSquareComponent.SetIndexCodeFromCartesian();
+                
+                boardSquareComponent.SetTileColor(isWhiteTile);
+                isWhiteTile = !isWhiteTile;
 
                 // Add the newly created squareBoard to the list containing all board squares
                 _boardSquares.Add(boardSquareComponent);
@@ -135,7 +172,7 @@ public class BoardManager : MonoService
                     materialIteration = 0;
                 Material materialToApply = _materialsArray[materialIteration];
                 meshRenderer.material = materialToApply;
-                materialIteration++;
+                 materialIteration++;
 
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
