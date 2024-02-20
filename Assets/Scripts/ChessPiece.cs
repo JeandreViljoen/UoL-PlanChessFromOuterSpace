@@ -123,7 +123,20 @@ public class ChessPiece : MonoBehaviour
     }
     public List<Vector2> RelativeMoveset;
     public List<Vector2> BaseRelativeMoveset;
-    public List<BoardSquare> PossibleInteractableTiles;
+    private List<BoardSquare> _possibleInteractableTiles;
+
+    public List<BoardSquare> PossibleInteractableTiles
+    {
+        get
+        {
+            _possibleInteractableTiles = GetAllPossibleMovesetTiles();
+            return _possibleInteractableTiles;
+        }
+        private set
+        {
+            _possibleInteractableTiles = value;
+        }
+    }
     private float _animateSpeed;
     public Team Team;
 
@@ -253,7 +266,7 @@ public class ChessPiece : MonoBehaviour
         }
 
         RelativeMoveset = newMoves;
-        PossibleInteractableTiles = GetAbsoluteMovesetTilesDirect();
+        _possibleInteractableTiles = GetAllPossibleMovesetTiles();
     }
 
     //Not used for now.
@@ -281,7 +294,7 @@ public class ChessPiece : MonoBehaviour
     /// Returns a list of validated BoardSquares where this ChessPiece can move/attack.
     /// </summary>
     /// <returns></returns>
-    public List<BoardSquare> GetAbsoluteMovesetTilesDirect()
+    public List<BoardSquare> GetAllPossibleMovesetTiles()
     {
         List<BoardSquare> tiles = new List<BoardSquare>();
 
@@ -305,19 +318,20 @@ public class ChessPiece : MonoBehaviour
                 
                 if (tile != null)
                 {
-                    //Add its own tile
+                    //check own tile
                     if (tile.ChessPieceAssigned == this)
                     {
-                        //tiles.Add(tile);
+                        //empty
                     }
                     //If tile is empty add tile
                     if (tile.IsEmpty())
                     {
                         tiles.Add(tile);
                     }
-                    //If tile is occupied, add it, but skip the rest of the tiles behind the blocked tile.
+                    //If tile is occupied, check TEAM
                     else
                     {
+                        //Add tile if different team, else dont add tile
                         if (tile.ChessPieceAssigned.Team != Team) 
                         {
                             tiles.Add(tile);
