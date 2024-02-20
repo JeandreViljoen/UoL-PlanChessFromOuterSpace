@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1849869854237479218}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.2}
   m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children: []
   m_Father: {fileID: 4762313361456078439}
@@ -206,6 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EventHandler: {fileID: 2550273566272354808}
   HighlightBorder: {fileID: 4096930559519672890}
+  Icon: {fileID: 2060131937153303413}
   AnimationSpeed: 0.15
 --- !u!1 &4284618077996294069
 GameObject:
@@ -232,8 +233,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4284618077996294069}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -0.1}
+  m_LocalScale: {x: 1.1, y: 1.1, z: 1.1}
   m_Children: []
   m_Father: {fileID: 4762313361456078439}
   m_RootOrder: 0

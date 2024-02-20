@@ -9,6 +9,7 @@ public class UpgradeButton : MonoBehaviour
 {
     public MouseEventHandler EventHandler;
     public SpriteRenderer HighlightBorder;
+    public SpriteRenderer Icon;
     public float AnimationSpeed = 0.15f;
 
     private Tween _tweenHighlightFade;
@@ -19,15 +20,20 @@ public class UpgradeButton : MonoBehaviour
 
     private void OnEnable()
     {
-        EventHandler.OnMouseEnter += OnHighlight;
-        EventHandler.OnMouseExit += OnUnHighlight;
-        _tweenHighlightFade = HighlightBorder.DOFade(0f, AnimationSpeed).SetEase(Ease.InOutSine).SetUpdate(true);
-        _startScale = transform.localScale;
+        
+        
     }
 
     void Start()
     {
+        EventHandler.OnMouseEnter += OnHighlight;
+        EventHandler.OnMouseExit += OnUnHighlight;
         
+        _tweenHighlightFade = HighlightBorder.DOFade(0f, AnimationSpeed).SetEase(Ease.InOutSine).SetUpdate(true);
+        _startScale = transform.localScale;
+        
+        Icon.color = GlobalGameAssets.Instance.HighlightColor;
+        HighlightBorder.color = GlobalGameAssets.Instance.HighlightColor;
     }
     
     void Update()

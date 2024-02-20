@@ -4353,7 +4353,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 623, y: 579}
+  m_AnchoredPosition: {x: 462, y: 491}
   m_SizeDelta: {x: 920.54675, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1378368367
@@ -4403,8 +4403,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 57.77
+  m_fontSizeBase: 57.77
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -4802,6 +4802,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1546978040}
   - component: {fileID: 1546978039}
+  - component: {fileID: 1546978041}
   m_Layer: 0
   m_Name: SkyBG
   m_TagString: Untagged
@@ -4873,6 +4874,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1546978041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1546978038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3938e7bfdc9aa0e4889fc9babec00eb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1550620797 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 688371961623885389, guid: e14fcf069a8276b4499a61990178bb13,

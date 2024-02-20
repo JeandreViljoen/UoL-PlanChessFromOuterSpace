@@ -69,8 +69,10 @@ public class ChessPiece : MonoBehaviour
             
         }
     }
-    public int Level;
+    public int Level; //TODO ASAP
     public BoardSquare AssignedSquare;
+
+    public float UnitValue;// => Level, type
 
     private bool _isSelected;
     public bool IsSelected
@@ -115,9 +117,11 @@ public class ChessPiece : MonoBehaviour
         {
             _range = value;
             UpdateMoveset();
+            AbsoluteMovesetTiles = GetAbsoluteMovesetTilesDirect();
         }
     }
     public List<Vector2> RelativeMoveset;
+    public List<BoardSquare> AbsoluteMovesetTiles;
     public List<Vector2> BaseRelativeMoveset;
 
     private float _animateSpeed;
@@ -216,6 +220,10 @@ public class ChessPiece : MonoBehaviour
         {
             //TODO: KING logic 
         }
+        // if (PieceType == ChessPieceType.Knight)
+        // {
+        //     //TODO: Knight logic 
+        // }
         else
         {
             //Each direction vector in base moveset (i.e. up, down, diagonal, etc.)
@@ -283,7 +291,7 @@ public class ChessPiece : MonoBehaviour
                     //Add its own tile
                     if (tile.ChessPieceAssigned == this)
                     {
-                        tiles.Add(tile);
+                        //tiles.Add(tile);
                     }
                     //If tile is empty add tile
                     if (tile.ChessPieceAssigned == null)
@@ -327,7 +335,7 @@ public class ChessPiece : MonoBehaviour
     //                 tiles.Add(tile);
     //                 i += rangeOffset;
     //             }
-    //             
+    //           
     //         }
     //     }
     //     return tiles;

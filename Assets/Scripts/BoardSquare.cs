@@ -75,6 +75,7 @@ public class BoardSquare : MonoBehaviour
     void Start()
     {
         _highlightWorldPosition = HighlightSprite.transform.localPosition;
+        HighlightSprite.color = GlobalGameAssets.Instance.HighlightColor;
         HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
 
         if (GlobalDebug.Instance.ShowIndexCodes)
