@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Services;
@@ -9,6 +10,8 @@ public class ExecutionOrderManager : MonoService
     private EasyService<BoardManager> _boardManager;
     public IEnumerable<ChessPiece> UnitOrderList;
 
+    public event Action OnTimeLineRefresh; 
+
     void Start()
     {
         
@@ -16,7 +19,12 @@ public class ExecutionOrderManager : MonoService
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            RefreshTimelineOrder();
+        }
         
+            
     }
 
     public void RefreshTimelineOrder()
@@ -24,5 +32,9 @@ public class ExecutionOrderManager : MonoService
         UnitOrderList = _boardManager.Value.Pieces.Values
             .OrderByDescending(piece => piece.Speed)
             .ThenBy(piece => piece.Team);
+        
+        OnTimeLineRefresh?.Invoke();
     }
+    
+    
 }
