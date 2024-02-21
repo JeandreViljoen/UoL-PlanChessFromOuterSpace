@@ -26,7 +26,9 @@ public class GlobalGameAssets : ScriptableObjectSingleton<GlobalGameAssets>
    public GameObject QueenPrefab;
    public ChessPieceData KingData;
    public GameObject KingPrefab;
-   
+
+   [Header("AI Balance Data")] 
+   public AIBalanceData AIBalanceData;
    
 
    public float ChessPieceAnimateSpeed;

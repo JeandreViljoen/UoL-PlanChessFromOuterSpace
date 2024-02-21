@@ -176,9 +176,6 @@ public class BoardManager : MonoService
 
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
-
-               ExecuteDebugCode(i,j);
-
             }
             // Reset X position
             squareBoardPosition.x = firstSquarePosition.x;
@@ -186,24 +183,44 @@ public class BoardManager : MonoService
             // Update Z position
             squareBoardPosition.z += squareBoardSize.z;
         }
+        
+        ExecuteDebugCode();
     }
 
-    private void ExecuteDebugCode(int i, int j)
+    private void ExecuteDebugCode()
     {
         if (GlobalDebug.Instance.PopulateBoardOnStart)
         {
-            float rng = UnityEngine.Random.Range(0f, 1f);
-
-            if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
+            for (int i = 0; i < _boardDepth; ++i)
             {
-                int randomPiece = UnityEngine.Random.Range(0, 6);
-                        
-                ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
-                        
-                ChessPiece piece = CreatePiece(type, i, j, Team.Friendly);
-                piece.Speed = UnityEngine.Random.Range(0, 5);
-            }
+                for (int j = 0; j < _boardWidth; ++j)
+                {
+                    float rng = UnityEngine.Random.Range(0f, 1f);
+
+                    if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
+                    {
+                        int randomPiece = UnityEngine.Random.Range(0, 5);
+                            
+                        ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
+
+                        Team randomTeam;
+                        if (UnityEngine.Random.Range(0,2) == 0)
+                        {
+                            randomTeam = Team.Friendly;
+                        }
+                        else
+                        {
+                            randomTeam = Team.Enemy;
+                        }
                     
+                        ChessPiece piece = CreatePiece(type, i, j, randomTeam);
+                    
+                    
+                        piece.Speed = UnityEngine.Random.Range(1, 5);
+                        Debug.Log($"{piece.Team} {piece.PieceType} | Speed : {piece.Speed}");
+                    }
+                }
+            }
         }
     }
 
@@ -312,7 +329,9 @@ public class BoardManager : MonoService
         // TODO: More initialisation required on the chess piece
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
         piece.Team = team;
+        piece.AssignedSquare = square;
         square.ChessPieceAssigned = piece;
+        piece.Init();
 
         _pieces.Add(pos, piece);
         return piece;
@@ -476,6 +495,7 @@ public class BoardManager : MonoService
         //TODO: Implement
         return 0;
     }
+    
 
     // --------------- Private Helpers ---------------
 
@@ -490,20 +510,5 @@ public class BoardManager : MonoService
 
     private void CheckIndex((int x, int y) pos)
         => CheckIndex(pos.x, pos.y);
-
-    //TEMP - DELETE THIS LATER
-    private IEnumerator DelayedBounce()
-    {
-        foreach (var block in _boardSquares)
-        {
-            block.BounceAnimate();
-            yield return new WaitForSeconds(0.02f);
-        }
-    }
-
-    private void BounceSquaresOnStateChange(GameState state)
-    {
-        StartCoroutine(DelayedBounce());
-    }
 
 }
