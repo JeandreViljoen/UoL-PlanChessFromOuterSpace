@@ -16,7 +16,7 @@ public class ShopManagerScript : MonoBehaviour
     {
         //currencyBalance = cbd.StartCurrency;
         currencyBalance = cm.Currency;
-        currencyTxt.text = "Currency: "+currencyBalance.ToString();
+        currencyTxt.text = "Currency: $"+currencyBalance.ToString();
         
         //Sets ItemIDs in the shop
         shopItems[1,1] = 1; //Pawn
