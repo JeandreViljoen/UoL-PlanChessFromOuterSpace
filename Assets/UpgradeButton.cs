@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class UpgradeButton : MonoBehaviour
 {
     public MouseEventHandler EventHandler;
+    public SpriteRenderer BackGround;
     public SpriteRenderer HighlightBorder;
     public SpriteRenderer Icon;
     public float AnimationSpeed = 0.15f;
@@ -32,8 +33,9 @@ public class UpgradeButton : MonoBehaviour
         _tweenHighlightFade = HighlightBorder.DOFade(0f, AnimationSpeed).SetEase(Ease.InOutSine).SetUpdate(true);
         _startScale = transform.localScale;
         
-        Icon.color = GlobalGameAssets.Instance.HighlightColor;
-        HighlightBorder.color = GlobalGameAssets.Instance.HighlightColor;
+        //Icon.color = GlobalGameAssets.Instance.HighlightColor;
+        //HighlightBorder.color = GlobalGameAssets.Instance.HighlightColor;
+        BackGround.color = GlobalGameAssets.Instance.HighlightColor;
     }
     
     void Update()

@@ -127,7 +127,7 @@ MonoBehaviour:
   - {x: 1, y: 0}
   - {x: 0, y: -1}
   - {x: -1, y: 0}
-  PossibleInteractableTiles: []
+  _timelineNode: {fileID: 0}
   Team: 0
 --- !u!1 &3917540364016151458
 GameObject:
@@ -600,6 +600,11 @@ PrefabInstance:
     - target: {fileID: 2060131937153303413, guid: d3c2a6d0114ce1442aba41049155d444,
         type: 3}
       propertyPath: m_Color.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2060131937153303413, guid: d3c2a6d0114ce1442aba41049155d444,
+        type: 3}
+      propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3393436892704994732, guid: d3c2a6d0114ce1442aba41049155d444,
