@@ -436,6 +436,7 @@ public class ChessPiece : MonoBehaviour
             case ChessPieceState.ATTACK:
                 break;
             case ChessPieceState.DEAD:
+                OnDeadState();
                 break;
             case ChessPieceState.END:
                 OnStateEnd?.Invoke();
@@ -443,6 +444,14 @@ public class ChessPiece : MonoBehaviour
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
+    }
+
+    void OnDeadState()
+    {
+        
+            
+        int reward = GlobalGameAssets.Instance.CurrencyBalanceData.BishopReward;
+        _currencyManager.Value.AddCurrency(reward);
     }
 
     public static ChessPieceData GetStartData(ChessPieceType PieceType)
