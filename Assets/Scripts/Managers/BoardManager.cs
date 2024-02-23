@@ -7,6 +7,7 @@ using DG.Tweening.Core;
 using Services;
 using UnityEngine;
 using Random = System.Random;
+using System.Threading;
 
 public class BoardManager : MonoService
 {
@@ -15,8 +16,10 @@ public class BoardManager : MonoService
     [Header("Chess Board Settings")]
     [SerializeField, Tooltip("Chess board width.")]
     private int _boardWidth = 8;
+    public int Width => _boardWidth;
     [SerializeField, Tooltip("Chess board depth.")]
     private int _boardDepth = 8;
+    public int Depth => _boardDepth;
     [SerializeField, Tooltip("Chess board center position.")]
     private Vector3 _centerPosition;
     // This list contains every board square generated on initialization
@@ -78,51 +81,10 @@ public class BoardManager : MonoService
         _pieces = new Dictionary<(int, int), ChessPiece>();
 
         GenerateChessBoard();
-
-        // Pawn creation for testing
-        //CreatePiece(ChessPieceType.Rook, 4, 4, Team.Friendly);
-
     }
 
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.P))
-        // {
-        //     CreatePiece(ChessPieceType.Rook, IndexCode.A8, Team.Friendly);
-        // }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            CreatePiece(ChessPieceType.Rook, (5, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            CreatePiece(ChessPieceType.Bishop, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            CreatePiece(ChessPieceType.Pawn, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            CreatePiece(ChessPieceType.King, (4, 4), Team.Friendly);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.N))
-
-        {
-            CreatePiece(ChessPieceType.Queen, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            CreatePiece(ChessPieceType.Knight, (4, 4), Team.Friendly);
-        }
-
-        // if (Input.GetKeyDown(KeyCode.M))
-        // {
-        //     MovePiece((7, 0), (0, 7));
-        // }
 
     }
 
@@ -182,45 +144,6 @@ public class BoardManager : MonoService
 
             // Update Z position
             squareBoardPosition.z += squareBoardSize.z;
-        }
-        
-        ExecuteDebugCode();
-    }
-
-    private void ExecuteDebugCode()
-    {
-        if (GlobalDebug.Instance.PopulateBoardOnStart)
-        {
-            for (int i = 0; i < _boardDepth; ++i)
-            {
-                for (int j = 0; j < _boardWidth; ++j)
-                {
-                    float rng = UnityEngine.Random.Range(0f, 1f);
-
-                    if (rng <= GlobalDebug.Instance.ChanceToPopulateTile)
-                    {
-                        int randomPiece = UnityEngine.Random.Range(0, 5);
-                            
-                        ChessPieceType type = (ChessPieceType) Enum.ToObject(typeof(ChessPieceType), randomPiece);
-
-                        Team randomTeam;
-                        if (UnityEngine.Random.Range(0,2) == 0)
-                        {
-                            randomTeam = Team.Friendly;
-                        }
-                        else
-                        {
-                            randomTeam = Team.Enemy;
-                        }
-                    
-                        ChessPiece piece = CreatePiece(type, i, j, randomTeam);
-                    
-                    
-                        piece.Speed = UnityEngine.Random.Range(1, 5);
-                        Debug.Log($"{piece.Team} {piece.PieceType} | Speed : {piece.Speed}");
-                    }
-                }
-            }
         }
     }
 
