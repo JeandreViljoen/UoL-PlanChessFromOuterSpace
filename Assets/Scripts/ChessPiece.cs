@@ -66,6 +66,7 @@ public class ChessPiece : MonoBehaviour
             {
                 _speedIconUIController.Speed = _speed;
                 UpdateLevel();
+                ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
             }
         }
     }
@@ -124,6 +125,8 @@ public class ChessPiece : MonoBehaviour
     public List<Vector2> RelativeMoveset;
     public List<Vector2> BaseRelativeMoveset;
     private List<BoardSquare> _possibleInteractableTiles;
+
+    [HideInInspector] public TimelineNode _timelineNode;
 
     public List<BoardSquare> PossibleInteractableTiles
     {
@@ -228,10 +231,9 @@ public class ChessPiece : MonoBehaviour
 
     }
 
-    private void RequestSelection()
+    public void RequestSelection(ChessPiece pieceToSelect)
     {
-        ServiceLocator.GetService<BoardManager>().SelectedUnit = this;
-        Debug.Log("SPEED OF SELECTED UNIT: " + Speed);
+        ServiceLocator.GetService<BoardManager>().SelectedUnit = pieceToSelect;
     }
 
     private void UpdateMoveset()
@@ -382,7 +384,12 @@ public class ChessPiece : MonoBehaviour
         //Init();
 
         _spritePosition = Sprite.transform.localPosition;
-        
+
+        SetUpEventHandlers();
+    }
+
+    private void SetUpEventHandlers()
+    {
         if (Team == Team.Enemy)
         {
             Sprite.color = GlobalDebug.Instance.EnemyTintColor;
@@ -390,14 +397,22 @@ public class ChessPiece : MonoBehaviour
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
             HighlightTiles(PossibleInteractableTiles);
+            if (_timelineNode != null)
+            {
+                _timelineNode.HighlightNode();
+            }
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
         {
             UnHighlightTiles(PossibleInteractableTiles);
+            if (_timelineNode != null)
+            {
+                _timelineNode.UnHighlightNode();
+            }
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseDown += (_) =>
         {
-            RequestSelection();
+            RequestSelection(this);
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseUp += (_) =>
         {
