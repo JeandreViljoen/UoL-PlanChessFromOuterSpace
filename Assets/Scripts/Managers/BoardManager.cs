@@ -489,6 +489,13 @@ public class BoardManager : MonoService
         => MovePiece((srcX, srcY), (dstX, dstY));
 
 
+    public bool DestroyPiece(ChessPiece piece)
+    {
+        bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+
+        return s;
+    }
 
     public int GetDistanceBetweenTiles(BoardSquare t1, BoardSquare t2)
     {

@@ -54,14 +54,6 @@ public class UnitOrderTimelineController : MonoBehaviour
         {
             NodeOffset++;
         }
-        // if (Input.GetKeyDown(KeyCode.DownArrow))
-        // {
-        //     NodeOffset--;
-        // }
-        // if (Input.GetKeyDown(KeyCode.UpArrow))
-        // {
-        //     NodeOffset++;
-        // }
     }
 
     public void InitTimeline()
@@ -110,7 +102,31 @@ public class UnitOrderTimelineController : MonoBehaviour
 
     public void RefreshTimelinePositions()
     {
-        StartCoroutine(DelayedRefreshTimelinePositions());
+        //If less pieces than node slots. Dont refresh anything
+        if (_nodes.Count <= NodeSlots.Count)
+        {
+            return;
+        }
+        
+        for (int i = 0; i < _nodes.Count; i++)
+        {
+            //Move nodes offscreen top
+            if (i < NodeOffset)
+            {
+                _nodes[i].MoveNode(TopSlot, 0.15f);
+            }
+            //Move nodes onto screen space slots
+            else if (i -_nodeOffset <= NodeSlots.Count-1)
+            {
+                _nodes[i].MoveNode(NodeSlots[i -_nodeOffset], 0.15f);
+            }
+            //Move notes off screen, bottom
+            else
+            {
+                _nodes[i].MoveNode(BottomSlot, 0.15f);
+            }
+        }
+        //StartCoroutine(DelayedRefreshTimelinePositions());
     }
 
     private IEnumerator DelayedRefreshTimelinePositions()
@@ -129,9 +145,7 @@ public class UnitOrderTimelineController : MonoBehaviour
             {
                 _nodes[i].MoveNode(BottomSlot, 0.15f);
             }
-            
             yield return new WaitForSeconds(0.00f);
-
         }
     }
 }

@@ -10,7 +10,9 @@ public class ExecutionOrderManager : MonoService
     private EasyService<BoardManager> _boardManager;
     public IEnumerable<ChessPiece> UnitOrderList;
 
-    public event Action OnTimeLineRefresh; 
+    public event Action OnTimeLineRefresh;
+
+    private int _currentActiveUnit = -1;
 
     void Start()
     {
@@ -24,6 +26,14 @@ public class ExecutionOrderManager : MonoService
             RefreshTimelineOrder();
         }
         
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            _currentActiveUnit++;
+            if (_currentActiveUnit < UnitOrderList.ToList().Count)
+            {
+                UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
+            }
+        }
             
     }
 

@@ -46,6 +46,22 @@ public class ChessPiece : MonoBehaviour
     // --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
     public SpriteRenderer Sprite;
+
+    private ChessPieceState _state;
+
+    public ChessPieceState State
+    {
+        get
+        {
+            return _state;
+        }
+        set
+        {
+            _state = value;
+            RunStateLogic(_state);
+        }
+    }
+    
     private ChessPieceData _data;
     private int _speed;
     public int Speed
@@ -158,7 +174,9 @@ public class ChessPiece : MonoBehaviour
     //     }
     // }
 
-    public event Action OnStateEnd;
+    public event Action OnEndState;
+    public event Action<BoardSquare> OnMoveEnd;
+    public event Action StateLogicCompleted;
 #endregion
 
     private void OnEnable()
@@ -174,7 +192,9 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown += OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown += OnRangeUpgradePressed;
         }
-       
+
+        OnMoveEnd += square => { State = ChessPieceState.END; UpdateMoveset(); };
+
     }
 
     private void UpdateLevel()
@@ -396,7 +416,7 @@ public class ChessPiece : MonoBehaviour
         }
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
-            HighlightTiles(PossibleInteractableTiles);
+            HighlightTiles(PossibleInteractableTiles, 0.2f);
             if (_timelineNode != null)
             {
                 _timelineNode.HighlightNode();
@@ -431,8 +451,14 @@ public class ChessPiece : MonoBehaviour
     /// <param name="BoardSquare"></param>
     public void MoveToBlock(BoardSquare square)
     {
-        
-        transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine);
+        Sequence s = DOTween.Sequence();
+        s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
+        s.AppendCallback(() =>
+        {
+            OnMoveEnd?.Invoke(square);
+            AssignedSquare = square;
+            square.ChessPieceAssigned = this;
+        });
         //IndexCodePosition = square.IndexCode;
     }
 
@@ -443,22 +469,83 @@ public class ChessPiece : MonoBehaviour
             case ChessPieceState.INACTIVE:
                 break;
             case ChessPieceState.START:
+                FalseSearchTiles(PossibleInteractableTiles, 0.1f);
                 break;
             case ChessPieceState.VALIDATE_BEST_MOVE:
+                //Requires AI Hook
+                ValidateBestMove();
                 break;
             case ChessPieceState.MOVE:
                 break;
             case ChessPieceState.ATTACK:
                 break;
             case ChessPieceState.DEAD:
+                Killed();
                 break;
             case ChessPieceState.END:
-                OnStateEnd?.Invoke();
+                OnEndState?.Invoke();
+                State = ChessPieceState.INACTIVE;
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
     }
+
+    private void ValidateBestMove()
+    {
+        StartCoroutine(ValidateBestMoveDelayed());
+    }
+
+    private IEnumerator ValidateBestMoveDelayed()
+    {
+        int choice = UnityEngine.Random.Range(0, PossibleInteractableTiles.Count);
+        
+        PossibleInteractableTiles[choice].Highlight(Team);
+        yield return new WaitForSeconds(0.5f);
+
+        if (!PossibleInteractableTiles[choice].IsEmpty())
+        {
+            State = ChessPieceState.ATTACK;
+            PossibleInteractableTiles[choice].ChessPieceAssigned.State = ChessPieceState.DEAD;
+            MoveToBlock(PossibleInteractableTiles[choice]);
+           
+        }
+        else
+        {
+            State = ChessPieceState.MOVE;
+            MoveToBlock(PossibleInteractableTiles[choice]);
+           
+        }
+        
+        PossibleInteractableTiles[choice].UnHighlight();
+    }
+
+    private void FalseSearchTiles(List<BoardSquare> tiles, float timePerTile)
+    {
+        _highlightMoveTween?.Kill();
+        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
+        _highlightRoutine = StartCoroutine(DelayedFalseSearch(tiles, timePerTile));
+        _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
+    }
+
+    private IEnumerator DelayedFalseSearch(List<BoardSquare> tiles, float delay)
+    {
+        foreach (var tile in tiles)
+        {
+            Sequence s = DOTween.Sequence();
+            s.AppendCallback(() => { tile.Highlight(Team); });
+            s.AppendInterval(delay*2);
+            
+            s.AppendCallback(() => { tile.UnHighlight(); });
+            //s.AppendInterval(delay/2);
+
+            yield return new WaitForSeconds(delay);
+        }
+
+        State = ChessPieceState.VALIDATE_BEST_MOVE;
+
+    }
+
 
     public static ChessPieceData GetStartData(ChessPieceType PieceType)
     {
@@ -507,17 +594,17 @@ public class ChessPiece : MonoBehaviour
     /// <summary>
     /// Highlight a list of BoardSquare tiles given in parameters
     /// </summary>
-    public void HighlightTiles(List<BoardSquare> tiles)
+    public void HighlightTiles(List<BoardSquare> tiles, float totalAnimTime)
     {
         _highlightMoveTween?.Kill();
         if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
-        _highlightRoutine = StartCoroutine(DelayedHighlight(tiles));
+        _highlightRoutine = StartCoroutine(DelayedHighlight(tiles, totalAnimTime));
         _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
     }
 
-    private IEnumerator DelayedHighlight(List<BoardSquare> tiles)
+    private IEnumerator DelayedHighlight(List<BoardSquare> tiles, float totalAnimTime)
     {
-        float totalAnimationTime = 0.2f;
+        float totalAnimationTime = totalAnimTime;
         float incrementTiming = totalAnimationTime / tiles.Count;
         
         //Highlight own square
@@ -559,6 +646,12 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
        
+    }
+
+    private void Killed()
+    {
+        ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
+        Destroy(gameObject);
     }
     
 }

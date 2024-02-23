@@ -87,7 +87,7 @@ public class TimelineNode : MonoBehaviour
         
         gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
         {
-            Piece.HighlightTiles(Piece.PossibleInteractableTiles);
+            Piece.HighlightTiles(Piece.PossibleInteractableTiles, 0.2f);
             HighlightNode();
         };
         gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
