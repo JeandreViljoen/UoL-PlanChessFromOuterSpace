@@ -159,6 +159,11 @@ public class ChessPiece : MonoBehaviour
     // }
 
     public event Action OnStateEnd;
+
+    public event Action OnSuccessfulUpgrade;
+    public event Action OnFailedUpgrade;
+    
+    
 #endregion
 
     private void OnEnable()
@@ -192,10 +197,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
         {
             Speed++;
+            OnSuccessfulUpgrade.Invoke();
         }
         else
         {
             //TODO: SHow feedback for not enough currency
+            OnFailedUpgrade.Invoke();
         }
         
     }
@@ -208,10 +215,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
         {
             Range++;
+            OnSuccessfulUpgrade.Invoke();
         }
         else
         {
             //TODO: SHow feedback for not enough currency
+            OnFailedUpgrade.Invoke();
         }
         
     }
