@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class TimelineNode : MonoBehaviour
 {
-    private ChessPiece Piece;
+    public ChessPiece Piece;
 
     [SerializeField] private Image _bulletpoint;
     [SerializeField] private Transform _linkPosition;
@@ -58,15 +58,22 @@ public class TimelineNode : MonoBehaviour
         SetUpEventHandlers();
     }
 
+    public void RefreshPiece()
+    {
+        _speedIcons.IconsToShow = Piece.Speed;
+        _levelText.text = $"LEVEL {Piece.Level}";
+    }
+
     private void InitPiece()
     {
+        Piece.TimelineNode = this;
         _portrait.sprite = Piece.Sprite.sprite;
         _speedIcons.IconsToShow = Piece.Speed;
         _levelText.text = $"LEVEL {Piece.Level}";
         _levelText.color = Piece.Team == Team.Friendly
             ? GlobalGameAssets.Instance.HighlightColor
             : GlobalDebug.Instance.EnemyTintColor;
-        Piece.TimelineNode = this;
+        
     }
 
     public void MoveNode(Transform node, float speed)

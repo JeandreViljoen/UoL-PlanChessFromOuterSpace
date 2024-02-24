@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Services;
 using UnityEngine;
 
@@ -70,6 +71,7 @@ public class UnitOrderTimelineController : MonoService
     void Start()
     {
         _orderManager.Value.OnTimeLineInit += InitTimeline;
+        //_orderManager.Value.OnTimeLineRefresh += RefreshChildIndices;
     }
     
     void Update()
@@ -160,6 +162,29 @@ public class UnitOrderTimelineController : MonoService
             }
         }
         //StartCoroutine(DelayedRefreshTimelinePositions());
+    }
+
+    public void RefreshListIndices()
+    {
+        if (_stateManager.Value.GameState != GameState.PREP)
+        {
+            return;
+        }
+
+        for (int i = 0; i < _orderManager.Value.UnitOrderList.ToList().Count; i++)
+        {
+            ChessPiece correctUnit = _orderManager.Value.UnitOrderList.ToList()[i];
+            
+            if (correctUnit != _nodes[i].Piece)
+            {
+                _nodes.Remove(correctUnit.TimelineNode);
+                _nodes.Insert(i, correctUnit.TimelineNode);
+
+                //_nodes[i].Piece = correctUnit;
+                //correctUnit.TimelineNode = _nodes[i];
+            } 
+        }
+        RefreshTimelinePositions();
     }
 
     private IEnumerator DelayedRefreshTimelinePositions()
