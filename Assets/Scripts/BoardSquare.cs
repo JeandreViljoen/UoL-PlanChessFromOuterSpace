@@ -87,7 +87,7 @@ public class BoardSquare : MonoBehaviour
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
             IndexCodeTextField.gameObject.SetActive(true);
-            IndexCodeTextField.color = GlobalDebug.Instance.HighlightColor;
+            //IndexCodeTextField.color = GlobalDebug.Instance.HighlightColor;
         }
         else
         {
@@ -103,6 +103,12 @@ public class BoardSquare : MonoBehaviour
     }
     
     // --------------- Public Functions and Methods ---------------
+
+    public void Clear()
+    {
+        ChessPieceAssigned = null;
+    }
+    
     
     // Returns the chess piece assigned to this board square
     public ChessPiece GetChessPiece()

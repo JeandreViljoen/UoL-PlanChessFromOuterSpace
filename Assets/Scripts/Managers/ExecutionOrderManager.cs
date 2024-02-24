@@ -33,18 +33,32 @@ public class ExecutionOrderManager : MonoService
             {
                 UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
             }
+            else
+            {
+                _currentActiveUnit = 0;
+                UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
+            }
         }
-            
     }
 
     public void RefreshTimelineOrder()
     {
-        UnitOrderList = _boardManager.Value.Pieces.Values
+        //Debug.Log($"Atttempting refresh of Timeline: Pieces.Count = {_boardManager.Value.ListofPieces.Count}");
+        
+        UnitOrderList = _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
             .ThenBy(piece => piece.Team);
         
         OnTimeLineRefresh?.Invoke();
     }
-    
+
+    public void AdvanceQueue()
+    {
+        _currentActiveUnit++;
+        if (_currentActiveUnit < UnitOrderList.ToList().Count)
+        {
+            UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
+        }
+    }
     
 }

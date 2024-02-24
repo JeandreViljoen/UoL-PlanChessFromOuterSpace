@@ -24,6 +24,9 @@ public class BoardManager : MonoService
     // This list contains every chess piece on the board
     private Dictionary<(int, int), ChessPiece> _pieces;
     public IReadOnlyDictionary<(int, int), ChessPiece> Pieces => _pieces;
+    
+    //REFACTOR
+    public List<ChessPiece> ListofPieces;
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -333,6 +336,7 @@ public class BoardManager : MonoService
         square.ChessPieceAssigned = piece;
         piece.Init();
 
+        ListofPieces.Add(piece);
         _pieces.Add(pos, piece);
         return piece;
     }
@@ -491,9 +495,9 @@ public class BoardManager : MonoService
 
     public bool DestroyPiece(ChessPiece piece)
     {
-        bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        //bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        bool s = ListofPieces.Remove(piece);
         ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
-
         return s;
     }
 

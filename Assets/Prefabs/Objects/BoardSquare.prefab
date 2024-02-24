@@ -28,7 +28,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3837180676674853827}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2611352934844891268
 GameObject:
@@ -60,7 +60,7 @@ Transform:
   m_LocalScale: {x: 0.1182266, y: 0.118811876, z: 1}
   m_Children: []
   m_Father: {fileID: 3837180676674853827}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &6702488762534732672
 SpriteRenderer:
@@ -250,7 +250,7 @@ Transform:
   m_LocalScale: {x: 0.12822667, y: 0.12797506, z: 1}
   m_Children: []
   m_Father: {fileID: 3837180676674853827}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!212 &9040715559351463145
 SpriteRenderer:
@@ -347,10 +347,10 @@ Transform:
   m_LocalScale: {x: 1, y: 0.01, z: 1}
   m_Children:
   - {fileID: 8836543032944032868}
-  - {fileID: 3175471567199797293}
   - {fileID: 81747571191998378}
   - {fileID: 2703099330900461522}
   - {fileID: 3879627801747938341}
+  - {fileID: 3175471567199797293}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -466,11 +466,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3837180676674853827}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0.521}
+  m_AnchoredPosition: {x: 0, y: 6.8}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &10815256941006931
@@ -509,8 +509,8 @@ MeshRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1399863259
+  m_SortingLayer: 4
   m_SortingOrder: 0
 --- !u!222 &2052190395138506368
 CanvasRenderer:
@@ -539,7 +539,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: F7
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -548,8 +548,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4282203647
-  m_fontColor: {r: 1, g: 0.24056602, b: 0.24056602, a: 1}
+    rgba: 469762047
+  m_fontColor: {r: 1, g: 1, b: 1, a: 0.105882354}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:

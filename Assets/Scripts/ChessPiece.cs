@@ -1,5 +1,6 @@
 ﻿using System;using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Services;
 using UnityEngine;
@@ -193,7 +194,7 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown += OnRangeUpgradePressed;
         }
 
-        OnMoveEnd += square => { State = ChessPieceState.END; UpdateMoveset(); };
+        OnMoveEnd += square => { State = ChessPieceState.END; };
 
     }
 
@@ -364,7 +365,7 @@ public class ChessPiece : MonoBehaviour
                 }
             }
         }
-        return tiles;
+        return tiles; 
     }
 
     
@@ -414,22 +415,9 @@ public class ChessPiece : MonoBehaviour
         {
             Sprite.color = GlobalDebug.Instance.EnemyTintColor;
         }
-        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += (_) =>
-        {
-            HighlightTiles(PossibleInteractableTiles, 0.2f);
-            if (_timelineNode != null)
-            {
-                _timelineNode.HighlightNode();
-            }
-        };
-        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += (_) =>
-        {
-            UnHighlightTiles(PossibleInteractableTiles);
-            if (_timelineNode != null)
-            {
-                _timelineNode.UnHighlightNode();
-            }
-        };
+
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += Highlight;
+        Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseExit += UnHighlight;
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseDown += (_) =>
         {
             RequestSelection(this);
@@ -438,6 +426,24 @@ public class ChessPiece : MonoBehaviour
         {
            
         };
+    }
+
+    private void Highlight(PointerEventData _)
+    {
+        HighlightTiles(PossibleInteractableTiles, 0.2f);
+        if (_timelineNode != null)
+        {
+            _timelineNode.HighlightNode();
+        }
+    }
+
+    private void UnHighlight(PointerEventData _)
+    {
+        UnHighlightTiles(PossibleInteractableTiles);
+        if (_timelineNode != null)
+        {
+            _timelineNode.UnHighlightNode();
+        }
     }
 
     void Update()
@@ -455,11 +461,19 @@ public class ChessPiece : MonoBehaviour
         s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
         s.AppendCallback(() =>
         {
-            OnMoveEnd?.Invoke(square);
-            AssignedSquare = square;
-            square.ChessPieceAssigned = this;
+            cb(square);
+
         });
         //IndexCodePosition = square.IndexCode;
+    }
+
+    private void cb(BoardSquare square)
+    {
+        BoardSquare oldSquare = AssignedSquare;
+        AssignedSquare = square;
+        AssignedSquare.ChessPieceAssigned = this;
+        OnMoveEnd?.Invoke(square); 
+        oldSquare.ChessPieceAssigned = null;
     }
 
     public void RunStateLogic(ChessPieceState state)
@@ -469,6 +483,11 @@ public class ChessPiece : MonoBehaviour
             case ChessPieceState.INACTIVE:
                 break;
             case ChessPieceState.START:
+                if (GlobalDebug.Instance.ShowCombatMessageLogs)
+                {
+                    Debug.Log($"-------------------------- {ToString(this)} ---- START -------------------------\n");
+                }
+                UpdateMoveset();
                 FalseSearchTiles(PossibleInteractableTiles, 0.1f);
                 break;
             case ChessPieceState.VALIDATE_BEST_MOVE:
@@ -483,12 +502,24 @@ public class ChessPiece : MonoBehaviour
                 Killed();
                 break;
             case ChessPieceState.END:
+                UpdateMoveset();
+                if (GlobalDebug.Instance.ShowCombatMessageLogs)
+                {
+                    Debug.Log($"--------------------------------------- END ------------------------------------\n");
+                }
                 OnEndState?.Invoke();
+                ServiceLocator.GetService<ExecutionOrderManager>().AdvanceQueue();
                 State = ChessPieceState.INACTIVE;
+                
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
+    }
+
+    public static string ToString(ChessPiece piece)
+    {
+        return $"{piece.GetSpeedRepresentation()} {piece.Team} {piece.PieceType} ({piece.AssignedSquare.IndexCode})";
     }
 
     private void ValidateBestMove()
@@ -498,13 +529,25 @@ public class ChessPiece : MonoBehaviour
 
     private IEnumerator ValidateBestMoveDelayed()
     {
+        if (PossibleInteractableTiles.Count < 1 )
+        {
+            if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log("\t\tNo move choices. Staying put\n");
+            yield return new WaitForSeconds(0.5f);
+            OnMoveEnd?.Invoke(AssignedSquare);
+            yield break;
+        }
+        
         int choice = UnityEngine.Random.Range(0, PossibleInteractableTiles.Count);
+        
+        if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log(  $"\t\t{PossibleInteractableTiles.Count} possible moves.\n");
         
         PossibleInteractableTiles[choice].Highlight(Team);
         yield return new WaitForSeconds(0.5f);
 
         if (!PossibleInteractableTiles[choice].IsEmpty())
         {
+            if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\tATTACKING {PossibleInteractableTiles[choice].ChessPieceAssigned.PieceType} at {PossibleInteractableTiles[choice].IndexCode}\n");
+
             State = ChessPieceState.ATTACK;
             PossibleInteractableTiles[choice].ChessPieceAssigned.State = ChessPieceState.DEAD;
             MoveToBlock(PossibleInteractableTiles[choice]);
@@ -512,12 +555,24 @@ public class ChessPiece : MonoBehaviour
         }
         else
         {
+            if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\tMOVING to {PossibleInteractableTiles[choice].IndexCode}\n");
             State = ChessPieceState.MOVE;
             MoveToBlock(PossibleInteractableTiles[choice]);
            
         }
         
         PossibleInteractableTiles[choice].UnHighlight();
+    }
+
+    private string GetSpeedRepresentation()
+    {
+        string s = "";
+        for (int i = 0; i < _speed; i++)
+        {
+            s +=(">");
+        }
+
+        return s;
     }
 
     private void FalseSearchTiles(List<BoardSquare> tiles, float timePerTile)
@@ -650,8 +705,12 @@ public class ChessPiece : MonoBehaviour
 
     private void Killed()
     {
+        if (Team == Team.Enemy)
+        {
+            _currencyManager.Value.RequestCaptureReward(this);
+        }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
     }
-    
+
 }
