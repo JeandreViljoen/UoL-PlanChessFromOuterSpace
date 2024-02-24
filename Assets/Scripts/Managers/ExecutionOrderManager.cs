@@ -20,6 +20,7 @@ public class ExecutionOrderManager : MonoService
     void Start()
     {
         _stateManager.Value.OnStateChanged += StateChangeLogic;
+        ServiceLocator.GetService<TransitionController>().OnTransitionStart += StateTransitionLogic;
     }
 
     void Update()
@@ -78,13 +79,38 @@ public class ExecutionOrderManager : MonoService
     {
         switch (state)
         {
+            case GameState.TRANSITION:
+                break;
+            case GameState.START:
+                break;
+            case GameState.PREP:
+                //StartPrep();
+                break;
+            case GameState.COMBAT:
+                StartCombat();
+                break;
+            case GameState.WIN:
+                break;
+            case GameState.LOSE:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(state), state, null);
+        }
+        
+    }
+    
+    private void StateTransitionLogic(GameState state)
+    {
+        switch (state)
+        {
+            case GameState.TRANSITION:
+                break;
             case GameState.START:
                 break;
             case GameState.PREP:
                 StartPrep();
                 break;
             case GameState.COMBAT:
-                StartCombat();
                 break;
             case GameState.WIN:
                 break;
@@ -108,7 +134,7 @@ public class ExecutionOrderManager : MonoService
     {
         RefreshTimelineOrder();
         OnTimeLineInit?.Invoke();
-        
+        //TODO: SHow shop
 
     }
 }

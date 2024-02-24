@@ -74,9 +74,8 @@ public class UnitOrderTimelineController : MonoService
     
     void Update()
     {
-
         
-        if (_stateManager.Value.GameState == GameState.PREP && _stateManager.Value.GetTimeSinceStateChange() > 1)
+        if (_stateManager.Value.GameState == GameState.PREP && _stateManager.Value.GetTimeSinceStateChange() > 2)
         {
             if (Input.mouseScrollDelta.y > 0f)
             {

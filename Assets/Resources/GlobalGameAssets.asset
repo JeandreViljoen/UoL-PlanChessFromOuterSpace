@@ -33,4 +33,5 @@ MonoBehaviour:
   KingData: {fileID: 11400000, guid: aa6a198830a33a94dae9409391e74048, type: 2}
   KingPrefab: {fileID: 7960528148421452470, guid: c9ed32979c41b9746b27a3a0dec52a6e,
     type: 3}
-  ChessPieceAnimateSpeed: 1
+  AIBalanceData: {fileID: 11400000, guid: 65651d9280e60934c8ca86c6873a85b8, type: 2}
+  ChessPieceAnimateSpeed: 0.5
