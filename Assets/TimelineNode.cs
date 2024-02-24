@@ -25,6 +25,7 @@ public class TimelineNode : MonoBehaviour
     private Tween _tweenBulletpointScale;
 
     private Transform _assignedNode;
+    private bool _isDying = false;
     
     void Start()
     {
@@ -65,7 +66,7 @@ public class TimelineNode : MonoBehaviour
         _levelText.color = Piece.Team == Team.Friendly
             ? GlobalGameAssets.Instance.HighlightColor
             : GlobalDebug.Instance.EnemyTintColor;
-        Piece._timelineNode = this;
+        Piece.TimelineNode = this;
     }
 
     public void MoveNode(Transform node, float speed)
@@ -107,6 +108,10 @@ public class TimelineNode : MonoBehaviour
 
     public void HighlightNode()
     {
+        if (_isDying)
+        {
+            return;
+        }
         _highlightMoveTween?.Kill();
         _tweenBulletpointScale?.Kill();
         _highlightMoveTween = _panelsContainer.transform.DOLocalMove(_panelsContainerBasePosition + Vector3.right*10f, 0.15f).SetEase(Ease.InOutSine);
@@ -116,11 +121,32 @@ public class TimelineNode : MonoBehaviour
     
     public void UnHighlightNode()
     {
+        if (_isDying)
+        {
+            return;
+        }
         _highlightMoveTween?.Kill();
         _tweenBulletpointScale?.Kill();
         _highlightMoveTween = _panelsContainer.transform.DOLocalMove(_panelsContainerBasePosition, 0.15f).SetEase(Ease.InOutSine);
         _bulletpoint.color = Color.white;
         _tweenBulletpointScale = _bulletpoint.transform.DOScale(Vector3.one, 0.15f);
+    }
+
+    public void KillAnimation(float killTime)
+    {
+        Sequence k = DOTween.Sequence();
+        
+        _isDying = true;
+        _highlightMoveTween?.Kill();
+        _tweenBulletpointScale?.Kill();
+        _bulletpoint.color = GlobalGameAssets.Instance.HighlightColor;
+        _tweenBulletpointScale = _bulletpoint.transform.DOScale(Vector3.one *1.2f, killTime);
+        k.Append( _panelsContainer.transform.DOLocalMove(_panelsContainerBasePosition + Vector3.right*100f, killTime).SetEase(Ease.InOutSine));
+        k.AppendCallback(() => { Destroy(gameObject);});
+
+
+
+
     }
     
 }

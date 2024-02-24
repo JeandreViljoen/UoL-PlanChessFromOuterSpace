@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using Services;
 using UnityEngine;
 
-public class UnitOrderTimelineController : MonoBehaviour
+public class UnitOrderTimelineController : MonoService
 {
     private EasyService<ExecutionOrderManager> _orderManager;
+    private EasyService<GameStateManager> _stateManager;
 
     [SerializeField] private Transform TopSlot;
     [SerializeField] private List<Transform> NodeSlots;
@@ -17,6 +18,7 @@ public class UnitOrderTimelineController : MonoBehaviour
     private List<TimelineNode> _nodes = new List<TimelineNode>();
 
     private int _nodeOffset;
+    private int _maxNodeOffset;
 
     public int NodeOffset
     {
@@ -26,10 +28,12 @@ public class UnitOrderTimelineController : MonoBehaviour
         }
         set
         {
+            setMaxOffset();
+            
             int validatedOffset = 0;
             if (value > 0)
             {
-                validatedOffset = Math.Min(value, _nodes.Count - NodeSlots.Count);
+                validatedOffset = Math.Min(value, _maxNodeOffset);
             }
 
             _nodeOffset = validatedOffset;
@@ -38,22 +42,52 @@ public class UnitOrderTimelineController : MonoBehaviour
         }
     }
 
+    void setMaxOffset()
+    {
+        switch (ServiceLocator.GetService<GameStateManager>().GameState)
+        {
+            case GameState.START:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
+            case GameState.PREP:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
+            case GameState.COMBAT:
+                _maxNodeOffset = _nodes.Count;
+                break;
+            case GameState.WIN:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
+            case GameState.LOSE:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        
+    }
+
     void Start()
     {
-        _orderManager.Value.OnTimeLineRefresh += InitTimeline;
+        _orderManager.Value.OnTimeLineInit += InitTimeline;
     }
     
     void Update()
     {
 
-        if (Input.mouseScrollDelta.y > 0f)
+        
+        if (_stateManager.Value.GameState == GameState.PREP && _stateManager.Value.GetTimeSinceStateChange() > 1)
         {
-            NodeOffset--;
+            if (Input.mouseScrollDelta.y > 0f)
+            {
+                NodeOffset--;
+            }
+            else if (Input.mouseScrollDelta.y < 0f)
+            {
+                NodeOffset++;
+            }
         }
-        else if (Input.mouseScrollDelta.y < 0f)
-        {
-            NodeOffset++;
-        }
+       
     }
 
     public void InitTimeline()
@@ -147,5 +181,19 @@ public class UnitOrderTimelineController : MonoBehaviour
             }
             yield return new WaitForSeconds(0.00f);
         }
+    }
+    
+    public void RemoveTimelineNode(TimelineNode nodeToRemove)
+    {
+        StartCoroutine(DelayedKill(nodeToRemove));
+    }
+
+    private IEnumerator DelayedKill(TimelineNode nodeToRemove)
+    {
+        nodeToRemove.KillAnimation(1f);
+        yield return new WaitForSeconds(1.2f);
+        bool s = _nodes.Remove(nodeToRemove);
+        RefreshTimelinePositions();
+        
     }
 }

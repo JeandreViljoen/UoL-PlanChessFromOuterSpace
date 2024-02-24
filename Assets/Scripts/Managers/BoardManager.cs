@@ -496,6 +496,7 @@ public class BoardManager : MonoService
     public bool DestroyPiece(ChessPiece piece)
     {
         //bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        ServiceLocator.GetService<UnitOrderTimelineController>().RemoveTimelineNode(piece.TimelineNode);
         bool s = ListofPieces.Remove(piece);
         ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
         return s;

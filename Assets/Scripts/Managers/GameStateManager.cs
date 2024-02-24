@@ -8,6 +8,7 @@ public class GameStateManager : MonoService
 {
 
     private GameState _gameState;
+    private float _stateChangeTime;
 
 
 
@@ -31,6 +32,8 @@ public class GameStateManager : MonoService
             {
                 case GameState.START:
                     break;
+                case GameState.SPAWN:
+                    break;
                 case GameState.PREP:
                     break;
                 case GameState.COMBAT:
@@ -44,6 +47,7 @@ public class GameStateManager : MonoService
             }
 
             OnStateChanged?.Invoke(_gameState);
+            _stateChangeTime = Time.time;
         }
     }
 
@@ -51,7 +55,7 @@ public class GameStateManager : MonoService
 
     void Start()
     {
-       
+        GameState = GameState.PREP;
     }
 
     void Update()
@@ -59,11 +63,19 @@ public class GameStateManager : MonoService
         
     }
 
+    public float GetTimeSinceStateChange()
+    {
+        return Time.time - _stateChangeTime;
+    }
+
 }
+
+
 
 public enum GameState
 {
     START,
+    SPAWN,
     PREP,
     COMBAT,
     WIN,

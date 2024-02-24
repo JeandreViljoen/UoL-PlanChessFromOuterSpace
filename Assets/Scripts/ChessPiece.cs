@@ -143,7 +143,7 @@ public class ChessPiece : MonoBehaviour
     public List<Vector2> BaseRelativeMoveset;
     private List<BoardSquare> _possibleInteractableTiles;
 
-    [HideInInspector] public TimelineNode _timelineNode;
+    [HideInInspector] public TimelineNode TimelineNode;
 
     public List<BoardSquare> PossibleInteractableTiles
     {
@@ -431,18 +431,18 @@ public class ChessPiece : MonoBehaviour
     private void Highlight(PointerEventData _)
     {
         HighlightTiles(PossibleInteractableTiles, 0.2f);
-        if (_timelineNode != null)
+        if (TimelineNode != null)
         {
-            _timelineNode.HighlightNode();
+            TimelineNode.HighlightNode();
         }
     }
 
     private void UnHighlight(PointerEventData _)
     {
         UnHighlightTiles(PossibleInteractableTiles);
-        if (_timelineNode != null)
+        if (TimelineNode != null)
         {
-            _timelineNode.UnHighlightNode();
+            TimelineNode.UnHighlightNode();
         }
     }
 
@@ -461,19 +461,22 @@ public class ChessPiece : MonoBehaviour
         s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
         s.AppendCallback(() =>
         {
-            cb(square);
+            OnMoveEndLogic(square);
 
         });
         //IndexCodePosition = square.IndexCode;
     }
 
-    private void cb(BoardSquare square)
+    private void OnMoveEndLogic(BoardSquare square)
     {
+        UnHighlightTiles(PossibleInteractableTiles);
         BoardSquare oldSquare = AssignedSquare;
         AssignedSquare = square;
         AssignedSquare.ChessPieceAssigned = this;
         OnMoveEnd?.Invoke(square); 
+        
         oldSquare.ChessPieceAssigned = null;
+        
     }
 
     public void RunStateLogic(ChessPieceState state)
@@ -487,8 +490,10 @@ public class ChessPiece : MonoBehaviour
                 {
                     Debug.Log($"-------------------------- {ToString(this)} ---- START -------------------------\n");
                 }
+                TimelineNode.HighlightNode();
                 UpdateMoveset();
-                FalseSearchTiles(PossibleInteractableTiles, 0.1f);
+                HighlightTiles(PossibleInteractableTiles, 0.2f);
+                State = ChessPieceState.VALIDATE_BEST_MOVE;
                 break;
             case ChessPieceState.VALIDATE_BEST_MOVE:
                 //Requires AI Hook
@@ -507,8 +512,11 @@ public class ChessPiece : MonoBehaviour
                 {
                     Debug.Log($"--------------------------------------- END ------------------------------------\n");
                 }
+                TimelineNode.UnHighlightNode();
                 OnEndState?.Invoke();
+                ServiceLocator.GetService<UnitOrderTimelineController>().NodeOffset++;
                 ServiceLocator.GetService<ExecutionOrderManager>().AdvanceQueue();
+                
                 State = ChessPieceState.INACTIVE;
                 
                 break;
@@ -541,7 +549,7 @@ public class ChessPiece : MonoBehaviour
         
         if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log(  $"\t\t{PossibleInteractableTiles.Count} possible moves.\n");
         
-        PossibleInteractableTiles[choice].Highlight(Team);
+        PossibleInteractableTiles[choice].TargetFlash();
         yield return new WaitForSeconds(0.5f);
 
         if (!PossibleInteractableTiles[choice].IsEmpty())
@@ -551,17 +559,13 @@ public class ChessPiece : MonoBehaviour
             State = ChessPieceState.ATTACK;
             PossibleInteractableTiles[choice].ChessPieceAssigned.State = ChessPieceState.DEAD;
             MoveToBlock(PossibleInteractableTiles[choice]);
-           
         }
         else
         {
             if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\tMOVING to {PossibleInteractableTiles[choice].IndexCode}\n");
             State = ChessPieceState.MOVE;
             MoveToBlock(PossibleInteractableTiles[choice]);
-           
         }
-        
-        PossibleInteractableTiles[choice].UnHighlight();
     }
 
     private string GetSpeedRepresentation()
