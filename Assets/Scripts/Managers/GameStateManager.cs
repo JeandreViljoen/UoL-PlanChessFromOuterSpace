@@ -8,6 +8,8 @@ public class GameStateManager : MonoService
 {
 
     private GameState _gameState;
+    private float _stateChangeTime;
+    private EasyService<TransitionController> _transitionController;
 
 
 
@@ -24,12 +26,24 @@ public class GameStateManager : MonoService
                 Debug.LogWarning($"[GameStateManager.cs] - : Attempted to set the game state to {value} but the GameState is already set to {value}. Returning early without executing state logic.");
                 return;
             }
-            
-            _gameState = value;
-            
+
+            if (_gameState != GameState.TRANSITION)
+            {
+                _gameState = GameState.TRANSITION;
+            }
+            else
+            {
+                _gameState = value;
+            }
+
             switch (_gameState)
             {
+                case GameState.TRANSITION:
+                    _transitionController.Value.Transition(value);
+                    break;
                 case GameState.START:
+                    break;
+                case GameState.SPAWN:
                     break;
                 case GameState.PREP:
                     break;
@@ -44,6 +58,7 @@ public class GameStateManager : MonoService
             }
 
             OnStateChanged?.Invoke(_gameState);
+            _stateChangeTime = Time.time;
         }
     }
 
@@ -51,7 +66,7 @@ public class GameStateManager : MonoService
 
     void Start()
     {
-       
+        GameState = GameState.PREP;
     }
 
     void Update()
@@ -59,15 +74,24 @@ public class GameStateManager : MonoService
         
     }
 
+    public float GetTimeSinceStateChange()
+    {
+        return Time.time - _stateChangeTime;
+    }
+
 }
+
+
 
 public enum GameState
 {
     START,
+    SPAWN,
     PREP,
     COMBAT,
     WIN,
-    LOSE
+    LOSE,
+    TRANSITION
 }
 
 /*
