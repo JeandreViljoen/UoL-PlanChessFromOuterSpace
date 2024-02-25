@@ -29,8 +29,8 @@ public class AudioManager : MonoService
     private bool _isInitialized = false;
     
     // --- Buttons
-    public Button PauseButton;
-    public List<Button> UIButtons;
+    // public Button PauseButton;
+    // public List<Button> UIButtons;
     
     // --- Member methods & functions ---
     private void Start()
@@ -43,21 +43,21 @@ public class AudioManager : MonoService
         _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>(); 
         
         // Initialize button listeners
-        foreach (var button in UIButtons)
-        {
-            button.onClick.AddListener(PlayUIButtonSFX);
-            Debug.Log($"AudioManager: Button from game object #{button.gameObject.name} added as UI button.");
-        }
+        // foreach (var button in UIButtons)
+        // {
+        //     button.onClick.AddListener(PlayUIButtonSFX);
+        //     Debug.Log($"AudioManager: Button from game object #{button.gameObject.name} added as UI button.");
+        // }
 
         // Set Pause Button sound
-        if (PauseButton)
-        {
-            PauseButton.onClick.AddListener(PlayPauseButtonSFX);
-        }
-        else
-        {
-            Debug.LogWarning("There is no pause button assigned to the AudioManager.");
-        }
+        // if (PauseButton)
+        // {
+        //     PauseButton.onClick.AddListener(PlayPauseButtonSFX);
+        // }
+        // else
+        // {
+        //     Debug.LogWarning("There is no pause button assigned to the AudioManager.");
+        // }
         
         // Camera management sounds
         if (FocusTileSound)
@@ -82,12 +82,12 @@ public class AudioManager : MonoService
         PlaySFX(FailSound);
     }
 
-    private void PlayUIButtonSFX()
+    public void PlayUIButtonSFX()
     {
         PlaySFX(UiButtonPressed);
     }
 
-    private void PlayPauseButtonSFX()
+    public void PlayPauseButtonSFX()
     {
         PlaySFX(PauseButtonSound);
     }
