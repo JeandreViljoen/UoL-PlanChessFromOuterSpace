@@ -294,8 +294,6 @@ public class BoardManager : MonoService
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
         piece.Team = team;
         piece.AssignedSquare = square;
-        piece.OnSuccessfulUpgrade += _audioManager.Value.PlaySuccessSFX;
-        piece.OnFailedUpgrade += _audioManager.Value.PlayFailSFX;
         square.ChessPieceAssigned = piece;
         piece.Init();
 

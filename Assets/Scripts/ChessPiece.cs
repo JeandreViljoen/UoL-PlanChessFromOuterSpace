@@ -127,6 +127,7 @@ public class ChessPiece : MonoBehaviour
     private UpgradeButtonUIController _upgradeButtonUIController;
 
     private EasyService<CurrencyManager> _currencyManager;
+    private EasyService<AudioManager> _audioManager;
 
     public int Range
     {
@@ -217,12 +218,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
         {
             Speed++;
-            OnSuccessfulUpgrade.Invoke();
+            OnSuccessfulUpgrade?.Invoke();
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade.Invoke();
+            OnFailedUpgrade?.Invoke();
         }
         
     }
@@ -235,12 +236,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
         {
             Range++;
-            OnSuccessfulUpgrade.Invoke();
+            OnSuccessfulUpgrade?.Invoke();
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade.Invoke();
+            OnFailedUpgrade?.Invoke();
         }
         
     }
@@ -413,6 +414,10 @@ public class ChessPiece : MonoBehaviour
         //Init();
 
         _spritePosition = Sprite.transform.localPosition;
+    
+        // Setup SFX
+        OnSuccessfulUpgrade += _audioManager.Value.PlaySuccessSFX;
+        OnFailedUpgrade += _audioManager.Value.PlayFailSFX;
 
         SetUpEventHandlers();
     }
@@ -712,6 +717,10 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
+        
+        // Remove SFX subscriptions
+        OnSuccessfulUpgrade -= _audioManager.Value.PlaySuccessSFX;
+        OnFailedUpgrade -= _audioManager.Value.PlayFailSFX;
        
     }
 
