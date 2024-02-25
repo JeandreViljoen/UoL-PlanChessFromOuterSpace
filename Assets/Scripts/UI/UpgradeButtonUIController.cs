@@ -16,7 +16,7 @@ public class UpgradeButtonUIController : MonoBehaviour
     void Start()
     {
         // _cameraManager.Value.OnCameraFocus += Show;
-         _cameraManager.Value.OnCameraTopDown += Hide;
+        _cameraManager.Value.OnCameraTopDown += Hide;
         Hide();
     }
 
@@ -58,6 +58,12 @@ public class UpgradeButtonUIController : MonoBehaviour
 //         }
 //     }
 // }
+
+
+    private void OnDestroy()
+    {
+        _cameraManager.Value.OnCameraTopDown -= Hide;
+    }
 
 }
 

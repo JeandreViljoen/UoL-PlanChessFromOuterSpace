@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartCurrency: 300
   CurrencyEarnedPerRound: 50
+  AdditionalCurrencyRewardPerLevel: 5
   QueenReward: 50
   RookReward: 25
   KnightReward: 35

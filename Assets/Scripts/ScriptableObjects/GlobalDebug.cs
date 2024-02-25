@@ -12,4 +12,6 @@ public class GlobalDebug : ScriptableObjectSingleton<GlobalDebug>
 
    public Color HighlightColor;
    public Color EnemyTintColor;
+
+   public bool ShowCombatMessageLogs;
 }

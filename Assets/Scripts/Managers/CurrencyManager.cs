@@ -88,4 +88,39 @@ public class CurrencyManager : MonoService
 
         return false;
     }
+
+    public void RequestCaptureReward(ChessPiece piece)
+    {
+        int baseReward = 0;
+        int additionalReward = 0;
+        
+        switch (piece.PieceType)
+        {
+            case ChessPieceType.Pawn:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.PawnReward;
+                break;
+            case ChessPieceType.Knight:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.KnightReward;
+                break;
+            case ChessPieceType.Bishop:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.BishopReward;
+                break;
+            case ChessPieceType.Rook:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.RookReward;
+                break;
+            case ChessPieceType.Queen:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.QueenReward;
+                break;
+            case ChessPieceType.King:
+                baseReward = GlobalGameAssets.Instance.CurrencyBalanceData.KingReward;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        additionalReward = (piece.Level-1) * GlobalGameAssets.Instance.CurrencyBalanceData.AdditionalCurrencyRewardPerLevel;
+        
+        AddCurrency(baseReward + additionalReward);
+        if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\t{ChessPiece.ToString(piece)} CAPTURED! - Rewarding currency:\n\t\tBase: {baseReward}\t\tAdditional: {additionalReward}");
+    }
 }

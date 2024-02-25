@@ -47,6 +47,10 @@ public class BoardSquare : MonoBehaviour
     private Tween _tweenAttackSignalFade;
     private Vector3 _attackSignalPosition;
 
+    public SpriteRenderer TargetSignalSprite;
+    private Tween _tweenTargetFlash;
+    
+
     public Color WhiteTileColor;
     public Color BlackTileColor;
     
@@ -83,11 +87,12 @@ public class BoardSquare : MonoBehaviour
         _attackSignalPosition = AttackSignalSprite.transform.localPosition;
         _tweenHighlightFade = HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.000001f).SetUpdate(true);
+        _tweenTargetFlash = TargetSignalSprite.DOFade(0f, 0.000001f).SetUpdate(true);
 
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
             IndexCodeTextField.gameObject.SetActive(true);
-            IndexCodeTextField.color = GlobalDebug.Instance.HighlightColor;
+            //IndexCodeTextField.color = GlobalDebug.Instance.HighlightColor;
         }
         else
         {
@@ -103,6 +108,12 @@ public class BoardSquare : MonoBehaviour
     }
     
     // --------------- Public Functions and Methods ---------------
+
+    public void Clear()
+    {
+        ChessPieceAssigned = null;
+    }
+    
     
     // Returns the chess piece assigned to this board square
     public ChessPiece GetChessPiece()
@@ -261,6 +272,24 @@ public class BoardSquare : MonoBehaviour
 
         _tweenAttackSignalMove = AttackSignalSprite.transform.DOLocalMove(_attackSignalPosition, 0.2f).SetEase(Ease.InOutSine);
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
+    }
+
+    public void TargetFlash()
+    {
+        _tweenTargetFlash?.Kill();
+        Sequence f = DOTween.Sequence();
+
+        f.Append(TargetSignalSprite.DOFade(1f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(0f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(1f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(0f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(1f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(0f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(1f, 0.1f));
+        f.Append(TargetSignalSprite.DOFade(0f, 0.5f));
+        
+        
+        _tweenTargetFlash = f;
     }
 
 
