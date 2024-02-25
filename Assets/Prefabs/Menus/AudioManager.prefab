@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6212407104944691394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6212407104944691421}
+  - component: {fileID: 6212407104944691420}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6212407104944691421
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6212407104944691394}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 601800090254672828}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6212407104944691420
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6212407104944691394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c061af26d17f4c499974233067ac1ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PauseButtonSound: {fileID: 8300000, guid: 52242562f646a0e4f96efa47c733e0db, type: 3}
+  UiButtonPressed: {fileID: 8300000, guid: 2f8a38d95f0dfa34599385e205674ee4, type: 3}
+  BackgroundMusic: {fileID: 8300000, guid: 21fda0d9ed55778488630da06b5688a4, type: 3}
+  FocusTileSound: {fileID: 8300000, guid: 2a1abed9411036e42b098ae8e77e1013, type: 3}
+  ReturnCameraTopDownSound: {fileID: 8300000, guid: fc7f406526bfa8541ae8b4590b183cfe,
+    type: 3}
+  SuccessfulSound: {fileID: 8300000, guid: b1fc30b277f01634cab8096618d28162, type: 3}
+  FailSound: {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
+  AudioObject: {fileID: 2598032638427760271}
+  PauseButton: {fileID: 0}
+  UIButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+--- !u!1001 &310226985811529007
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 6212407104944691421}
+    m_Modifications:
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2323915852452383648, guid: 40129c47febe87b4c8acb08d2f33bb54,
+        type: 3}
+      propertyPath: m_Name
+      value: AudioObject
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 40129c47febe87b4c8acb08d2f33bb54, type: 3}
+--- !u!1 &2598032638427760271 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2323915852452383648, guid: 40129c47febe87b4c8acb08d2f33bb54,
+    type: 3}
+  m_PrefabInstance: {fileID: 310226985811529007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &601800090254672828 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+    type: 3}
+  m_PrefabInstance: {fileID: 310226985811529007}
+  m_PrefabAsset: {fileID: 0}

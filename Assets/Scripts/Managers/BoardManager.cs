@@ -24,6 +24,9 @@ public class BoardManager : MonoService
     // This list contains every chess piece on the board
     private Dictionary<(int, int), ChessPiece> _pieces;
     public IReadOnlyDictionary<(int, int), ChessPiece> Pieces => _pieces;
+    
+    //REFACTOR
+    public List<ChessPiece> ListofPieces;
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -79,51 +82,10 @@ public class BoardManager : MonoService
         _pieces = new Dictionary<(int, int), ChessPiece>();
 
         GenerateChessBoard();
-
-        // Pawn creation for testing
-        //CreatePiece(ChessPieceType.Rook, 4, 4, Team.Friendly);
-
     }
 
     void Update()
     {
-        // if (Input.GetKeyDown(KeyCode.P))
-        // {
-        //     CreatePiece(ChessPieceType.Rook, IndexCode.A8, Team.Friendly);
-        // }
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            CreatePiece(ChessPieceType.Rook, (5, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            CreatePiece(ChessPieceType.Bishop, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            CreatePiece(ChessPieceType.Pawn, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            CreatePiece(ChessPieceType.King, (4, 4), Team.Friendly);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.N))
-
-        {
-            CreatePiece(ChessPieceType.Queen, (4, 4), Team.Friendly);
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            CreatePiece(ChessPieceType.Knight, (4, 4), Team.Friendly);
-        }
-
-        // if (Input.GetKeyDown(KeyCode.M))
-        // {
-        //     MovePiece((7, 0), (0, 7));
-        // }
 
     }
 
@@ -165,6 +127,7 @@ public class BoardManager : MonoService
                 isWhiteTile = !isWhiteTile;
 
                 // Add the newly created squareBoard to the list containing all board squares
+                boardSquareComponent.name = $"TILE: {boardSquareComponent.IndexCode}";
                 _boardSquares.Add(boardSquareComponent);
 
                 // Add material to the square board
@@ -336,6 +299,7 @@ public class BoardManager : MonoService
         square.ChessPieceAssigned = piece;
         piece.Init();
 
+        ListofPieces.Add(piece);
         _pieces.Add(pos, piece);
         return piece;
     }
@@ -492,6 +456,14 @@ public class BoardManager : MonoService
         => MovePiece((srcX, srcY), (dstX, dstY));
 
 
+    public bool DestroyPiece(ChessPiece piece)
+    {
+        //bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        ServiceLocator.GetService<UnitOrderTimelineController>().RemoveTimelineNode(piece.TimelineNode);
+        bool s = ListofPieces.Remove(piece);
+        ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+        return s;
+    }
 
     public int GetDistanceBetweenTiles(BoardSquare t1, BoardSquare t2)
     {
