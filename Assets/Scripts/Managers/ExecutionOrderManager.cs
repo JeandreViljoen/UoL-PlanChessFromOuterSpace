@@ -52,7 +52,7 @@ public class ExecutionOrderManager : MonoService
         else
         {
             OnCombatComplete?.Invoke();
-            _stateManager.Value.GameState = GameState.PREP;
+            _stateManager.Value.GameState = GameState.SPAWN;
         }
     }
 
