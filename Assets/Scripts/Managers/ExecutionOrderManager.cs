@@ -29,25 +29,6 @@ public class ExecutionOrderManager : MonoService
         {
             RefreshTimelineOrder();
         }
-
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            _stateManager.Value.GameState = GameState.COMBAT;
-        }
-
-    // if (Input.GetKeyDown(KeyCode.S))
-        // {
-        //     _currentActiveUnit++;
-        //     if (_currentActiveUnit < UnitOrderList.ToList().Count)
-        //     {
-        //         UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
-        //     }
-        //     else
-        //     {
-        //         _currentActiveUnit = 0;
-        //         UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
-        //     }
-        // }
     }
 
     public void RefreshTimelineOrder()
