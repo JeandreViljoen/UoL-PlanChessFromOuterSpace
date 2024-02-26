@@ -1,15 +1,58 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Services;
 using UnityEngine;
 
 public class GameStateManager : MonoService
 {
-
     private GameState _gameState;
 
+    /// <summary>
+    /// The interval between each move in seconds.
+    /// </summary>
+    public int thinkTime;
 
+    private AI _ai;
+    private int _thinkTimeLeft;
+
+    private EasyService<BoardManager> _board;
+    private EasyService<ExecutionOrderManager> _moveOrder;
+    private Queue<ChessPiece> _queue;
+
+    /// <summary>
+    /// Queue up a new set of moves.
+    /// </summary>
+    private void QueueMoves()
+    {
+        foreach (var piece in _moveOrder.Value.UnitOrderList.Prepend(null))
+            _queue.Enqueue(piece);
+    }
+
+    /// <summary>
+    /// Shift the queue so the head is a live chess piece.
+    /// </summary>
+    private void ShiftQueue()
+    {
+        while (true)
+        {
+            if (_queue.First() == null)
+            {
+                QueueMoves();
+                _queue.Dequeue();
+                continue;
+            }
+            if (_queue.First().Dead)
+            {
+                Destroy(_queue.First());
+                _queue.Dequeue();
+                continue;
+            }
+
+            return;
+        }
+    }
 
     public GameState GameState
     {
@@ -24,9 +67,9 @@ public class GameStateManager : MonoService
                 Debug.LogWarning($"[GameStateManager.cs] - : Attempted to set the game state to {value} but the GameState is already set to {value}. Returning early without executing state logic.");
                 return;
             }
-            
+
             _gameState = value;
-            
+
             switch (_gameState)
             {
                 case GameState.START:
@@ -34,6 +77,10 @@ public class GameStateManager : MonoService
                 case GameState.PREP:
                     break;
                 case GameState.COMBAT:
+                    // prepend null for concatenation
+                    QueueMoves();
+                    ShiftQueue();
+                    _thinkTimeLeft = thinkTime;
                     break;
                 case GameState.WIN:
                     break;
@@ -51,12 +98,30 @@ public class GameStateManager : MonoService
 
     void Start()
     {
-       
     }
 
     void Update()
     {
-        
+        switch (_gameState)
+        {
+            case GameState.WIN:
+            case GameState.LOSE:
+                break;
+            case GameState.COMBAT:
+                if (_thinkTimeLeft == 0)
+                {
+                    var dst = _ai.RecommendMove(_board.Value);
+                    var piece = _queue.Dequeue();
+
+                    piece.MoveToBlock(dst);
+
+                    ShiftQueue();
+                    _ai.SyncAI(_board.Value, _queue);
+                }
+                break;
+            default:
+                break;
+        }
     }
 
 }
