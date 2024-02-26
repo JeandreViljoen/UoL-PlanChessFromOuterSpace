@@ -28,9 +28,8 @@ public class UpgradeButtonUIController : MonoBehaviour
 
     public void Show()
     {
-        SpeedButton.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost);
-        RangeButton.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost);
-        Button3.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpecialCost);
+        RefreshCosts();
+        
         SpeedButton.gameObject.SetActive(true);
         RangeButton.gameObject.SetActive(true);
         Button3.gameObject.SetActive(true);
@@ -66,6 +65,13 @@ public class UpgradeButtonUIController : MonoBehaviour
     private void OnDestroy()
     {
         _cameraManager.Value.OnCameraTopDown -= Hide;
+    }
+
+    public void RefreshCosts()
+    {
+        SpeedButton.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost);
+        RangeButton.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost);
+        Button3.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpecialCost);
     }
 
 }
