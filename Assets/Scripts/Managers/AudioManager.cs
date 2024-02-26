@@ -8,30 +8,14 @@ using UnityEngine.UI;
 public class AudioManager : MonoService
 {
     
-    // --- Sounds for the game ---
-    // UI
-    public AudioClip PauseButtonSound;
-    public AudioClip UiButtonPressed;
-    
-    // Gameplay 
-    public AudioClip BackgroundMusic;
-    public AudioClip FocusTileSound;
-    public AudioClip ReturnCameraTopDownSound;
-    public AudioClip SuccessfulSound;
-    public AudioClip FailSound;
-    
     // --- AudioSource for playing audios
     public GameObject AudioObject;
-    private AudioSource _soundEffectAudioSource;
+    public AudioSource SoundEffectAudioSource;
     private AudioSource _backgroundMusicAudioSource;
     
     // -- Service Initialization
     private bool _isInitialized = false;
-    
-    // --- Buttons
-    // public Button PauseButton;
-    // public List<Button> UIButtons;
-    
+
     // --- Member methods & functions ---
     private void Start()
     {
@@ -39,74 +23,68 @@ public class AudioManager : MonoService
             return;
 
         // Find AudioSources for playing clips
-        _soundEffectAudioSource = AudioObject.transform.Find("SoundEffectAudio").GetComponent<AudioSource>();
-        _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>(); 
-        
-        // Initialize button listeners
-        // foreach (var button in UIButtons)
-        // {
-        //     button.onClick.AddListener(PlayUIButtonSFX);
-        //     Debug.Log($"AudioManager: Button from game object #{button.gameObject.name} added as UI button.");
-        // }
+        SoundEffectAudioSource = AudioObject.transform.Find("SoundEffectAudio").GetComponent<AudioSource>();
+        _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>();
 
-        // Set Pause Button sound
-        // if (PauseButton)
-        // {
-        //     PauseButton.onClick.AddListener(PlayPauseButtonSFX);
-        // }
-        // else
-        // {
-        //     Debug.LogWarning("There is no pause button assigned to the AudioManager.");
-        // }
-        
-        // Camera management sounds
-        if (FocusTileSound)
-            ServiceLocator.GetService<CameraManager>().OnCameraFocus += PlayFocusTileSFX;
-        if (ReturnCameraTopDownSound)
-            ServiceLocator.GetService<CameraManager>().OnCameraTopDown += TopDownCameraSFX;
-        
         // Init background music
-        _backgroundMusicAudioSource.clip = BackgroundMusic;
-        _backgroundMusicAudioSource.Play();
+        PlayMusic(Music.Track1);
         
         _isInitialized = true;
     }
 
-    public void PlaySuccessSFX()
+    /// <summary>
+    /// Play sound of given sound ID in parameters
+    /// </summary>
+    /// <param name="id">Sound enum of audio clip to play</param>
+    public void PlaySound(Sound id)
     {
-        PlaySFX(SuccessfulSound);
-    }
-
-    public void PlayFailSFX()
-    {
-        PlaySFX(FailSound);
-    }
-
-    public void PlayUIButtonSFX()
-    {
-        PlaySFX(UiButtonPressed);
-    }
-
-    public void PlayPauseButtonSFX()
-    {
-        PlaySFX(PauseButtonSound);
-    }
-
-    private void PlayFocusTileSFX(BoardSquare tile)
-    {
-        PlaySFX(FocusTileSound);
-    }
-
-    private void TopDownCameraSFX()
-    {
-        PlaySFX(ReturnCameraTopDownSound);
+        AudioClip clip = GetClipFromID(id);
+        
+        SoundEffectAudioSource.clip = clip;
+        SoundEffectAudioSource.Play();
     }
     
-    // Generic use Play SFX
-    private void PlaySFX(AudioClip clip)
+    /// <summary>
+    /// Play music of given music ID in parameters
+    /// </summary>
+    /// <param name="id">Music enum of audio clip to play</param>
+    public void PlayMusic(Music id)
     {
-        _soundEffectAudioSource.clip = clip;
-        _soundEffectAudioSource.Play();
+        AudioClip clip = GetMusicFromID(id);
+        
+        _backgroundMusicAudioSource.clip = clip;
+        _backgroundMusicAudioSource.Play();
+    }
+
+    //Fetch audio clip from data object using given Sound ID enum
+    private AudioClip GetClipFromID(Sound id)
+    {
+        AudioData data = GlobalGameAssets.Instance.AudioData;
+        
+        switch (id)
+        {
+            case Sound.PauseButton: return data.PauseButtonSound;
+            case Sound.GenericUIButton: return data.UiButtonPressed;
+            case Sound.FocusTile: return data.FocusTileSound;
+            case Sound.ReturnCamera: return data.ReturnCameraTopDownSound;
+            case Sound.Success: return data.SuccessfulSound;
+            case Sound.Fail: return data.FailSound;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(id), id, null);
+        }
+    }
+    
+    //Fetch audio clip from data object using given Music ID enum
+    private AudioClip GetMusicFromID(Music id)
+    {
+        AudioData data = GlobalGameAssets.Instance.AudioData;
+        
+        switch (id)
+        {
+            case Music.Track1: return data.BackgroundMusic;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(id), id, null);
+        }
     }
     
 }

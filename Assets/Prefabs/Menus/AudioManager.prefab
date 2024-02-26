@@ -44,20 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c061af26d17f4c499974233067ac1ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PauseButtonSound: {fileID: 8300000, guid: 52242562f646a0e4f96efa47c733e0db, type: 3}
-  UiButtonPressed: {fileID: 8300000, guid: 2f8a38d95f0dfa34599385e205674ee4, type: 3}
-  BackgroundMusic: {fileID: 8300000, guid: 21fda0d9ed55778488630da06b5688a4, type: 3}
-  FocusTileSound: {fileID: 8300000, guid: 2a1abed9411036e42b098ae8e77e1013, type: 3}
-  ReturnCameraTopDownSound: {fileID: 8300000, guid: fc7f406526bfa8541ae8b4590b183cfe,
-    type: 3}
-  SuccessfulSound: {fileID: 8300000, guid: b1fc30b277f01634cab8096618d28162, type: 3}
-  FailSound: {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
   AudioObject: {fileID: 2598032638427760271}
-  PauseButton: {fileID: 0}
-  UIButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  SoundEffectAudioSource: {fileID: 3891005268618931896}
 --- !u!1001 &310226985811529007
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -136,6 +124,12 @@ GameObject:
 --- !u!4 &601800090254672828 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 870356029599436435, guid: 40129c47febe87b4c8acb08d2f33bb54,
+    type: 3}
+  m_PrefabInstance: {fileID: 310226985811529007}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &3891005268618931896 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 3580789834391561111, guid: 40129c47febe87b4c8acb08d2f33bb54,
     type: 3}
   m_PrefabInstance: {fileID: 310226985811529007}
   m_PrefabAsset: {fileID: 0}

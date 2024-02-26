@@ -23,6 +23,8 @@ public class CameraManager : MonoService
     public float FocusXRotation;
     public float FocusFOV;
 
+    private EasyService<AudioManager> _audioManager;
+
     public event Action<BoardSquare> OnCameraFocus;
     public event Action OnCameraTopDown;
     
@@ -55,7 +57,9 @@ public class CameraManager : MonoService
         _tweenRotation = _mainCam.transform.DORotate(ResetRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
         
+        _audioManager.Value.PlaySound(Sound.ReturnCamera);
         OnCameraTopDown?.Invoke();
+        
 
     }
 
@@ -74,6 +78,7 @@ public class CameraManager : MonoService
         _tweenRotation = _mainCam.transform.DORotate(focusRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(FocusFOV, TransitionSpeed).SetEase(Ease.InOutSine);
 
+        _audioManager.Value.PlaySound(Sound.FocusTile);
         OnCameraFocus?.Invoke(tile);
     }
 }

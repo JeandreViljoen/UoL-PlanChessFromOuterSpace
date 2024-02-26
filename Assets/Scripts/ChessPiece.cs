@@ -181,9 +181,7 @@ public class ChessPiece : MonoBehaviour
     public event Action OnEndState;
     public event Action<BoardSquare> OnMoveEnd;
     public event Action StateLogicCompleted;
-    public event Action OnSuccessfulUpgrade;
-    public event Action OnFailedUpgrade;
-#endregion
+    #endregion
 
     private void OnEnable()
     {
@@ -218,12 +216,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
         {
             Speed++;
-            OnSuccessfulUpgrade?.Invoke();
+            _audioManager.Value.PlaySound(Sound.Success);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade?.Invoke();
+            _audioManager.Value.PlaySound(Sound.Fail);
         }
         
     }
@@ -236,12 +234,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
         {
             Range++;
-            OnSuccessfulUpgrade?.Invoke();
+            _audioManager.Value.PlaySound(Sound.Success);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade?.Invoke();
+            _audioManager.Value.PlaySound(Sound.Fail);
         }
         
     }
@@ -414,10 +412,6 @@ public class ChessPiece : MonoBehaviour
         //Init();
 
         _spritePosition = Sprite.transform.localPosition;
-    
-        // Setup SFX
-        OnSuccessfulUpgrade += _audioManager.Value.PlaySuccessSFX;
-        OnFailedUpgrade += _audioManager.Value.PlayFailSFX;
 
         SetUpEventHandlers();
     }
@@ -718,10 +712,6 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
         
-        // Remove SFX subscriptions
-        OnSuccessfulUpgrade -= _audioManager.Value.PlaySuccessSFX;
-        OnFailedUpgrade -= _audioManager.Value.PlayFailSFX;
-       
     }
 
     private void Killed()
