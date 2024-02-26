@@ -30,6 +30,9 @@ public class GlobalGameAssets : ScriptableObjectSingleton<GlobalGameAssets>
    [Header("AI Balance Data")] 
    public AIBalanceData AIBalanceData;
    
+   [Header("Audio Data")] 
+   public AudioData AudioData;
+   
 
    public float ChessPieceAnimateSpeed;
 

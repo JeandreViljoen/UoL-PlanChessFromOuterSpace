@@ -74,6 +74,7 @@ public class BoardManager : MonoService
 
     // Services
     private EasyService<GameStateManager> _gameStateManager;
+    private EasyService<AudioManager> _audioManager;
 
     void Start()
     {

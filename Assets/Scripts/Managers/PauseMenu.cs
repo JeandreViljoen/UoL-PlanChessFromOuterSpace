@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using Services;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -62,5 +63,15 @@ public class PauseMenu : MonoBehaviour
     {
         _tweenPauseMenuMove?.Kill();
         _tweenPauseMenuMove = _pauseMenuPanel.gameObject.transform.DOLocalMove(_hidePosition, _tweenTime).SetUpdate(true);
+    }
+
+    public void PlayUIButtonSound()
+    {
+        ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GenericUIButton);
+    }
+    
+    public void PlayPauseSound()
+    {
+        ServiceLocator.GetService<AudioManager>().PlaySound(Sound.PauseButton);
     }
 }
