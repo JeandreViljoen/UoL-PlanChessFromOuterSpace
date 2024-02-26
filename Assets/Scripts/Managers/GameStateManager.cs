@@ -14,10 +14,10 @@ public class GameStateManager : MonoService
     /// <summary>
     /// The interval between each move in seconds.
     /// </summary>
-    public int thinkTime;
+    public float thinkTime;
 
     private AI _ai;
-    private int _thinkTimeLeft;
+    private float _thinkTimeLeft;
 
     private EasyService<BoardManager> _board;
     private EasyService<ExecutionOrderManager> _moveOrder;
@@ -124,7 +124,8 @@ public class GameStateManager : MonoService
             case GameState.LOSE:
                 break;
             case GameState.COMBAT:
-                if (_thinkTimeLeft == 0)
+                _thinkTimeLeft -= Time.deltaTime;
+                if (_thinkTimeLeft <= 0)
                 {
                     var dst = _ai.RecommendMove(_board.Value);
                     var piece = _queue.Dequeue();
@@ -133,6 +134,8 @@ public class GameStateManager : MonoService
 
                     ShiftQueue();
                     _ai.SyncAI(_board.Value, _queue);
+
+                    _thinkTimeLeft = thinkTime;
                 }
                 break;
             default:
