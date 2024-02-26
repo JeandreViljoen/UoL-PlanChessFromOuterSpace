@@ -9,7 +9,10 @@ public class GameStateManager : MonoService
 
     private GameState _gameState;
     private float _stateChangeTime;
+    private int _turnCount;
     private EasyService<TransitionController> _transitionController;
+    private EasyService<ExecutionOrderManager> _executionOrderManager;
+    private EasyService<EnemySpawner> _enemySpawner;
 
 
 
@@ -44,6 +47,7 @@ public class GameStateManager : MonoService
                 case GameState.START:
                     break;
                 case GameState.SPAWN:
+                    _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
                     break;
@@ -67,6 +71,7 @@ public class GameStateManager : MonoService
     void Start()
     {
         GameState = GameState.PREP;
+        _executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
     }
 
     void Update()
@@ -78,7 +83,16 @@ public class GameStateManager : MonoService
     {
         return Time.time - _stateChangeTime;
     }
+    
+    public int GetTurnNumber()
+    {
+        return _turnCount;
+    }
 
+    private void IncreaseTurnCount()
+    {
+        _turnCount++;
+    }
 }
 
 
