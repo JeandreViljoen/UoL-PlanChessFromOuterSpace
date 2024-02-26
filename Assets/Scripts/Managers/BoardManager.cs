@@ -339,27 +339,17 @@ public class BoardManager : MonoService
         var piece = GetPiece(src) ?? throw new ArgumentNullException(
                 $"attempt to move nonexistent piece at (${src.x}, ${src.y})"
             );
-
-        // check for existing piece at destination
-        var capture = GetPiece(dst);
-        if (capture != null)
-        {
-            // destination is occupied, try to capture
-            if (capture.Team == piece.Team)
-                return false; // friendly fire is disallowed
-            _pieces.Remove(dst);
-            // TODO: Animate
-            Destroy(capture.gameObject);
-        }
-
-        // do the logical move
-        _pieces.Remove(src);
-        _pieces.Add(dst, piece);
-
-        // update visual location
+        
+        // attempt to move to destination
         var dstTile = GetTile(dst);
-        piece.MoveToBlock(dstTile);
-        return true;
+        bool moved = piece.MoveToBlock(dstTile);
+
+        if (moved) {
+            // do the logical move
+            _pieces.Remove(src);
+            _pieces.Add(dst, piece);
+        }
+        return moved;
     }
 
     /// <summary>

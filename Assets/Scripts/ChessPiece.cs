@@ -100,6 +100,8 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
+    public bool Dead = false;
+
     private int _range;
     private Coroutine _highlightRoutine;
 
@@ -428,10 +430,18 @@ public class ChessPiece : MonoBehaviour
     /// Moves Piece to given BoardSquare position in parameters
     /// </summary>
     /// <param name="BoardSquare"></param>
-    public void MoveToBlock(BoardSquare square)
+    public bool MoveToBlock(BoardSquare square)
     {
-        
+        // check for target
+        var piece = square.ChessPieceAssigned;
+        if (piece)
+        {
+            if (piece.Team == Team)
+                return false; // no friendly fire
+            piece.Dead = true;
+        }
         transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine);
+        return true;
         //IndexCodePosition = square.IndexCode;
     }
 
