@@ -28,6 +28,9 @@ public class UpgradeButtonUIController : MonoBehaviour
 
     public void Show()
     {
+        SpeedButton.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost);
+        RangeButton.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost);
+        Button3.SetCostField(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpecialCost);
         SpeedButton.gameObject.SetActive(true);
         RangeButton.gameObject.SetActive(true);
         Button3.gameObject.SetActive(true);
