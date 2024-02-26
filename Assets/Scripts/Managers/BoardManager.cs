@@ -27,6 +27,9 @@ public class BoardManager : MonoService
     // This list contains every chess piece on the board
     private Dictionary<(int, int), ChessPiece> _pieces;
     public IReadOnlyDictionary<(int, int), ChessPiece> Pieces => _pieces;
+    
+    //REFACTOR
+    public List<ChessPiece> ListofPieces;
 
     // BoardSquare Settings
     [Header("Board Squares")]
@@ -126,6 +129,7 @@ public class BoardManager : MonoService
                 isWhiteTile = !isWhiteTile;
 
                 // Add the newly created squareBoard to the list containing all board squares
+                boardSquareComponent.name = $"TILE: {boardSquareComponent.IndexCode}";
                 _boardSquares.Add(boardSquareComponent);
 
                 // Add material to the square board
@@ -256,6 +260,7 @@ public class BoardManager : MonoService
         square.ChessPieceAssigned = piece;
         piece.Init();
 
+        ListofPieces.Add(piece);
         _pieces.Add(pos, piece);
         return piece;
     }
@@ -402,6 +407,14 @@ public class BoardManager : MonoService
         => MovePiece((srcX, srcY), (dstX, dstY));
 
 
+    public bool DestroyPiece(ChessPiece piece)
+    {
+        //bool s = _pieces.Remove((piece.AssignedSquare.IndexX, piece.AssignedSquare.IndexZ ));
+        ServiceLocator.GetService<UnitOrderTimelineController>().RemoveTimelineNode(piece.TimelineNode);
+        bool s = ListofPieces.Remove(piece);
+        ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+        return s;
+    }
 
     public int GetDistanceBetweenTiles(BoardSquare t1, BoardSquare t2)
     {

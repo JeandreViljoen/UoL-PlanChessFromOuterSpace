@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Friendly
   - Enemy
+  - Event
   layers:
   - Default
   - TransparentFX
