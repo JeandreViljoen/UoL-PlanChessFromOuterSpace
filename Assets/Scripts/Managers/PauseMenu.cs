@@ -67,11 +67,11 @@ public class PauseMenu : MonoBehaviour
 
     public void PlayUIButtonSound()
     {
-        ServiceLocator.GetService<AudioManager>().PlayUIButtonSFX();
+        ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GenericUIButton);
     }
     
     public void PlayPauseSound()
     {
-        ServiceLocator.GetService<AudioManager>().PlayPauseButtonSFX();
+        ServiceLocator.GetService<AudioManager>().PlaySound(Sound.PauseButton);
     }
 }

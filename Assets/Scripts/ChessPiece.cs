@@ -127,6 +127,7 @@ public class ChessPiece : MonoBehaviour
     private UpgradeButtonUIController _upgradeButtonUIController;
 
     private EasyService<CurrencyManager> _currencyManager;
+    private EasyService<AudioManager> _audioManager;
 
     public int Range
     {
@@ -180,9 +181,7 @@ public class ChessPiece : MonoBehaviour
     public event Action OnEndState;
     public event Action<BoardSquare> OnMoveEnd;
     public event Action StateLogicCompleted;
-    public event Action OnSuccessfulUpgrade;
-    public event Action OnFailedUpgrade;
-#endregion
+    #endregion
 
     private void OnEnable()
     {
@@ -217,12 +216,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
         {
             Speed++;
-            OnSuccessfulUpgrade.Invoke();
+            _audioManager.Value.PlaySound(Sound.Success);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade.Invoke();
+            _audioManager.Value.PlaySound(Sound.Fail);
         }
         
     }
@@ -235,12 +234,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
         {
             Range++;
-            OnSuccessfulUpgrade.Invoke();
+            _audioManager.Value.PlaySound(Sound.Success);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            OnFailedUpgrade.Invoke();
+            _audioManager.Value.PlaySound(Sound.Fail);
         }
         
     }
@@ -712,7 +711,7 @@ public class ChessPiece : MonoBehaviour
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
-       
+        
     }
 
     private void Killed()
