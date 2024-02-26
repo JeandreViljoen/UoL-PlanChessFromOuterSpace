@@ -10,7 +10,7 @@ public class AudioManager : MonoService
     
     // --- AudioSource for playing audios
     public GameObject AudioObject;
-    public AudioSource SoundEffectAudioSource;
+    private AudioSource _soundEffectAudioSource;
     private AudioSource _backgroundMusicAudioSource;
     
     // -- Service Initialization
@@ -23,7 +23,7 @@ public class AudioManager : MonoService
             return;
 
         // Find AudioSources for playing clips
-        SoundEffectAudioSource = AudioObject.transform.Find("SoundEffectAudio").GetComponent<AudioSource>();
+        _soundEffectAudioSource = AudioObject.transform.Find("SoundEffectAudio").GetComponent<AudioSource>();
         _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>();
 
         // Init background music
@@ -40,8 +40,8 @@ public class AudioManager : MonoService
     {
         AudioClip clip = GetClipFromID(id);
         
-        SoundEffectAudioSource.clip = clip;
-        SoundEffectAudioSource.Play();
+        _soundEffectAudioSource.clip = clip;
+        _soundEffectAudioSource.Play();
     }
     
     /// <summary>
