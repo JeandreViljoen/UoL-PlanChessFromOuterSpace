@@ -1,5 +1,7 @@
-﻿using System;using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Services;
 using UnityEngine;
@@ -132,7 +134,7 @@ public class ChessPiece : MonoBehaviour
     {
         get
         {
-            _possibleInteractableTiles = GetAllPossibleMovesetTiles();
+            _possibleInteractableTiles = GetAllPossibleMovesetTiles().ToList();
             return _possibleInteractableTiles;
         }
         private set
@@ -269,7 +271,7 @@ public class ChessPiece : MonoBehaviour
         }
 
         RelativeMoveset = newMoves;
-        _possibleInteractableTiles = GetAllPossibleMovesetTiles();
+        _possibleInteractableTiles = GetAllPossibleMovesetTiles().ToList();
     }
 
     //Not used for now.
@@ -297,10 +299,8 @@ public class ChessPiece : MonoBehaviour
     /// Returns a list of validated BoardSquares where this ChessPiece can move/attack.
     /// </summary>
     /// <returns></returns>
-    public List<BoardSquare> GetAllPossibleMovesetTiles()
+    public IEnumerable<BoardSquare> GetAllPossibleMovesetTiles()
     {
-        List<BoardSquare> tiles = new List<BoardSquare>();
-
         for (int i = 0; i < RelativeMoveset.Count; i++)
         {
             //Use range to offset indices when a occupied block is detected
@@ -329,7 +329,7 @@ public class ChessPiece : MonoBehaviour
                     //If tile is empty add tile
                     if (tile.IsEmpty())
                     {
-                        tiles.Add(tile);
+                        yield return tile;
                     }
                     //If tile is occupied, check TEAM
                     else
@@ -337,14 +337,13 @@ public class ChessPiece : MonoBehaviour
                         //Add tile if different team, else dont add tile
                         if (tile.ChessPieceAssigned.Team != Team) 
                         {
-                            tiles.Add(tile);
+                            yield return tile;
                         }
                         i += rangeOffset;
                     }
                 }
             }
         }
-        return tiles;
     }
 
     
