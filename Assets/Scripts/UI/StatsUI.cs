@@ -36,10 +36,16 @@ public class StatsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        OpenStats();
+        if (!_scoreManager.IsAssigned)
+        {
+            return;
+        }
+        UpdateStats();
     }
+    
+    
 
-    public void OpenStats()
+    public void UpdateStats()
     {
         _scoreManager.Value.UpdateStats();
         Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.Value.GetPiecesDestroyed();

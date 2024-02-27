@@ -35,8 +35,10 @@ public class CurrencyManager : MonoService
         if (amount == 0)
         {
             Debug.LogWarning($"[CurrencyManager.cs] - AddCurrency() : Tried to add 0 currency");
+            return;
         }
 
+        InitFloatingCurrency(amount);
         Currency += amount;
         OnCurrencyAdded?.Invoke(amount);
     }
@@ -61,11 +63,20 @@ public class CurrencyManager : MonoService
         if (amount == 0)
         {
             Debug.LogWarning($"[CurrencyManager.cs] - TryRemoveCurrency() : Tried to remove 0 currency");
+            return false;
         }
 
         Currency -= amount;
+        InitFloatingCurrency(amount*-1);
         OnCurrencyRemoved?.Invoke(amount);
         return true;
+    }
+
+    private void InitFloatingCurrency(int value)
+    {
+        FloatingCurrency f = Instantiate(GlobalGameAssets.Instance.FloatingCurrencyUIPrefab.GetComponent<FloatingCurrency>(),  ServiceLocator.GetService<HUDManager>().CurrencyDisplay.transform);
+        f.transform.position = ServiceLocator.GetService<HUDManager>().CurrencyDisplay.transform.position + Vector3.right *100;
+        f.InitUI(value);
     }
 
     /// <summary>

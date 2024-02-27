@@ -37,4 +37,6 @@ MonoBehaviour:
   AudioData: {fileID: 11400000, guid: 340fe765a6ddacb4fb26069aa474cdfd, type: 2}
   FloatingCurrencyPrefab: {fileID: 2361099941089585517, guid: a05fed96c4df03c41b9d570199bf0353,
     type: 3}
+  FloatingCurrencyUIPrefab: {fileID: 2198709723387822324, guid: 9b74c946628317043a00a215f0a75b95,
+    type: 3}
   ChessPieceAnimateSpeed: 0.5
