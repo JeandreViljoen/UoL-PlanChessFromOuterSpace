@@ -9,6 +9,7 @@ public class ExecutionOrderManager : MonoService
 {
     private EasyService<BoardManager> _boardManager;
     private EasyService<GameStateManager> _stateManager;
+    private EasyService<AI> _ai;
     public List<ChessPiece> UnitOrderList;
 
     public event Action OnTimeLineRefresh;
@@ -68,6 +69,7 @@ public class ExecutionOrderManager : MonoService
         if (_currentActiveUnit < UnitOrderList.Count)
         {
             UnitOrderList[_currentActiveUnit].State = ChessPieceState.START;
+            _ai.Value.SyncAI(UnitOrderList.Skip(_currentActiveUnit));
         }
         else
         {
@@ -128,6 +130,7 @@ public class ExecutionOrderManager : MonoService
         ServiceLocator.GetService<CameraManager>().ResetCameraPosition();
         ServiceLocator.GetService<UnitOrderTimelineController>().NodeOffset = 0;
         _currentActiveUnit = 0;
+        _ai.Value.SyncAI(UnitOrderList);
         UnitOrderList[0].State = ChessPieceState.START;
     }
 
