@@ -56,14 +56,14 @@ public class AI : MonoService
     public BoardSquare RecommendMove()
     {
         if (moveQueue.Count() == 0)
-            throw new ArgumentException("no moves");
+            throw new ArgumentException("no piece to move");
 
         var piece = moveQueue.First();
         var destinations = piece.GetAllPossibleMovesetTiles();
 
         var balanceData = GlobalGameAssets.Instance.AIBalanceData;
 
-        var moves = new SortedSet<Move>();
+        var moveset = new SortedSet<Move>();
 
         foreach (var dst in destinations)
         {
@@ -75,9 +75,10 @@ public class AI : MonoService
                 score = ScoreCapture(capture.PieceType, balanceData);
             }
 
-            moves.Add(new Move(dst, score));
+            moveset.Add(new Move(dst, score));
         }
 
+        var moves = moveset.Reverse();
         int highscore = moves.First().score;
         var top = moves.TakeWhile((m) => m.score == highscore).ToArray();
         int rand = Random.Range(0, 1 << 24) % top.Length;
