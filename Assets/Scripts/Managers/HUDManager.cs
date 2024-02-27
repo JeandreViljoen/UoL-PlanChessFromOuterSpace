@@ -8,6 +8,7 @@ using UnityEngine;
 public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
+    public GameObject StatsPanel;
     
 
     private EasyService<CurrencyManager> _currencyManager;
@@ -37,7 +38,10 @@ public class HUDManager : MonoService
 
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            StatsPanel.SetActive(true);
+        }
     }
 
     private void OnDestroy()

@@ -13,6 +13,7 @@ public class GameStateManager : MonoService
     private EasyService<TransitionController> _transitionController;
     private EasyService<ExecutionOrderManager> _executionOrderManager;
     private EasyService<EnemySpawner> _enemySpawner;
+    private EasyService<ScoreManager> _scoreManager;
 
 
 
@@ -50,6 +51,7 @@ public class GameStateManager : MonoService
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
+                    _scoreManager.Value.UpdateStats();
                     break;
                 case GameState.COMBAT:
                     break;
