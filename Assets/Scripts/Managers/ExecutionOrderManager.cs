@@ -9,7 +9,8 @@ public class ExecutionOrderManager : MonoService
 {
     private EasyService<BoardManager> _boardManager;
     private EasyService<GameStateManager> _stateManager;
-    public IEnumerable<ChessPiece> UnitOrderList;
+    private EasyService<AI> _ai;
+    public List<ChessPiece> UnitOrderList;
 
     public event Action OnTimeLineRefresh;
     public event Action OnTimeLineInit;
@@ -35,9 +36,10 @@ public class ExecutionOrderManager : MonoService
     {
         //Debug.Log($"Atttempting refresh of Timeline: Pieces.Count = {_boardManager.Value.ListofPieces.Count}");
         
-        UnitOrderList = _boardManager.Value.ListofPieces
+        UnitOrderList.Clear();
+        UnitOrderList.AddRange(_boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
-            .ThenBy(piece => piece.Team);
+            .ThenBy(piece => piece.Team));
         
         OnTimeLineRefresh?.Invoke();
     }
@@ -45,9 +47,10 @@ public class ExecutionOrderManager : MonoService
     public void AdvanceQueue()
     {
         _currentActiveUnit++;
-        if (_currentActiveUnit < UnitOrderList.ToList().Count)
+        if (_currentActiveUnit < UnitOrderList.Count)
         {
-            UnitOrderList.ToList()[_currentActiveUnit].State = ChessPieceState.START;
+            UnitOrderList[_currentActiveUnit].State = ChessPieceState.START;
+            _ai.Value.SyncAI(UnitOrderList.Skip(_currentActiveUnit));
         }
         else
         {
@@ -108,7 +111,8 @@ public class ExecutionOrderManager : MonoService
         ServiceLocator.GetService<CameraManager>().ResetCameraPosition();
         ServiceLocator.GetService<UnitOrderTimelineController>().NodeOffset = 0;
         _currentActiveUnit = 0;
-        UnitOrderList.ToList()[0].State = ChessPieceState.START;
+        _ai.Value.SyncAI(UnitOrderList);
+        UnitOrderList[0].State = ChessPieceState.START;
     }
 
     private void StartPrep()

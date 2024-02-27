@@ -127,6 +127,7 @@ public class ChessPiece : MonoBehaviour
     private UpgradeButtonUIController _upgradeButtonUIController;
 
     private EasyService<CurrencyManager> _currencyManager;
+    private EasyService<AI> _ai;
     private EasyService<AudioManager> _audioManager;
 
     public int Range
@@ -551,27 +552,26 @@ public class ChessPiece : MonoBehaviour
             OnMoveEnd?.Invoke(AssignedSquare);
             yield break;
         }
-        
-        int choice = UnityEngine.Random.Range(0, PossibleInteractableTiles.Count);
-        
-        if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log(  $"\t\t{PossibleInteractableTiles.Count} possible moves.\n");
-        
-        PossibleInteractableTiles[choice].TargetFlash();
+    
         yield return new WaitForSeconds(0.5f);
+        var dst = _ai.Value.RecommendMove();
+        dst.TargetFlash();
 
-        if (!PossibleInteractableTiles[choice].IsEmpty())
+        if (!dst.IsEmpty())
         {
-            if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\tATTACKING {PossibleInteractableTiles[choice].ChessPieceAssigned.PieceType} at {PossibleInteractableTiles[choice].IndexCode}\n");
+            if (GlobalDebug.Instance.ShowCombatMessageLogs)
+                Debug.Log($"\t\tATTACKING {dst.ChessPieceAssigned.PieceType} at {dst.IndexCode}\n");
 
             State = ChessPieceState.ATTACK;
-            PossibleInteractableTiles[choice].ChessPieceAssigned.State = ChessPieceState.DEAD;
-            MoveToBlock(PossibleInteractableTiles[choice]);
+            dst.ChessPieceAssigned.State = ChessPieceState.DEAD;
+            MoveToBlock(dst);
         }
         else
         {
-            if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\tMOVING to {PossibleInteractableTiles[choice].IndexCode}\n");
+            if (GlobalDebug.Instance.ShowCombatMessageLogs)
+                Debug.Log($"\t\tMOVING to {dst.IndexCode}\n");
             State = ChessPieceState.MOVE;
-            MoveToBlock(PossibleInteractableTiles[choice]);
+            MoveToBlock(dst);
         }
     }
 
