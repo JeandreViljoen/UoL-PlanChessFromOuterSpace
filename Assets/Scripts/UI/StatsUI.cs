@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatsUI : MonoBehaviour
 {
@@ -16,6 +17,14 @@ public class StatsUI : MonoBehaviour
     public TextMeshProUGUI KnightPiecesDestroyed;
     public TextMeshProUGUI KingPiecesDestroyed;
     public TextMeshProUGUI QueenPiecesDestroyed;
+    
+    public Image PawnIcon;
+    public Image RookIcon;
+    public Image BishopIcon;
+    public Image KnightIcon;
+    public Image KingIcon;
+    public Image QueenIcon;
+    
     public TextMeshProUGUI CurrencyText;
     public TextMeshProUGUI TimePlayedText;
     public TextMeshProUGUI TurnsLastedText;
@@ -26,6 +35,12 @@ public class StatsUI : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(false);
+        PawnIcon.sprite = GlobalGameAssets.Instance.PawnData.Sprite;
+        RookIcon.sprite = GlobalGameAssets.Instance.RookData.Sprite;
+        BishopIcon.sprite = GlobalGameAssets.Instance.BishopData.Sprite;
+        KnightIcon.sprite = GlobalGameAssets.Instance.KnightData.Sprite;
+        KingIcon.sprite = GlobalGameAssets.Instance.KingData.Sprite;
+        QueenIcon.sprite = GlobalGameAssets.Instance.QueenData.Sprite;
     }
 
     // Update is called once per frame
