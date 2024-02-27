@@ -128,6 +128,7 @@ public class ChessPiece : MonoBehaviour
 
     private EasyService<CurrencyManager> _currencyManager;
     private EasyService<AudioManager> _audioManager;
+    private EasyService<ScoreManager> _scoreManager;
 
     public int Range
     {
@@ -719,6 +720,11 @@ public class ChessPiece : MonoBehaviour
         if (Team == Team.Enemy)
         {
             _currencyManager.Value.RequestCaptureReward(this);
+            _scoreManager.Value.AddEnemyDestroyedToScore(this.PieceType);
+        }
+        else
+        {
+            _scoreManager.Value.AlliedPieceDestroyed();
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
