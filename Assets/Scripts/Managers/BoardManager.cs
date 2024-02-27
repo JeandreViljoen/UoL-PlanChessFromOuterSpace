@@ -246,6 +246,10 @@ public class BoardManager : MonoService
     public BoardSquare GetTile((int x, int y) tile)
         => GetTile(tile.x, tile.y);
 
+    public void ButtonTapped(){
+        Debug.Log("TRY TRY");
+    }
+
     /// <summary>
     /// Create a chess piece at the specified location.
     /// </summary>

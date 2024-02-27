@@ -17,6 +17,7 @@ public class ButtonInfo : MonoBehaviour
     public TextMeshProUGUI BuyText; // Text field to display piece name
     public Image Sprite; // Sprite field to display unique sprite
     public MouseEventHandler EventHandler; //Event handler to hook events in to MouseEvents like click and hover etc.
+    private BoardManager BoardManager; //For BoardManagerScript
 
     private EasyService<CurrencyManager> _currencyManager;
     public event Action<ChessPieceType> OnSuccessfulPurchase;
@@ -25,7 +26,7 @@ public class ButtonInfo : MonoBehaviour
     {
         EventHandler = GetComponent<MouseEventHandler>();//Retrieve and store the event handler object
         EventHandler.OnMouseDown += TryBuy; //Fire TryBuy() function on Click event
-        
+        BoardManager = GameObject.FindGameObjectWithTag("GameSystems").GetComponent<BoardManager>(); //Link to BoardManager
         InitValues(); // Initialise starting values for button object
     }
 
@@ -41,6 +42,7 @@ public class ButtonInfo : MonoBehaviour
         {
             _currencyManager.Value.TryRemoveCurrency(_price); //Remove currency
             OnSuccessfulPurchase?.Invoke(Type);//Send an event that purchase was successful and put the TYPE as parameters.
+            ChessPiece piece = BoardManager.CreatePiece(Type, 1, 1, Team.friendly);
         }
         else
         {
