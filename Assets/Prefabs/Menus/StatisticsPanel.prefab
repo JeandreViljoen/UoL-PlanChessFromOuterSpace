@@ -1419,6 +1419,12 @@ MonoBehaviour:
   KnightPiecesDestroyed: {fileID: 6538449899412876024}
   KingPiecesDestroyed: {fileID: 6538449900072710630}
   QueenPiecesDestroyed: {fileID: 6538449900754216152}
+  PawnIcon: {fileID: 6538449900854810687}
+  RookIcon: {fileID: 6538449900574172371}
+  BishopIcon: {fileID: 6538449899397357358}
+  KnightIcon: {fileID: 6538449901126386831}
+  KingIcon: {fileID: 6538449900131541365}
+  QueenIcon: {fileID: 6538449900958804436}
   CurrencyText: {fileID: 6538449900429302132}
   TimePlayedText: {fileID: 6538449899527697977}
   TurnsLastedText: {fileID: 6538449900987523343}
