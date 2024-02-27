@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
+using Services;
 using Random = UnityEngine.Random;
 
-public class AI
+public class AI : MonoService
 {
     private IEnumerable<ChessPiece> moveQueue;
+
+    private EasyService<BoardManager> currentBoard;
 
     /// <summary>
     /// Restart AI computation.
     /// </summary>
-    /// <param name="board">The state of the board.</param>
     /// <param name="moveQueue">The move order.</param>
-    public void SyncAI(BoardManager board,
-        IEnumerable<ChessPiece> moveQueue)
+    public void SyncAI(IEnumerable<ChessPiece> moveQueue)
     {
         this.moveQueue = moveQueue;
     }
@@ -52,9 +52,8 @@ public class AI
     /// <summary>
     /// Recommend a move for the current turn.
     /// </summary>
-    /// <param name="board">The state of the board.</param>
-    /// <returns></returns>
-    public BoardSquare RecommendMove(BoardManager board)
+    /// <returns>The recommended tile to move to.</returns>
+    public BoardSquare RecommendMove()
     {
         if (moveQueue.Count() == 0)
             throw new ArgumentException("no moves");
