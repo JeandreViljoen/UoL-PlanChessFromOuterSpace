@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoService
 {
-    
+    public PauseMenu PauseMenu;
     void Start()
     {
         

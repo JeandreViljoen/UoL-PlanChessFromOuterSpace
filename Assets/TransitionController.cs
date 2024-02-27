@@ -16,6 +16,7 @@ public class TransitionController : MonoService
     private Vector3 _showPos = new Vector3(0f,0f,0f);
 
     private Tween _tweenShow;
+    
 
     public event Action<GameState> OnTransitionStart; 
 
@@ -32,6 +33,7 @@ public class TransitionController : MonoService
 
     public void Transition(GameState stateTransitioningTo, float preDelay = 0f, float holdDelay = 1f, float postDelay = 0.5f)
     {
+
         _tweenShow?.Kill();
         TransitionText.transform.localPosition = _startPos;
         SetText(stateTransitioningTo);

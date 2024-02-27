@@ -8,6 +8,7 @@ using UnityEngine;
 public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
+    
 
     private EasyService<CurrencyManager> _currencyManager;
     void Start()

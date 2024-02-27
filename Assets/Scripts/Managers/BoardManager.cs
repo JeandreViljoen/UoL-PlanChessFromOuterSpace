@@ -74,6 +74,7 @@ public class BoardManager : MonoService
 
     // Services
     private EasyService<GameStateManager> _gameStateManager;
+    private EasyService<AudioManager> _audioManager;
 
     void Start()
     {
@@ -259,6 +260,12 @@ public class BoardManager : MonoService
     {
         BoardSquare square = GetTile(pos);
 
+        if (!square.IsEmpty())
+        {
+            Debug.Log("Cannot create chess piece on given BoardSquare because there is already a chess piece assigned.");
+            return null;
+        }
+
         ChessPiece piece;
 
         //Instantiate given piece
@@ -301,6 +308,12 @@ public class BoardManager : MonoService
         return piece;
     }
 
+    // Returns the number of [rows, columns]
+    public int[] GetBoardDimensions()
+    {
+        return new int[] {_boardDepth, _boardWidth };
+    }
+    
     /// <summary>
     /// Create a chess piece at the specified location.
     /// </summary>
