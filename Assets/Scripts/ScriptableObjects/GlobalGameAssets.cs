@@ -32,7 +32,9 @@ public class GlobalGameAssets : ScriptableObjectSingleton<GlobalGameAssets>
    
    [Header("Audio Data")] 
    public AudioData AudioData;
-   
+
+
+   public GameObject FloatingCurrencyPrefab;
 
    public float ChessPieceAnimateSpeed;
 

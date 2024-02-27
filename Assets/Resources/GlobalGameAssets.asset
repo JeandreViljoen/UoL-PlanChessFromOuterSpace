@@ -35,4 +35,6 @@ MonoBehaviour:
     type: 3}
   AIBalanceData: {fileID: 11400000, guid: 65651d9280e60934c8ca86c6873a85b8, type: 2}
   AudioData: {fileID: 11400000, guid: 340fe765a6ddacb4fb26069aa474cdfd, type: 2}
+  FloatingCurrencyPrefab: {fileID: 2361099941089585517, guid: a05fed96c4df03c41b9d570199bf0353,
+    type: 3}
   ChessPieceAnimateSpeed: 0.5

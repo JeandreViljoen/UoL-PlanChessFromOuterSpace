@@ -323,6 +323,13 @@ public class ChessPiece : MonoBehaviour
         return absoluteMoves;
     }
 
+    private void InitFloatingCurrency(int value)
+    {
+        FloatingCurrency f = Instantiate(GlobalGameAssets.Instance.FloatingCurrencyPrefab.GetComponent<FloatingCurrency>());
+        f.transform.localPosition = transform.position + Vector3.up;
+        f.Init(value);
+    }
+
     /// <summary>
     /// Returns a list of validated BoardSquares where this ChessPiece can move/attack.
     /// </summary>
@@ -719,7 +726,8 @@ public class ChessPiece : MonoBehaviour
     {
         if (Team == Team.Enemy)
         {
-            _currencyManager.Value.RequestCaptureReward(this);
+            int currency = _currencyManager.Value.RequestCaptureReward(this);
+            InitFloatingCurrency(currency);
             _scoreManager.Value.AddEnemyDestroyedToScore(this.PieceType);
         }
         else

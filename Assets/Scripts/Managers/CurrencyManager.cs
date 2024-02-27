@@ -89,7 +89,7 @@ public class CurrencyManager : MonoService
         return false;
     }
 
-    public void RequestCaptureReward(ChessPiece piece)
+    public int RequestCaptureReward(ChessPiece piece)
     {
         int baseReward = 0;
         int additionalReward = 0;
@@ -121,6 +121,7 @@ public class CurrencyManager : MonoService
         additionalReward = (piece.Level-1) * GlobalGameAssets.Instance.CurrencyBalanceData.AdditionalCurrencyRewardPerLevel;
         
         AddCurrency(baseReward + additionalReward);
+        return baseReward + additionalReward;
         if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log($"\t\t{ChessPiece.ToString(piece)} CAPTURED! - Rewarding currency:\n\t\tBase: {baseReward}\t\tAdditional: {additionalReward}");
     }
 }
