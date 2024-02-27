@@ -63,7 +63,7 @@ public class GameStateManager : MonoService
                     throw new ArgumentOutOfRangeException(nameof(_gameState), _gameState, null);
             }
 
-            OnStateChanged?.Invoke(_gameState);
+            OnStateChanged(_gameState);
             _stateChangeTime = Time.time;
         }
     }
