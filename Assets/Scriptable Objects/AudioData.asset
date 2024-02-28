@@ -12,11 +12,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 564329b08452b0b4aabace317848351c, type: 3}
   m_Name: AudioData
   m_EditorClassIdentifier: 
-  PauseButtonSound: {fileID: 8300000, guid: 52242562f646a0e4f96efa47c733e0db, type: 3}
-  UiButtonPressed: {fileID: 8300000, guid: 2f8a38d95f0dfa34599385e205674ee4, type: 3}
-  FocusTileSound: {fileID: 8300000, guid: 2a1abed9411036e42b098ae8e77e1013, type: 3}
-  ReturnCameraTopDownSound: {fileID: 8300000, guid: fc7f406526bfa8541ae8b4590b183cfe,
-    type: 3}
-  SuccessfulSound: {fileID: 8300000, guid: b1fc30b277f01634cab8096618d28162, type: 3}
-  FailSound: {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
+  PauseButtonSound:
+  - {fileID: 8300000, guid: 52242562f646a0e4f96efa47c733e0db, type: 3}
+  UiButtonPressed:
+  - {fileID: 8300000, guid: 2f8a38d95f0dfa34599385e205674ee4, type: 3}
+  UI_Hover:
+  - {fileID: 8300000, guid: bc1476e58e8dd2047a934498f6df4b35, type: 3}
+  - {fileID: 8300000, guid: 999c17fa296fd064182cf49c4da9218e, type: 3}
+  - {fileID: 8300000, guid: 5b98e8971be82034183e4300ae8c1fcf, type: 3}
+  - {fileID: 8300000, guid: d882d8095f5755b4fa963e82f36864c4, type: 3}
+  UI_Subtle:
+  - {fileID: 8300000, guid: 7dd7487471509b441bf869ffff4dcef4, type: 3}
+  - {fileID: 8300000, guid: dfedd7a1d462b904abbf45b0a3d90142, type: 3}
+  - {fileID: 8300000, guid: ff5b7c62ed90bd147982d57918326195, type: 3}
+  UI_Click:
+  - {fileID: 8300000, guid: 8fa74dfe4e661274988627c9d9c75e44, type: 3}
+  - {fileID: 8300000, guid: 956511ce6259b094e89fcdd5b1b97a77, type: 3}
+  - {fileID: 8300000, guid: fd11e0ab34fa23045ad64ef981e7e252, type: 3}
+  - {fileID: 8300000, guid: 799d0a89b35bcdf44880f7e191f47252, type: 3}
+  UI_Sub:
+  - {fileID: 8300000, guid: 9bc5d43bac221304c8b1401bd4baff97, type: 3}
+  - {fileID: 8300000, guid: 24da2715e4375ce4d85ffacddea60756, type: 3}
+  - {fileID: 8300000, guid: 817eaa9aafeb7e2459b84a75f37df5df, type: 3}
+  UI_UpgradeSuccess:
+  - {fileID: 8300000, guid: 4370b182bc2429248932efae088227f8, type: 3}
+  - {fileID: 8300000, guid: 0eb4ac35e8617764f9328bcd30be7ddb, type: 3}
+  - {fileID: 8300000, guid: ff7440ed10c46d14a9f2b578f4e81565, type: 3}
+  - {fileID: 8300000, guid: 77fa5263583c23f4eab965a8de5c288c, type: 3}
+  - {fileID: 8300000, guid: 8114bb8031c5fde4e846c364dae687fa, type: 3}
+  - {fileID: 8300000, guid: 56f4c2af77791614bbd0f536b168b96f, type: 3}
+  UI_CameraMove:
+  - {fileID: 8300000, guid: 9ba7b0a5a01f0e544b2716708dc8a9cc, type: 3}
+  - {fileID: 8300000, guid: f58d2654c05ab434da1921ce83e1b4ca, type: 3}
+  - {fileID: 8300000, guid: 1aae19ec1321b634cba231ad814bc968, type: 3}
+  UI_Deny:
+  - {fileID: 8300000, guid: 8c8a639e3c2c58d47920d686e55f02aa, type: 3}
+  FocusTileSound:
+  - {fileID: 8300000, guid: 2a1abed9411036e42b098ae8e77e1013, type: 3}
+  ReturnCameraTopDownSound:
+  - {fileID: 8300000, guid: fc7f406526bfa8541ae8b4590b183cfe, type: 3}
+  SuccessfulSound:
+  - {fileID: 8300000, guid: b1fc30b277f01634cab8096618d28162, type: 3}
+  FailSound:
+  - {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
+  EnemyActivate:
+  - {fileID: 8300000, guid: f801b0f5ff935cc4abe65f8c2c078580, type: 3}
+  - {fileID: 8300000, guid: 2d4f35039b28f2e4bb188d6ea119b34f, type: 3}
+  - {fileID: 8300000, guid: 117702a48349aec4592e67d69b2b5877, type: 3}
+  - {fileID: 8300000, guid: 2c3f9e06cc342714aa378ac054718b88, type: 3}
+  - {fileID: 8300000, guid: c8794d5dae3739b4a957caa8d65b6da8, type: 3}
+  - {fileID: 8300000, guid: 025a2eef5f4f7334db690572287e0ed4, type: 3}
+  EnemyMove:
+  - {fileID: 8300000, guid: 4102394aab8a19e43aa8b3eda5b8d787, type: 3}
+  - {fileID: 8300000, guid: 40f3cec48d559b64aa6fe11510911c0a, type: 3}
+  - {fileID: 8300000, guid: 1e7fa64879c2e5644984151f822d8355, type: 3}
+  - {fileID: 8300000, guid: c0585d6ed55581f49bb9cd2af1dcc643, type: 3}
+  - {fileID: 8300000, guid: b9d73b56a3dc13c43a2e03e248b7e889, type: 3}
   BackgroundMusic: {fileID: 8300000, guid: 21fda0d9ed55778488630da06b5688a4, type: 3}

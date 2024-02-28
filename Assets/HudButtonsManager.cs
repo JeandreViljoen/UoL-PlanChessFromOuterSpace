@@ -58,8 +58,10 @@ public class HudButtonsManager : MonoBehaviour
     
     void OnFightButtonPressed()
     {
+        
         if (_stateManager.Value.GameState == GameState.PREP)
         {
+            _audioManager.Value.PlaySound(Sound.UI_Sub);
             _stateManager.Value.GameState = GameState.COMBAT;
             HideFightButton();
         }
@@ -69,6 +71,7 @@ public class HudButtonsManager : MonoBehaviour
     void OnReturnButtonPressed()
     {
         _cameraManager.Value.ResetCameraPosition();
+        _audioManager.Value.PlaySound(Sound.UI_Click);
     }
     
     void Update()

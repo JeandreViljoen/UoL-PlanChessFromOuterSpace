@@ -57,7 +57,7 @@ public class CameraManager : MonoService
         _tweenRotation = _mainCam.transform.DORotate(ResetRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
         
-        _audioManager.Value.PlaySound(Sound.ReturnCamera);
+        _audioManager.Value.PlaySound(Sound.UI_CameraMove);
         OnCameraTopDown?.Invoke();
         
 

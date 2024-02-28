@@ -63,12 +63,22 @@ public class AudioManager : MonoService
         
         switch (id)
         {
-            case Sound.PauseButton: return data.PauseButtonSound;
-            case Sound.GenericUIButton: return data.UiButtonPressed;
-            case Sound.FocusTile: return data.FocusTileSound;
-            case Sound.ReturnCamera: return data.ReturnCameraTopDownSound;
-            case Sound.Success: return data.SuccessfulSound;
-            case Sound.Fail: return data.FailSound;
+            case Sound.PauseButton: return RandomClip(data.PauseButtonSound);
+            case Sound.GenericUIButton: return RandomClip(data.UiButtonPressed);
+            case Sound.FocusTile: return RandomClip(data.FocusTileSound);
+            case Sound.ReturnCamera: return RandomClip(data.ReturnCameraTopDownSound);
+            case Sound.Success: return RandomClip(data.SuccessfulSound);
+            case Sound.Fail: return RandomClip(data.FailSound);
+            case Sound.UI_Hover: return RandomClip(data.UI_Hover);
+            case Sound.UI_Subtle: return RandomClip(data.UI_Subtle);
+            case Sound.UI_Click: return RandomClip(data.UI_Click);
+            case Sound.UI_Sub: return RandomClip(data.UI_Sub);
+            case Sound.UI_UpgradeSuccess: return RandomClip(data.UI_UpgradeSuccess);
+            case Sound.UI_CameraMove: return RandomClip(data.UI_CameraMove);
+            case Sound.UI_Deny: return RandomClip(data.UI_Deny);
+
+            case Sound.ENEMY_Move: return RandomClip(data.EnemyMove);
+            case Sound.ENEMY_Activate: return RandomClip(data.EnemyActivate);
             default:
                 throw new ArgumentOutOfRangeException(nameof(id), id, null);
         }
@@ -86,5 +96,17 @@ public class AudioManager : MonoService
                 throw new ArgumentOutOfRangeException(nameof(id), id, null);
         }
     }
-    
+
+    private AudioClip RandomClip(List<AudioClip> clips)
+    {
+        if (clips.Count == 0)
+        {
+            Debug.LogError($"[AudioManager.cs] : RandomClip - Requested a random choice from an empty list. Make sure no empty lists are present in the AudioData scriptable");
+            return null;
+        }
+        int randomIndex = UnityEngine.Random.Range(0, clips.Count);
+
+        return clips[randomIndex];
+
+    }
 }
