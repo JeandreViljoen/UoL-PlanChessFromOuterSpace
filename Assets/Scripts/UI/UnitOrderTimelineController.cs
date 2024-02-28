@@ -95,7 +95,7 @@ public class UnitOrderTimelineController : MonoService
     {
         ClearTimeline();
         
-        foreach (ChessPiece unit in _orderManager.Value.UnitOrderList)
+        foreach (ChessPiece unit in _orderManager.Value.UnitOrder)
         {
             TimelineNode node = Instantiate(TimelineNodePrefab, transform).GetComponent<TimelineNode>();
             node.transform.localPosition = BottomSlot.transform.localPosition;
@@ -171,9 +171,9 @@ public class UnitOrderTimelineController : MonoService
             return;
         }
 
-        for (int i = 0; i < _orderManager.Value.UnitOrderList.ToList().Count; i++)
+        for (int i = 0; i < _orderManager.Value.UnitOrder.ToList().Count; i++)
         {
-            ChessPiece correctUnit = _orderManager.Value.UnitOrderList.ToList()[i];
+            ChessPiece correctUnit = _orderManager.Value.UnitOrder.ToList()[i];
             
             if (correctUnit != _nodes[i].Piece)
             {

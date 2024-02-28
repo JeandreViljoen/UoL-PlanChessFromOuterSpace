@@ -10,16 +10,18 @@ public class ExecutionOrderManager : MonoService
     private EasyService<BoardManager> _boardManager;
     private EasyService<GameStateManager> _stateManager;
     private EasyService<AI> _ai;
-    public List<ChessPiece> UnitOrderList;
+    public IEnumerable<ChessPiece> UnitOrder => _unitOrder;
 
     public event Action OnTimeLineRefresh;
     public event Action OnTimeLineInit;
     public event Action OnCombatComplete;
 
-    private int _currentActiveUnit = -1;
+    private LinkedList<ChessPiece> _unitOrder;
+    private LinkedListNode<ChessPiece> _currentActiveUnit;
 
     void Start()
     {
+        Debug.Log($"called");
         _stateManager.Value.OnStateChanged += StateChangeLogic;
         ServiceLocator.GetService<TransitionController>().OnTransitionStart += StateTransitionLogic;
     }
@@ -34,29 +36,37 @@ public class ExecutionOrderManager : MonoService
 
     public void RefreshTimelineOrder()
     {
-        //Debug.Log($"Atttempting refresh of Timeline: Pieces.Count = {_boardManager.Value.ListofPieces.Count}");
-        
-        UnitOrderList.Clear();
-        UnitOrderList.AddRange(_boardManager.Value.ListofPieces
+        if (_unitOrder == null)
+            _unitOrder = new LinkedList<ChessPiece>();
+        _unitOrder.Clear();
+        foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
-            .ThenBy(piece => piece.Team));
-        
+            .ThenBy(piece => piece.Team))
+        {
+            _unitOrder.AddLast(piece);
+        }
+
         OnTimeLineRefresh?.Invoke();
     }
 
     public void AdvanceQueue()
     {
-        _currentActiveUnit++;
-        if (_currentActiveUnit < UnitOrderList.Count)
+        _currentActiveUnit = _currentActiveUnit.Next;
+        if (_currentActiveUnit != null)
         {
-            UnitOrderList[_currentActiveUnit].State = ChessPieceState.START;
-            _ai.Value.SyncAI(UnitOrderList.Skip(_currentActiveUnit));
+            _currentActiveUnit.Value.State = ChessPieceState.START;
+            _ai.Value.SyncAI(_currentActiveUnit.Forward());
         }
         else
         {
             OnCombatComplete?.Invoke();
             _stateManager.Value.GameState = GameState.SPAWN;
         }
+    }
+
+    public void DeletePiece(ChessPiece piece)
+    {
+        _unitOrder.Remove(piece);
     }
 
     private void StateChangeLogic(GameState state)
@@ -80,9 +90,9 @@ public class ExecutionOrderManager : MonoService
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
-        
+
     }
-    
+
     private void StateTransitionLogic(GameState state)
     {
         switch (state)
@@ -103,16 +113,16 @@ public class ExecutionOrderManager : MonoService
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
         }
-        
+
     }
 
     private void StartCombat()
     {
         ServiceLocator.GetService<CameraManager>().ResetCameraPosition();
         ServiceLocator.GetService<UnitOrderTimelineController>().NodeOffset = 0;
-        _currentActiveUnit = 0;
-        _ai.Value.SyncAI(UnitOrderList);
-        UnitOrderList[0].State = ChessPieceState.START;
+        _currentActiveUnit = _unitOrder.First;
+        _ai.Value.SyncAI(UnitOrder);
+        _currentActiveUnit.Value.State = ChessPieceState.START;
     }
 
     private void StartPrep()
