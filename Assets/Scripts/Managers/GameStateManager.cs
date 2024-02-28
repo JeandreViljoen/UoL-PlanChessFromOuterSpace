@@ -13,6 +13,7 @@ public class GameStateManager : MonoService
     private EasyService<TransitionController> _transitionController;
     private EasyService<ExecutionOrderManager> _executionOrderManager;
     private EasyService<EnemySpawner> _enemySpawner;
+    private EasyService<ScoreManager> _scoreManager;
 
 
 
@@ -50,6 +51,7 @@ public class GameStateManager : MonoService
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
+                    _scoreManager.Value.UpdateStats();
                     break;
                 case GameState.COMBAT:
                     break;
@@ -61,8 +63,8 @@ public class GameStateManager : MonoService
                     throw new ArgumentOutOfRangeException(nameof(_gameState), _gameState, null);
             }
 
-            _stateChangeTime = Time.time;
             OnStateChanged?.Invoke(_gameState);
+            _stateChangeTime = Time.time;
         }
     }
 

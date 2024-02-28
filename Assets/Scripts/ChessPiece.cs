@@ -129,6 +129,7 @@ public class ChessPiece : MonoBehaviour
     private EasyService<CurrencyManager> _currencyManager;
     private EasyService<AI> _ai;
     private EasyService<AudioManager> _audioManager;
+    private EasyService<ScoreManager> _scoreManager;
 
     public int Range
     {
@@ -320,6 +321,13 @@ public class ChessPiece : MonoBehaviour
         }
 
         return absoluteMoves;
+    }
+
+    private void InitFloatingCurrency(int value)
+    {
+        FloatingCurrency f = Instantiate(GlobalGameAssets.Instance.FloatingCurrencyPrefab.GetComponent<FloatingCurrency>());
+        f.transform.localPosition = transform.position + Vector3.up;
+        f.Init(value);
     }
 
     /// <summary>
@@ -718,7 +726,13 @@ public class ChessPiece : MonoBehaviour
     {
         if (Team == Team.Enemy)
         {
-            _currencyManager.Value.RequestCaptureReward(this);
+            int currency = _currencyManager.Value.RequestCaptureReward(this);
+            InitFloatingCurrency(currency);
+            _scoreManager.Value.AddEnemyDestroyedToScore(this.PieceType);
+        }
+        else
+        {
+            _scoreManager.Value.AlliedPieceDestroyed();
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
