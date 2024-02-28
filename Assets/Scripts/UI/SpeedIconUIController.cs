@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using AutoLayout3D;
-using TMPro.EditorUtilities;
 using UnityEngine;
 
 public class SpeedIconUIController : MonoBehaviour
