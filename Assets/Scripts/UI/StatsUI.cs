@@ -51,7 +51,7 @@ public class StatsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_scoreManager.IsAssigned)
+        if (!_scoreManager.HasService())
         {
             return;
         }
