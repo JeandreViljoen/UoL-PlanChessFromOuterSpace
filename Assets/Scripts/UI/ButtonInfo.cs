@@ -21,6 +21,8 @@ public class ButtonInfo : MonoBehaviour
     private EasyService<CurrencyManager> _currencyManager;
     public event Action<ChessPieceType> OnSuccessfulPurchase;
     public event Action<ChessPieceType> OnAttemptedPurchase;
+
+    private EasyService<BoardManager> _boardManager;
     private void Start()
     {
         EventHandler = GetComponent<MouseEventHandler>();//Retrieve and store the event handler object
@@ -31,16 +33,11 @@ public class ButtonInfo : MonoBehaviour
 
     private void TryBuy(PointerEventData _)
     {
-        //TODO:
-        //Might need extra logic to not remove currency immediately and only once mouse is released and a piece has been placed.
-        //In which case this function will change to rather send an event that a purchase is requested for a given type of piece.
-        //Where a different manager (Likely BoardManager) will handle converting the piece to game board logic.
-        //Event will look something like: OnAttemptedPurchase?.Invoke(Type)
-
-        if (_currencyManager.Value.HasCurrency(_price)) // Check if has currency
+     
+        if (_currencyManager.Value.HasCurrency(_price))
         {
-            _currencyManager.Value.TryRemoveCurrency(_price); //Remove currency
-            OnSuccessfulPurchase?.Invoke(Type);//Send an event that purchase was successful and put the TYPE as parameters.
+            _boardManager.Value.EnableBuyingState(Type);
+            OnAttemptedPurchase?.Invoke(Type);
         }
         else
         {

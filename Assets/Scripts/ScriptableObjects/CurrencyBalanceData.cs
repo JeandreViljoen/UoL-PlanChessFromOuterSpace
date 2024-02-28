@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,34 @@ public class CurrencyBalanceData : ScriptableObject
     public int PowerUp1Cost;
     public int PowerUp2Cost;
     public int PowerUp3Cost;
+    
+    
+    public int GetChessPieceCost(ChessPieceType type)
+    {
+        switch (type)
+        {
+            case ChessPieceType.Pawn:
+                return PawnCost;
+          
+            case ChessPieceType.Knight:
+                return KnightCost;
+           
+            case ChessPieceType.Bishop:
+                return BishopCost;
+           
+            case ChessPieceType.Rook:
+                return RookCost;
+          
+            case ChessPieceType.Queen:
+                return QueenCost;
+           
+            case ChessPieceType.King:
+                return KingCost;
+          
+            default:
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+    }
    
     
     

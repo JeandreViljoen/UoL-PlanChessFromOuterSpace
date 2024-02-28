@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class BoardSquare : MonoBehaviour
 {
@@ -53,7 +55,13 @@ public class BoardSquare : MonoBehaviour
 
     public Color WhiteTileColor;
     public Color BlackTileColor;
-    
+
+    public MouseEventHandler EventHandler;
+    private EasyService<BoardManager> _boardManager;
+
+    public event Action<ChessPieceType> TrySpawnPiece;
+    public event Action OnUnitBuyHighlight;
+    public event Action OnUnitBuyUnHighlight;
 
     public IndexCode IndexCode
     {
@@ -79,16 +87,57 @@ public class BoardSquare : MonoBehaviour
             Floor.color = BlackTileColor;
         }
     }
+
+    private void SetupEventHandlers()
+    {
+        EventHandler.OnMouseEnter += OnMouseEnterLogic;
+        EventHandler.OnMouseExit += OnMouseExitLogic;
+        EventHandler.OnMouseUp += OnMouseUpLogic;
+    }
+
+    private void OnMouseEnterLogic(PointerEventData _)
+    {
+        if (!_boardManager.Value.IsBuying()) return;
+        if (!IsEmpty()) return;
+
+        OnUnitBuyHighlight?.Invoke();
+        //Highlight(Team.Friendly);
+    }
     
+    private void OnMouseExitLogic(PointerEventData _)
+    {
+        if (!_boardManager.Value.IsBuying()) return;
+
+        OnUnitBuyUnHighlight?.Invoke();
+        //UnHighlight();
+    }
+    
+    private void OnMouseUpLogic(PointerEventData eventData)
+    {
+        if (!_boardManager.Value.IsBuying()) return;
+
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            _boardManager.Value.TryBuyUnit();
+        }
+        else
+        {
+            _boardManager.Value.CancelBuyUnit();
+        }
+
+       
+    }
 
     void Start()
     {
+        
         _highlightWorldPosition = HighlightSprite.transform.localPosition;
         _attackSignalPosition = AttackSignalSprite.transform.localPosition;
         _tweenHighlightFade = HighlightSprite.DOFade(0f, 0.000001f).SetUpdate(true);
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.000001f).SetUpdate(true);
         _tweenTargetFlash = TargetSignalSprite.DOFade(0f, 0.000001f).SetUpdate(true);
 
+        SetupEventHandlers();
         if (GlobalDebug.Instance.ShowIndexCodes)
         {
             IndexCodeTextField.gameObject.SetActive(true);

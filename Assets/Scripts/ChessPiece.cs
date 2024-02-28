@@ -39,12 +39,8 @@ public enum ChessPieceState
 public class ChessPiece : MonoBehaviour
 {
 #region Properties
-    
-    //TEMP FOR TESTING
-    public bool IsBuilding = false;
-    //--------------------
-    
-    // --------------- Member variables and data --------------- //
+
+// --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
     public SpriteRenderer Sprite;
 
@@ -83,7 +79,7 @@ public class ChessPiece : MonoBehaviour
             {
                 _speedIconUIController.Speed = _speed;
                 UpdateLevel();
-                if(TimelineNode!=null) TimelineNode.RefreshPiece();
+                if(TimelineNode != null) TimelineNode.RefreshPiece();
                 ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
                 ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
             }
@@ -130,6 +126,7 @@ public class ChessPiece : MonoBehaviour
     private EasyService<AI> _ai;
     private EasyService<AudioManager> _audioManager;
     private EasyService<ScoreManager> _scoreManager;
+    private EasyService<GameStateManager> _stateManager;
 
     public int Range
     {
@@ -140,13 +137,14 @@ public class ChessPiece : MonoBehaviour
         set
         {
             _range = value;
-            UpdateMoveset();
+            if(AssignedSquare != null) UpdateMoveset();
             UpdateLevel();
         }
     }
     public List<Vector2> RelativeMoveset;
     public List<Vector2> BaseRelativeMoveset;
-    private List<BoardSquare> _possibleInteractableTiles;
+    private List<BoardSquare> _possibleInteractableTiles = new List<BoardSquare>();
+    public List<BoardSquare> LastHighlightedTiles = new List<BoardSquare>();
 
     [HideInInspector] public TimelineNode TimelineNode;
 
@@ -248,13 +246,11 @@ public class ChessPiece : MonoBehaviour
     
     public void Init()
     {
+        
         //Fetch Data as assigned in inspector
         _data = GetStartData(PieceType);
-
-        if (!IsBuilding)
-        {
-            Sprite.sprite = _data.Sprite;
-        }
+        
+        Sprite.sprite = _data.Sprite;
         Speed = _data.DefaultSpeed;
         BaseRelativeMoveset = _data.BaseRelativeMoveset;
         Range = _data.DefaultRange; // Has to be retrieved after BaseRelativeMoveSet as it updates the moveset on this set method
@@ -263,18 +259,17 @@ public class ChessPiece : MonoBehaviour
 
     public void RequestSelection(ChessPiece pieceToSelect)
     {
+        if (ValidateInteraction()) return;
         ServiceLocator.GetService<BoardManager>().SelectedUnit = pieceToSelect;
+    }
+
+    public void ForceUpdateMoveset()
+    {
+        UpdateMoveset();
     }
 
     private void UpdateMoveset()
     {
-        //Temporary, used for testing
-        if (IsBuilding)
-        {
-            return;
-        }
-        //--------------------------
-        
         List<Vector2> newMoves = new List<Vector2>();
         //Add bas tile
         newMoves.Add(new Vector2(0,0));
@@ -444,8 +439,17 @@ public class ChessPiece : MonoBehaviour
         };
     }
 
+    private bool ValidateInteraction()
+    {
+        if (_stateManager.Value.GameState != GameState.PREP) return true;
+        if (ServiceLocator.GetService<BoardManager>().IsBuying()) return true;
+        return false;
+    }
+    
     private void Highlight(PointerEventData _)
     {
+        if (ValidateInteraction()) return;
+
         _audioManager.Value.PlaySound(Sound.UI_Hover);
         HighlightTiles(PossibleInteractableTiles, 0.2f);
         if (TimelineNode != null)
@@ -677,6 +681,7 @@ public class ChessPiece : MonoBehaviour
         if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
         _highlightRoutine = StartCoroutine(DelayedHighlight(tiles, totalAnimTime));
         _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
+        LastHighlightedTiles = tiles;
     }
 
     private IEnumerator DelayedHighlight(List<BoardSquare> tiles, float totalAnimTime)

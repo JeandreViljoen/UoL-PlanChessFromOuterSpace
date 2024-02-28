@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -38,5 +39,59 @@ public class GlobalGameAssets : ScriptableObjectSingleton<GlobalGameAssets>
    public GameObject FloatingCurrencyUIPrefab;
 
    public float ChessPieceAnimateSpeed;
+
+   public ChessPieceData GetChessPieceData(ChessPieceType type)
+   {
+      switch (type)
+      {
+         case ChessPieceType.Pawn:
+            return PawnData;
+          
+         case ChessPieceType.Knight:
+            return KnightData;
+           
+         case ChessPieceType.Bishop:
+            return BishopData;
+           
+         case ChessPieceType.Rook:
+            return RookData;
+          
+         case ChessPieceType.Queen:
+            return QueenData;
+           
+         case ChessPieceType.King:
+            return KingData;
+          
+         default:
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
+      }
+   }
+   
+   public GameObject GetChessPiecePrefab(ChessPieceType type)
+   {
+      switch (type)
+      {
+         case ChessPieceType.Pawn:
+            return PawnPrefab;
+          
+         case ChessPieceType.Knight:
+            return KnightPrefab;
+           
+         case ChessPieceType.Bishop:
+            return BishopPrefab;
+           
+         case ChessPieceType.Rook:
+            return RookPrefab;
+          
+         case ChessPieceType.Queen:
+            return QueenPrefab;
+           
+         case ChessPieceType.King:
+            return KingPrefab;
+          
+         default:
+            throw new ArgumentOutOfRangeException(nameof(type), type, null);
+      }
+   }
 
 }

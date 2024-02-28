@@ -52,6 +52,5 @@ public class FloatingCurrency : MonoBehaviour
     private void OnDestroy()
     {
         _tweenMove?.Kill();
-       
     }
 }

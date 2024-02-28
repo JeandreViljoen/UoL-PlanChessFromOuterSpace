@@ -42,7 +42,8 @@ public class HudButtonsManager : MonoBehaviour
         FightButton.onClick.AddListener(OnFightButtonPressed);
         ReturnButton.onClick.AddListener(OnReturnButtonPressed);
 
-        _transitionController.Value.OnTransitionStart += TryShowFightButton;
+        //_transitionController.Value.OnTransitionStart += TryShowFightButton;
+        _stateManager.Value.OnStateChanged += TryShowFightButton;
         _cameraManager.Value.OnCameraFocus += ShowBackButton;
         _cameraManager.Value.OnCameraTopDown += HideBackButton;
 

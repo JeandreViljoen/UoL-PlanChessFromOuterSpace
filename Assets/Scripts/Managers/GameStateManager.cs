@@ -15,6 +15,8 @@ public class GameStateManager : MonoService
     private EasyService<EnemySpawner> _enemySpawner;
     private EasyService<ScoreManager> _scoreManager;
 
+    public bool IsBusyBuying = false;
+
 
 
     public GameState GameState
