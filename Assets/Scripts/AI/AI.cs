@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Services;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class AI : MonoService
@@ -34,7 +35,7 @@ public class AI : MonoService
         return 0;
     }
 
-    private class Move : IComparable<Move> {
+    private struct Move : IComparable<Move> {
         public BoardSquare destination;
         public int score;
 
@@ -45,7 +46,11 @@ public class AI : MonoService
 
         public int CompareTo(Move other)
         {
-            return score.CompareTo(other.score);
+            int result = score.CompareTo(other.score);
+            if (result != 0) return result;
+            result = destination.IndexX.CompareTo(other.destination.IndexX);
+            if (result != 0) return result;
+            return destination.IndexZ.CompareTo(other.destination.IndexZ);
         }
     }
 
@@ -63,8 +68,9 @@ public class AI : MonoService
 
         var balanceData = GlobalGameAssets.Instance.AIBalanceData;
 
-        var moveset = new SortedSet<Move>();
+        var moves = new SortedSet<Move>();
 
+        var list = "";
         foreach (var dst in destinations)
         {
             var capture = dst.ChessPieceAssigned;
@@ -75,13 +81,12 @@ public class AI : MonoService
                 score = ScoreCapture(capture.PieceType, balanceData);
             }
 
-            moveset.Add(new Move(dst, score));
+            moves.Add(new Move(dst, score));
         }
 
-        var moves = moveset.Reverse();
-        int highscore = moves.First().score;
-        var top = moves.TakeWhile((m) => m.score == highscore).ToArray();
-        int rand = Random.Range(0, 1 << 24) % top.Length;
-        return top[rand].destination;
+        int highscore = moves.Reverse().First().score;
+        var top = moves.Reverse().TakeWhile(m => m.score == highscore).ToArray();
+
+        return top[Random.Range(0, top.Length)].destination;
     }
 }
