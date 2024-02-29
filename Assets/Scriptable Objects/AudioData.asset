@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PauseButtonSound: {fileID: 8300000, guid: 52242562f646a0e4f96efa47c733e0db, type: 3}
   UiButtonPressed: {fileID: 8300000, guid: 2f8a38d95f0dfa34599385e205674ee4, type: 3}
+  HoverButton: {fileID: 8300000, guid: 403eea7959c4fe849b899a5004692a0a, type: 3}
   FocusTileSound: {fileID: 8300000, guid: 2a1abed9411036e42b098ae8e77e1013, type: 3}
   ReturnCameraTopDownSound: {fileID: 8300000, guid: fc7f406526bfa8541ae8b4590b183cfe,
     type: 3}

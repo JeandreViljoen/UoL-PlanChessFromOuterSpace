@@ -1,13 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Services;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
     // Start is called before the first frame update
-    
+    private EasyService<AudioManager> _audioManager;
+
     public void OnOpenGame(){
+        _audioManager.Value.PlaySound(Sound.GenericUIButton);
         SceneManager.LoadSceneAsync(2); //Loads scene 2 Test Board Manager
         Debug.Log("Loads Game with scene 2"); 
     }
@@ -30,6 +35,7 @@ public class MainMenu : MonoBehaviour
     }
 
     public void OnCloseGame(){
+        _audioManager.Value.PlaySound(Sound.GenericUIButton);
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
@@ -37,4 +43,9 @@ public class MainMenu : MonoBehaviour
         #endif
     }
 
+    public void HoverButton()
+    {
+        _audioManager.Value.PlaySound(Sound.HoverButton);
+    }
+    
 }

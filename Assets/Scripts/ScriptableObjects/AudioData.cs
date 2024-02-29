@@ -8,6 +8,7 @@ public class AudioData : ScriptableObject
     [Header("UI")]
     public AudioClip PauseButtonSound;
     public AudioClip UiButtonPressed;
+    public AudioClip HoverButton;
     
     [Header("Gameplay")]
     public AudioClip FocusTileSound;
@@ -23,6 +24,7 @@ public enum Sound
 {
     PauseButton,
     GenericUIButton,
+    HoverButton,
     FocusTile,
     ReturnCamera,
     Success,

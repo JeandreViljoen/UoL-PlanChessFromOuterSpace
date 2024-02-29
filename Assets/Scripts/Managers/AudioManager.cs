@@ -65,6 +65,7 @@ public class AudioManager : MonoService
         {
             case Sound.PauseButton: return data.PauseButtonSound;
             case Sound.GenericUIButton: return data.UiButtonPressed;
+            case Sound.HoverButton: return data.HoverButton;
             case Sound.FocusTile: return data.FocusTileSound;
             case Sound.ReturnCamera: return data.ReturnCameraTopDownSound;
             case Sound.Success: return data.SuccessfulSound;
