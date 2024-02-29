@@ -9,6 +9,7 @@ public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
     public GameObject StatsPanel;
+    public GameObject LosePrompt;
     public KingController KingController;
     
 
@@ -17,6 +18,7 @@ public class HUDManager : MonoService
     {
         SubscribeCurrencyEvents();
         RefreshCurrencyDisplay(0);
+        LosePrompt.SetActive(false);
     }
 
     private void RefreshCurrencyDisplay(int amount)

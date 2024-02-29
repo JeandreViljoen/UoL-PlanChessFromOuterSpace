@@ -733,6 +733,8 @@ public class ChessPiece : MonoBehaviour
 
     private void Killed()
     {
+        
+        
         if (Team == Team.Enemy)
         {
             int currency = _currencyManager.Value.RequestCaptureReward(this);
@@ -742,6 +744,10 @@ public class ChessPiece : MonoBehaviour
         else
         {
             _scoreManager.Value.AlliedPieceDestroyed();
+            if (PieceType == ChessPieceType.King)
+            {
+                _stateManager.Value.GameState = GameState.LOSE;
+            }
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
