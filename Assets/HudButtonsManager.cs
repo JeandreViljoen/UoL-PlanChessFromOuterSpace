@@ -59,9 +59,13 @@ public class HudButtonsManager : MonoBehaviour
     
     void OnFightButtonPressed()
     {
-        
         if (_stateManager.Value.GameState == GameState.PREP)
         {
+            if (!_stateManager.Value.HasPlacedKing)
+            {
+                ServiceLocator.GetService<HUDManager>().KingController.ShowDeployKingPrompt();
+                return;
+            }
             _audioManager.Value.PlaySound(Sound.UI_Sub);
             _stateManager.Value.GameState = GameState.COMBAT;
             HideFightButton();

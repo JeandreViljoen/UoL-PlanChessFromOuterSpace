@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Bishop
   m_EditorClassIdentifier: 
   PieceType: 2
-  Sprite: {fileID: 21300000, guid: e82675506f5b5b14c83ed767ec899fc3, type: 3}
+  Sprite: {fileID: 21300000, guid: 7a4cc66e104863a4e882a9f9863b83d1, type: 3}
+  Portrait: {fileID: 0}
   DefaultSpeed: 1
   DefaultRange: 2
   BaseRelativeMoveset:

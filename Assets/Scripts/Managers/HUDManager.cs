@@ -9,6 +9,7 @@ public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
     public GameObject StatsPanel;
+    public KingController KingController;
     
 
     private EasyService<CurrencyManager> _currencyManager;

@@ -47,6 +47,9 @@ public class BoardManager : MonoService
 
     private ChessPiece _selectedUnit;
 
+    public event Action OnSuccessfulPurchase;
+    public event Action OnCancelledPurchase;
+
     public ChessPiece SelectedUnit
     {
         get
@@ -101,6 +104,12 @@ public class BoardManager : MonoService
         {
             CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
             ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
+            if (_unitToBuy == ChessPieceType.King)
+            {
+                _gameStateManager.Value.HasPlacedKing = true;
+                ServiceLocator.GetService<HUDManager>().KingController.Disable();
+            }
+            OnSuccessfulPurchase?.Invoke();
         }
 
         CancelBuyUnit();
@@ -116,6 +125,7 @@ public class BoardManager : MonoService
         Destroy(_newPieceToBuy.gameObject);
         _newPieceToBuy = null;
         DisableBuyingState();
+        OnCancelledPurchase?.Invoke();
     }
 
     public void DisableBuyingState()

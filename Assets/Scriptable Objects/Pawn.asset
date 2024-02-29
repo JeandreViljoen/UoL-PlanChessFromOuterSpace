@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Pawn
   m_EditorClassIdentifier: 
   PieceType: 0
-  Sprite: {fileID: 21300000, guid: 7f4322b1bf6aa794689a4efffc1851d3, type: 3}
+  Sprite: {fileID: 21300000, guid: 456c58a681dd6344dba74eeecdb95b8d, type: 3}
+  Portrait: {fileID: 0}
   DefaultSpeed: 1
   DefaultRange: 1
   BaseRelativeMoveset:
