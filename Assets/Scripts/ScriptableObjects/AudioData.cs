@@ -37,6 +37,7 @@ public enum Sound
 {
     PauseButton,
     GenericUIButton,
+    HoverButton,
     FocusTile,
     ReturnCamera,
     Success,
