@@ -11,6 +11,7 @@ public class HUDManager : MonoService
     public TextMeshProUGUI CurrencyDisplay;
     public GameObject StatsPanel;
     public GameObject LosePrompt;
+    public GameObject WinPrompt;
     public KingController KingController;
     public ShopManagerScript ShopMenu;
     public UnitOrderTimelineController TimelineController;

@@ -46,6 +46,7 @@ public class GameStateManager : MonoService
             _hudManager.Value.LosePrompt.SetActive(false);
             _hudManager.Value.StatsPanel.SetActive(false);
             _hudManager.Value.DimPanel.gameObject.SetActive(false);
+            _hudManager.Value.WinPrompt.SetActive(false);
 
             switch (_gameState)
             {
@@ -63,6 +64,9 @@ public class GameStateManager : MonoService
                 case GameState.COMBAT:
                     break;
                 case GameState.WIN:
+                    _hudManager.Value.WinPrompt.SetActive(true);
+                    _hudManager.Value.DimPanel.gameObject.SetActive(true);
+                    _hudManager.Value.StatsPanel.SetActive(true);
                     break;
                 case GameState.LOSE:
                     _hudManager.Value.DimPanel.gameObject.SetActive(true);
