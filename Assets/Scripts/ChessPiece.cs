@@ -443,6 +443,7 @@ public class ChessPiece : MonoBehaviour
     {
         if (_stateManager.Value.GameState != GameState.PREP) return true;
         if (ServiceLocator.GetService<BoardManager>().IsBuying()) return true;
+        if (PieceType == ChessPieceType.King) return true;
         return false;
     }
     
@@ -508,6 +509,11 @@ public class ChessPiece : MonoBehaviour
             case ChessPieceState.INACTIVE:
                 break;
             case ChessPieceState.START:
+                if (PieceType == ChessPieceType.King)
+                {
+                    State = ChessPieceState.END;
+                    return;
+                }
                 if (GlobalDebug.Instance.ShowCombatMessageLogs)
                 {
                     Debug.Log($"-------------------------- {ToString(this)} ---- START -------------------------\n");

@@ -17,5 +17,6 @@ MonoBehaviour:
   Portrait: {fileID: 0}
   DefaultSpeed: 1
   DefaultRange: 1
-  BaseRelativeMoveset: []
+  BaseRelativeMoveset:
+  - {x: 0, y: 0}
   UniqueRelativeAttackSet: []
