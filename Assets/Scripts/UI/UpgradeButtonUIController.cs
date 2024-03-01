@@ -32,7 +32,7 @@ public class UpgradeButtonUIController : MonoBehaviour
         
         SpeedButton.gameObject.SetActive(true);
         RangeButton.gameObject.SetActive(true);
-        Button3.gameObject.SetActive(true);
+        Button3.gameObject.SetActive(false);
     }
 
     public void Hide()

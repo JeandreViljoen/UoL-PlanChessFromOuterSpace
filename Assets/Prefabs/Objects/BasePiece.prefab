@@ -599,6 +599,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UpgradeButton (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3393436892704994732, guid: d3c2a6d0114ce1442aba41049155d444,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4762313361456078439, guid: d3c2a6d0114ce1442aba41049155d444,
         type: 3}
       propertyPath: m_RootOrder
