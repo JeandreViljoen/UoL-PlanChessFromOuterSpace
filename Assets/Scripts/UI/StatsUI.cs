@@ -41,6 +41,7 @@ public class StatsUI : MonoBehaviour
         KnightIcon.sprite = GlobalGameAssets.Instance.KnightData.Sprite;
         KingIcon.sprite = GlobalGameAssets.Instance.KingData.Sprite;
         QueenIcon.sprite = GlobalGameAssets.Instance.QueenData.Sprite;
+       
     }
 
     // Update is called once per frame
@@ -51,7 +52,7 @@ public class StatsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_scoreManager.HasService())
+        if (!_scoreManager.HasService() || PawnPiecesDestroyed == null)
         {
             return;
         }

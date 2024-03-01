@@ -4,11 +4,18 @@ using System.Collections.Generic;
 using Services;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
     public GameObject StatsPanel;
+    public GameObject LosePrompt;
+    public GameObject WinPrompt;
+    public KingController KingController;
+    public ShopManagerScript ShopMenu;
+    public UnitOrderTimelineController TimelineController;
+    public Image DimPanel;
     
 
     private EasyService<CurrencyManager> _currencyManager;
@@ -16,6 +23,7 @@ public class HUDManager : MonoService
     {
         SubscribeCurrencyEvents();
         RefreshCurrencyDisplay(0);
+        LosePrompt.SetActive(false);
     }
 
     private void RefreshCurrencyDisplay(int amount)
@@ -40,7 +48,15 @@ public class HUDManager : MonoService
     {
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            StatsPanel.SetActive(true);
+            if (StatsPanel.activeSelf)
+            {
+                StatsPanel.SetActive(false);
+            }
+            else
+            {
+                StatsPanel.SetActive(true);
+            }
+            
         }
     }
 

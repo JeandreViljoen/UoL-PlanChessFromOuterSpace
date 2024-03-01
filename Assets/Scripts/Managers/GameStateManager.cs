@@ -14,6 +14,9 @@ public class GameStateManager : MonoService
     private EasyService<ExecutionOrderManager> _executionOrderManager;
     private EasyService<EnemySpawner> _enemySpawner;
     private EasyService<ScoreManager> _scoreManager;
+    private EasyService<HUDManager> _hudManager;
+
+    public bool HasPlacedKing = false;
 
 
 
@@ -39,6 +42,11 @@ public class GameStateManager : MonoService
             {
                 _gameState = value;
             }
+            
+            _hudManager.Value.LosePrompt.SetActive(false);
+            _hudManager.Value.StatsPanel.SetActive(false);
+            _hudManager.Value.DimPanel.gameObject.SetActive(false);
+            _hudManager.Value.WinPrompt.SetActive(false);
 
             switch (_gameState)
             {
@@ -56,8 +64,14 @@ public class GameStateManager : MonoService
                 case GameState.COMBAT:
                     break;
                 case GameState.WIN:
+                    _hudManager.Value.WinPrompt.SetActive(true);
+                    _hudManager.Value.DimPanel.gameObject.SetActive(true);
+                    _hudManager.Value.StatsPanel.SetActive(true);
                     break;
                 case GameState.LOSE:
+                    _hudManager.Value.DimPanel.gameObject.SetActive(true);
+                    _hudManager.Value.LosePrompt.SetActive(true);
+                    _hudManager.Value.StatsPanel.SetActive(true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(_gameState), _gameState, null);

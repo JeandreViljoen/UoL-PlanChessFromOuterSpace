@@ -21,7 +21,6 @@ public class ExecutionOrderManager : MonoService
 
     void Start()
     {
-        Debug.Log($"called");
         _stateManager.Value.OnStateChanged += StateChangeLogic;
         ServiceLocator.GetService<TransitionController>().OnTransitionStart += StateTransitionLogic;
     }
@@ -36,8 +35,8 @@ public class ExecutionOrderManager : MonoService
 
     public void RefreshTimelineOrder()
     {
-        if (_unitOrder == null)
-            _unitOrder = new LinkedList<ChessPiece>();
+        if (_unitOrder == null) _unitOrder = new LinkedList<ChessPiece>();
+        
         _unitOrder.Clear();
         foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
@@ -105,6 +104,7 @@ public class ExecutionOrderManager : MonoService
                 StartPrep();
                 break;
             case GameState.COMBAT:
+                _boardManager.Value.CancelBuyUnit();
                 break;
             case GameState.WIN:
                 break;

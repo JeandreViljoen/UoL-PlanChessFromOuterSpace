@@ -42,7 +42,8 @@ public class HudButtonsManager : MonoBehaviour
         FightButton.onClick.AddListener(OnFightButtonPressed);
         ReturnButton.onClick.AddListener(OnReturnButtonPressed);
 
-        _transitionController.Value.OnTransitionStart += TryShowFightButton;
+        //_transitionController.Value.OnTransitionStart += TryShowFightButton;
+        _stateManager.Value.OnStateChanged += TryShowFightButton;
         _cameraManager.Value.OnCameraFocus += ShowBackButton;
         _cameraManager.Value.OnCameraTopDown += HideBackButton;
 
@@ -60,6 +61,12 @@ public class HudButtonsManager : MonoBehaviour
     {
         if (_stateManager.Value.GameState == GameState.PREP)
         {
+            if (!_stateManager.Value.HasPlacedKing)
+            {
+                ServiceLocator.GetService<HUDManager>().KingController.ShowDeployKingPrompt();
+                return;
+            }
+            _audioManager.Value.PlaySound(Sound.UI_Sub);
             _stateManager.Value.GameState = GameState.COMBAT;
             HideFightButton();
         }
@@ -69,6 +76,7 @@ public class HudButtonsManager : MonoBehaviour
     void OnReturnButtonPressed()
     {
         _cameraManager.Value.ResetCameraPosition();
+        _audioManager.Value.PlaySound(Sound.UI_Click);
     }
     
     void Update()

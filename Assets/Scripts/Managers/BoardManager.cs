@@ -5,6 +5,7 @@ using System.ComponentModel;
 using DG.Tweening;
 using DG.Tweening.Core;
 using Services;
+using UnityEditor;
 using UnityEngine;
 using Random = System.Random;
 
@@ -37,8 +38,17 @@ public class BoardManager : MonoService
  
     // Chess pieces information
     [Header("Chess Pieces Information and Properties")]
+    
+    private bool _isBuyingUnit = false;
+    private ChessPieceType _unitToBuy;
+    private Tween _tweenBuyMove;
+
+    private ChessPiece _newPieceToBuy;
 
     private ChessPiece _selectedUnit;
+
+    public event Action OnSuccessfulPurchase;
+    public event Action OnCancelledPurchase;
 
     public ChessPiece SelectedUnit
     {
@@ -67,6 +77,99 @@ public class BoardManager : MonoService
 
         _selectedUnit = null;
     }
+
+    public void EnableBuyingState(ChessPieceType type)
+    {
+
+        if (_isBuyingUnit)
+        {
+            CancelBuyUnit();
+        }
+        _isBuyingUnit = true;
+        _unitToBuy = type;
+        InitNewPieceToBuy(_unitToBuy);
+
+    }
+
+    public bool IsBuying()
+    {
+        return _isBuyingUnit;
+    }
+
+
+    public void TryBuyUnit()
+    {
+        int cost = GlobalGameAssets.Instance.CurrencyBalanceData.GetChessPieceCost(_newPieceToBuy.PieceType);
+        if (ServiceLocator.GetService<CurrencyManager>().HasCurrency(cost))
+        {
+            CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
+            ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
+            if (_unitToBuy == ChessPieceType.King)
+            {
+                _gameStateManager.Value.HasPlacedKing = true;
+                ServiceLocator.GetService<HUDManager>().KingController.Disable();
+            }
+            OnSuccessfulPurchase?.Invoke();
+        }
+
+        CancelBuyUnit();
+    }
+
+    public void CancelBuyUnit()
+    {
+        if (!IsBuying())
+        {
+            return;
+        }
+        _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+        Destroy(_newPieceToBuy.gameObject);
+        _newPieceToBuy = null;
+        DisableBuyingState();
+        OnCancelledPurchase?.Invoke();
+    }
+
+    public void DisableBuyingState()
+    {
+        _isBuyingUnit = false;
+    }
+
+    private void SubscribeBuyEvents()
+    {
+        foreach (var tile in _boardSquares)
+        {
+            tile.OnUnitBuyHighlight += () =>
+            {
+                if (_newPieceToBuy!=null && _newPieceToBuy.AssignedSquare != null)
+                {
+                    _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+                }
+                _tweenBuyMove?.Kill();
+                
+                _newPieceToBuy.AssignedSquare = tile;
+                _newPieceToBuy.ForceUpdateMoveset();
+                _newPieceToBuy.HighlightTiles(_newPieceToBuy.PossibleInteractableTiles, 0.1f);
+                _tweenBuyMove = _newPieceToBuy.transform.DOMove(tile.CenterSurfaceTransform.position, 0.1f).SetEase(Ease.InOutSine);
+            };
+
+            tile.OnUnitBuyUnHighlight += () =>
+            {
+                if (tile.ChessPieceAssigned == _newPieceToBuy)
+                {
+                    tile.ChessPieceAssigned = null;
+                }
+            };
+            
+           
+        }
+    }
+
+    private void InitNewPieceToBuy(ChessPieceType type)
+    { 
+        _newPieceToBuy = Instantiate(GlobalGameAssets.Instance.GetChessPiecePrefab(type)).GetComponent<ChessPiece>();
+        _newPieceToBuy.transform.position = _centerPosition + Vector3.up * 5f;
+        _newPieceToBuy.Init();
+        _newPieceToBuy.Sprite.gameObject.layer = 2;
+    }
     
 
     // Tweens
@@ -78,6 +181,7 @@ public class BoardManager : MonoService
 
     void Start()
     {
+        DisableBuyingState();
         _boardSquares = new List<BoardSquare>();
         _pieces = new Dictionary<(int, int), ChessPiece>();
 
@@ -86,7 +190,13 @@ public class BoardManager : MonoService
 
     void Update()
     {
-
+        if (_isBuyingUnit)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                CancelBuyUnit();
+            }
+        }
     }
 
     // Creates the chess board in the scene and stores all the necessary information
@@ -99,7 +209,7 @@ public class BoardManager : MonoService
             return;
         }
 
-        Vector3 squareBoardSize = _squareBoardPrefab.GetComponent<Renderer>().bounds.size;
+        Vector3 squareBoardSize = Vector3.one;
         Vector3 firstSquarePosition = new Vector3(_centerPosition.x - squareBoardSize.x/2 * _boardDepth, 0,
             _centerPosition.z - squareBoardSize.z/2 * _boardWidth);
 
@@ -131,12 +241,12 @@ public class BoardManager : MonoService
                 _boardSquares.Add(boardSquareComponent);
 
                 // Add material to the square board
-                MeshRenderer meshRenderer = squareBoard.GetComponent<MeshRenderer>();
-                if (materialIteration >= _materialsArray.Length)
-                    materialIteration = 0;
-                Material materialToApply = _materialsArray[materialIteration];
-                meshRenderer.material = materialToApply;
-                 materialIteration++;
+                // MeshRenderer meshRenderer = squareBoard.GetComponent<MeshRenderer>();
+                // if (materialIteration >= _materialsArray.Length)
+                //     materialIteration = 0;
+                // Material materialToApply = _materialsArray[materialIteration];
+                // meshRenderer.material = materialToApply;
+                //  materialIteration++;
 
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
@@ -147,8 +257,10 @@ public class BoardManager : MonoService
             // Update Z position
             squareBoardPosition.z += squareBoardSize.z;
         }
-        
+
+        SubscribeBuyEvents();
         ExecuteDebugCode();
+        
     }
 
     private void ExecuteDebugCode()
@@ -305,6 +417,8 @@ public class BoardManager : MonoService
 
         ListofPieces.Add(piece);
         _pieces.Add(pos, piece);
+        ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+        ServiceLocator.GetService<UnitOrderTimelineController>().AddNode(piece);
         return piece;
     }
 

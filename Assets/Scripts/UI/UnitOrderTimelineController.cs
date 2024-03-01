@@ -71,13 +71,13 @@ public class UnitOrderTimelineController : MonoService
     void Start()
     {
         _orderManager.Value.OnTimeLineInit += InitTimeline;
-        //_orderManager.Value.OnTimeLineRefresh += RefreshChildIndices;
     }
     
     void Update()
     {
-        
-        if (_stateManager.Value.GameState == GameState.PREP && _stateManager.Value.GetTimeSinceStateChange() > 2)
+     
+        //Check mouse scroll to update offset index - Ignore changes if units are less than the amount of node slots on screen
+        if (_stateManager.Value.GameState == GameState.PREP && _nodes.Count > NodeSlots.Count)
         {
             if (Input.mouseScrollDelta.y > 0f)
             {
@@ -137,12 +137,6 @@ public class UnitOrderTimelineController : MonoService
 
     public void RefreshTimelinePositions()
     {
-        //If less pieces than node slots. Dont refresh anything
-        if (_nodes.Count <= NodeSlots.Count)
-        {
-            return;
-        }
-        
         for (int i = 0; i < _nodes.Count; i++)
         {
             //Move nodes offscreen top
@@ -161,7 +155,6 @@ public class UnitOrderTimelineController : MonoService
                 _nodes[i].MoveNode(BottomSlot, 0.15f);
             }
         }
-        //StartCoroutine(DelayedRefreshTimelinePositions());
     }
 
     public void RefreshListIndices()
@@ -185,6 +178,16 @@ public class UnitOrderTimelineController : MonoService
             } 
         }
         RefreshTimelinePositions();
+    }
+
+    public void AddNode(ChessPiece piece)
+    {
+        TimelineNode node = Instantiate(TimelineNodePrefab, transform).GetComponent<TimelineNode>();
+        node.transform.localPosition = BottomSlot.transform.localPosition;
+        node.SetPiece(piece);
+        _nodes.Add(node);
+
+        RefreshListIndices();
     }
 
     private IEnumerator DelayedRefreshTimelinePositions()
