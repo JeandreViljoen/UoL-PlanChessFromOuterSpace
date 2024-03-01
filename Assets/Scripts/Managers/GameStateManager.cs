@@ -44,6 +44,8 @@ public class GameStateManager : MonoService
             }
             
             _hudManager.Value.LosePrompt.SetActive(false);
+            _hudManager.Value.StatsPanel.SetActive(false);
+            _hudManager.Value.DimPanel.gameObject.SetActive(false);
 
             switch (_gameState)
             {
@@ -63,7 +65,9 @@ public class GameStateManager : MonoService
                 case GameState.WIN:
                     break;
                 case GameState.LOSE:
+                    _hudManager.Value.DimPanel.gameObject.SetActive(true);
                     _hudManager.Value.LosePrompt.SetActive(true);
+                    _hudManager.Value.StatsPanel.SetActive(true);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(_gameState), _gameState, null);
