@@ -13,7 +13,7 @@ public class MainMenu : MonoBehaviour
 
     public void OnOpenGame(){
         _audioManager.Value.PlaySound(Sound.GenericUIButton);
-        SceneManager.LoadSceneAsync(2); //Loads scene 2 Test Board Manager
+        SceneManager.LoadSceneAsync(1); //Loads scene 2 Test Board Manager
         Debug.Log("Loads Game with scene 2"); 
     }
 
