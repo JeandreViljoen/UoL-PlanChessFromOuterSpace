@@ -40,6 +40,8 @@ public class BoardManager : MonoService
     [Header("Chess Pieces Information and Properties")]
     
     private bool _isBuyingUnit = false;
+
+    public GameObject BuyingTilesAccesHighlight;
     private ChessPieceType _unitToBuy;
     private Tween _tweenBuyMove;
 
@@ -148,6 +150,11 @@ public class BoardManager : MonoService
     {
         foreach (var tile in _boardSquares)
         {
+            if (tile.IndexX > 1)
+            {
+                return;
+            }
+            
             tile.OnUnitBuyHighlight += () =>
             {
                 if (_newPieceToBuy!=null && _newPieceToBuy.AssignedSquare != null)
@@ -204,6 +211,11 @@ public class BoardManager : MonoService
     {
         if (_isBuyingUnit)
         {
+            if (!BuyingTilesAccesHighlight.activeSelf)
+            {
+                BuyingTilesAccesHighlight.SetActive(true);
+            }
+            
             if (Input.GetMouseButtonDown(1))
             {
                 CancelBuyUnit();
@@ -211,6 +223,13 @@ public class BoardManager : MonoService
             else if (Input.GetMouseButtonDown(0) && _newPieceToBuy.AssignedSquare != null)
             {
                 TryBuyUnit();
+            }
+        }
+        else
+        {
+            if (BuyingTilesAccesHighlight.activeSelf)
+            {
+                BuyingTilesAccesHighlight.SetActive(false);
             }
         }
     }
