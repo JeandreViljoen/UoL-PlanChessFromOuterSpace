@@ -113,7 +113,11 @@ public class HudButtonsManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        _transitionController.Value.OnTransitionStart -= TryShowFightButton;
+        if (_transitionController.HasService())
+        {
+            _transitionController.Value.OnTransitionStart -= TryShowFightButton;
+        }
+        
         _cameraManager.Value.OnCameraFocus -= ShowBackButton;
         _cameraManager.Value.OnCameraTopDown -= HideBackButton;
     }
