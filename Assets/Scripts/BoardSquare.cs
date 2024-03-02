@@ -118,7 +118,7 @@ public class BoardSquare : MonoBehaviour
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            _boardManager.Value.TryBuyUnit();
+            //_boardManager.Value.TryBuyUnit();
         }
         else
         {

@@ -208,6 +208,10 @@ public class BoardManager : MonoService
             {
                 CancelBuyUnit();
             }
+            else if (Input.GetMouseButtonDown(0) && _newPieceToBuy.AssignedSquare != null)
+            {
+                TryBuyUnit();
+            }
         }
     }
 
@@ -631,7 +635,6 @@ public class BoardManager : MonoService
             {
                 p.SetLightEnabled(false);
             }
-            
         }
     }
     
@@ -640,7 +643,6 @@ public class BoardManager : MonoService
         foreach (var p in ListofPieces)
         {
             p.SetLightEnabled(true);
-            
         }
     }
 
