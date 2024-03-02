@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b61663d76c487a4e908639e55b866e2, type: 3}
   m_Name: CurrencyBalanceData
   m_EditorClassIdentifier: 
-  StartCurrency: 300
+  StartCurrency: 150
   CurrencyEarnedPerRound: 50
   UpgradeCostIncrease: 50
   AdditionalCurrencyRewardPerLevel: 5

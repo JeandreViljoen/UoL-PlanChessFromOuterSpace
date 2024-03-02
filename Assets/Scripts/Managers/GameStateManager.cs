@@ -15,6 +15,7 @@ public class GameStateManager : MonoService
     private EasyService<EnemySpawner> _enemySpawner;
     private EasyService<ScoreManager> _scoreManager;
     private EasyService<HUDManager> _hudManager;
+    private EasyService<CurrencyManager> _currencyManager;
 
     public bool HasPlacedKing = false;
 
@@ -59,6 +60,7 @@ public class GameStateManager : MonoService
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
+                    _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _scoreManager.Value.UpdateStats();
                     break;
                 case GameState.COMBAT:
