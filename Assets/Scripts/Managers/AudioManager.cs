@@ -44,6 +44,22 @@ public class AudioManager : MonoService
         _soundEffectAudioSource.Play();
     }
     
+    public void PlaySound(Sound id, GameObject sourceObj)
+    {
+        AudioSource source = sourceObj.GetComponent<AudioSource>();
+        if (source == null)
+        {
+            Debug.LogError($"[AudioManager.cs] : PlaySound(_,_) - Could not find AudioSource on object requesting audio." +
+                           $"\nMake sure the calling script ({sourceObj}) has an AudioSource component attached.");
+            return;
+        }
+        
+        AudioClip clip = GetClipFromID(id);
+        
+        source.clip = clip;
+        source.Play();
+    }
+    
     /// <summary>
     /// Play music of given music ID in parameters
     /// </summary>

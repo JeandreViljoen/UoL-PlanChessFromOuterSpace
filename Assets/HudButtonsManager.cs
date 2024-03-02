@@ -53,7 +53,7 @@ public class HudButtonsManager : MonoBehaviour
 
     void OnPauseButtonPressed()
     {
-        _audioManager.Value.PlaySound(Sound.PauseButton);
+        _audioManager.Value.PlaySound(Sound.PauseButton, PauseButton.gameObject);
         _menuManager.Value.PauseMenu.Pause();
     }
     
@@ -66,7 +66,7 @@ public class HudButtonsManager : MonoBehaviour
                 ServiceLocator.GetService<HUDManager>().KingController.ShowDeployKingPrompt();
                 return;
             }
-            _audioManager.Value.PlaySound(Sound.UI_Sub);
+            _audioManager.Value.PlaySound(Sound.UI_Sub, FightButton.gameObject);
             _stateManager.Value.GameState = GameState.COMBAT;
             HideFightButton();
         }
@@ -76,7 +76,7 @@ public class HudButtonsManager : MonoBehaviour
     void OnReturnButtonPressed()
     {
         _cameraManager.Value.ResetCameraPosition();
-        _audioManager.Value.PlaySound(Sound.UI_Click);
+        _audioManager.Value.PlaySound(Sound.UI_Click, ReturnButton.gameObject);
     }
     
     void Update()

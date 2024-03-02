@@ -216,12 +216,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
         {
             Speed++;
-            _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess);
+            _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.SpeedButton.gameObject);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            _audioManager.Value.PlaySound(Sound.UI_Deny);
+            _audioManager.Value.PlaySound(Sound.UI_Deny, _upgradeButtonUIController.SpeedButton.gameObject);
         }
         
     }
@@ -234,12 +234,12 @@ public class ChessPiece : MonoBehaviour
         if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
         {
             Range++;
-            _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess);
+            _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.RangeButton.gameObject);
         }
         else
         {
             //TODO: SHow feedback for not enough currency
-            _audioManager.Value.PlaySound(Sound.UI_Deny);
+            _audioManager.Value.PlaySound(Sound.UI_Deny, _upgradeButtonUIController.RangeButton.gameObject);
         }
         
     }
@@ -451,7 +451,7 @@ public class ChessPiece : MonoBehaviour
     {
         if (ValidateInteraction()) return;
 
-        _audioManager.Value.PlaySound(Sound.UI_Hover);
+        _audioManager.Value.PlaySound(Sound.UI_Hover, gameObject);
         HighlightTiles(PossibleInteractableTiles, 0.2f);
         if (TimelineNode != null)
         {
@@ -479,7 +479,7 @@ public class ChessPiece : MonoBehaviour
     /// <param name="BoardSquare"></param>
     public void MoveToBlock(BoardSquare square)
     {
-        _audioManager.Value.PlaySound(Sound.ENEMY_Move);
+        _audioManager.Value.PlaySound(Sound.ENEMY_Move, gameObject);
         Sequence s = DOTween.Sequence();
         s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
         s.AppendCallback(() =>
@@ -669,7 +669,7 @@ public class ChessPiece : MonoBehaviour
     {
         ServiceLocator.GetService<CameraManager>().FocusTile(this);
         if(Team == Team.Friendly) _upgradeButtonUIController.Show();
-        _audioManager.Value.PlaySound(Sound.ENEMY_Activate);
+        _audioManager.Value.PlaySound(Sound.ENEMY_Activate, gameObject);
     }
 
     //Deselect State Logic
@@ -701,7 +701,8 @@ public class ChessPiece : MonoBehaviour
         
         foreach (var tile in tiles)
         {
-            _audioManager.Value.PlaySound(Sound.UI_Subtle);
+            tile.SetAudio(Team);
+            _audioManager.Value.PlaySound(Sound.UI_Subtle, tile.gameObject);
             tile.Highlight(Team);
             tile.EvaluateAttackSignal(this);
             yield return new WaitForSeconds(incrementTiming);

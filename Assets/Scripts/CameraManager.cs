@@ -57,7 +57,7 @@ public class CameraManager : MonoService
         _tweenRotation = _mainCam.transform.DORotate(ResetRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
         
-        _audioManager.Value.PlaySound(Sound.UI_CameraMove);
+        _audioManager.Value.PlaySound(Sound.UI_CameraMove, _mainCam.gameObject);
         OnCameraTopDown?.Invoke();
         
 
@@ -78,7 +78,7 @@ public class CameraManager : MonoService
         _tweenRotation = _mainCam.transform.DORotate(focusRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(FocusFOV, TransitionSpeed).SetEase(Ease.InOutSine);
 
-        _audioManager.Value.PlaySound(Sound.FocusTile);
+        _audioManager.Value.PlaySound(Sound.FocusTile, _mainCam.gameObject);
         OnCameraFocus?.Invoke(tile);
     }
 }
