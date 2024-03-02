@@ -11,10 +11,17 @@ public class UpgradeButtonUIController : MonoBehaviour
     public UpgradeButton RangeButton;
     public UpgradeButton Button3;
 
+    public int SpeedUpgrades = 0;
+    public int RangeUpgrades = 0;
+
     private EasyService<CameraManager> _cameraManager;
 
     void Start()
     {
+        SpeedButton.EventHandler.OnMouseDown += RefreshCosts;
+        RangeButton.EventHandler.OnMouseDown += RefreshCosts;
+        Button3.EventHandler.OnMouseDown += RefreshCosts;
+        
         // _cameraManager.Value.OnCameraFocus += Show;
         _cameraManager.Value.OnCameraTopDown += Hide;
         Hide();
@@ -67,11 +74,13 @@ public class UpgradeButtonUIController : MonoBehaviour
         _cameraManager.Value.OnCameraTopDown -= Hide;
     }
 
-    public void RefreshCosts()
+    public void RefreshCosts(PointerEventData _ = null)
     {
-        SpeedButton.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost);
-        RangeButton.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost);
-        Button3.Cost = (GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpecialCost);
+        CurrencyBalanceData cData = GlobalGameAssets.Instance.CurrencyBalanceData;
+        
+        SpeedButton.Cost = cData.UpgradeSpeedCost + cData.UpgradeCostIncrease * SpeedUpgrades;
+        RangeButton.Cost = cData.UpgradeRangeCost + cData.UpgradeCostIncrease * RangeUpgrades;
+        Button3.Cost = cData.UpgradeSpecialCost;
     }
 
 }

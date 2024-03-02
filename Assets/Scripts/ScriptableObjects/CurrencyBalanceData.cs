@@ -11,6 +11,7 @@ public class CurrencyBalanceData : ScriptableObject
 
     public int StartCurrency;
     public int CurrencyEarnedPerRound;
+    public int UpgradeCostIncrease;
     public int AdditionalCurrencyRewardPerLevel;
     
     [Header("REWARDS")] 

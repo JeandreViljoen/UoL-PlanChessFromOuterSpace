@@ -217,10 +217,11 @@ public class ChessPiece : MonoBehaviour
     {
         //TODO: Validation checks & limits
         
-        if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeSpeedCost) )
+        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.SpeedButton.Cost) )
         {
             Speed++;
             _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.SpeedButton.gameObject);
+            _upgradeButtonUIController.SpeedUpgrades++;
         }
         else
         {
@@ -235,10 +236,11 @@ public class ChessPiece : MonoBehaviour
     {
         //TODO: Validation checks & limits
         
-        if (_currencyManager.Value.TryRemoveCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.UpgradeRangeCost) )
+        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.RangeButton.Cost) )
         {
             Range++;
             _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.RangeButton.gameObject);
+            _upgradeButtonUIController.RangeUpgrades++;
         }
         else
         {

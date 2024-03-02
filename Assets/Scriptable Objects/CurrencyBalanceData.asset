@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StartCurrency: 300
   CurrencyEarnedPerRound: 50
+  UpgradeCostIncrease: 50
   AdditionalCurrencyRewardPerLevel: 5
   QueenReward: 50
   RookReward: 25
@@ -21,13 +22,13 @@ MonoBehaviour:
   BishopReward: 25
   PawnReward: 10
   KingReward: 0
-  QueenCost: 100
-  RookCost: 50
-  KnightCost: 70
-  BishopCost: 50
-  PawnCost: 20
+  QueenCost: 150
+  RookCost: 75
+  KnightCost: 100
+  BishopCost: 75
+  PawnCost: 50
   KingCost: 0
-  UpgradeSpeedCost: 100
+  UpgradeSpeedCost: 50
   UpgradeRangeCost: 50
   UpgradeSpecialCost: 10
   PowerUp1Cost: 0
