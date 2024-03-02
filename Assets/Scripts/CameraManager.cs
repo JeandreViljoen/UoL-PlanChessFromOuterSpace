@@ -8,6 +8,11 @@ using UnityEngine;
 public class CameraManager : MonoService
 {
     private Camera _mainCam;
+    [SerializeField] private Light _mainCamLight1;
+    [SerializeField] private Light _mainCamLight2;
+    [SerializeField] private float _lightBrightness;
+    private Tween _tweenLight1;
+    private Tween _tweenLight2;
 
     private Tween _tweenPosition;
     private Tween _tweenRotation;
@@ -36,7 +41,6 @@ public class CameraManager : MonoService
 
     void Start()
     {
-        
     }
     
     void Update()
@@ -49,6 +53,7 @@ public class CameraManager : MonoService
 
     public void ResetCameraPosition()
     {
+        LightsOn();
         _tweenPosition?.Kill();
         _tweenRotation?.Kill();
         _tweenFOV?.Kill();
@@ -56,7 +61,9 @@ public class CameraManager : MonoService
         _tweenPosition = _mainCam.transform.DOMove(ResetPosition, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenRotation = _mainCam.transform.DORotate(ResetRotation, TransitionSpeed).SetEase(Ease.InOutSine);
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
-        
+
+        ServiceLocator.GetService<BoardManager>().SelectedUnit = null;
+        //ServiceLocator.GetService<BoardManager>().EnableAllPieceLights();
         _audioManager.Value.PlaySound(Sound.UI_CameraMove, _mainCam.gameObject);
         OnCameraTopDown?.Invoke();
         
@@ -65,10 +72,13 @@ public class CameraManager : MonoService
 
     public void FocusTile(ChessPiece piece)
     {
+        LightsOff();
         BoardSquare tile = piece.AssignedSquare;
-        
+
         Vector3 focusPosition = new Vector3(tile.IndexZ, FocusHeight, tile.IndexX - 0.6f);
         Vector3 focusRotation = new Vector3(FocusXRotation, 0f, 0f);
+        
+        //ServiceLocator.GetService<BoardManager>().DisableAllPieceLights();
         
         _tweenPosition?.Kill();
         _tweenRotation?.Kill();
@@ -80,5 +90,23 @@ public class CameraManager : MonoService
 
         _audioManager.Value.PlaySound(Sound.FocusTile, _mainCam.gameObject);
         OnCameraFocus?.Invoke(tile);
+    }
+
+    public void LightsOn()
+    {
+        _tweenLight1?.Kill();
+        _tweenLight1 = _mainCamLight1.DOIntensity(_lightBrightness, TransitionSpeed);
+        
+        _tweenLight2?.Kill();
+        _tweenLight2 = _mainCamLight2.DOIntensity(_lightBrightness, TransitionSpeed);
+    }
+    
+    public void LightsOff()
+    {
+        _tweenLight1?.Kill();
+        _tweenLight1 = _mainCamLight1.DOIntensity(0.5f, TransitionSpeed);
+        
+        _tweenLight2?.Kill();
+        _tweenLight2 = _mainCamLight2.DOIntensity(0.5f, TransitionSpeed);
     }
 }

@@ -64,7 +64,12 @@ public class BoardManager : MonoService
             }
             
             _selectedUnit = value;
-            _selectedUnit.IsSelected = true;
+
+            if (_selectedUnit != null)
+            {
+                _selectedUnit.IsSelected = true;
+            }
+           
         }
     }
 
@@ -102,6 +107,12 @@ public class BoardManager : MonoService
         int cost = GlobalGameAssets.Instance.CurrencyBalanceData.GetChessPieceCost(_newPieceToBuy.PieceType);
         if (ServiceLocator.GetService<CurrencyManager>().HasCurrency(cost))
         {
+            
+            BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXShortPrefab).GetComponent<BeamController>();
+            beam.transform.position = _newPieceToBuy.AssignedSquare.CenterSurfaceTransform.position;
+            beam.Order = 7 - _newPieceToBuy.AssignedSquare.IndexX + 1;
+            beam.PlayVFX();
+            
             CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
             ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
             if (_unitToBuy == ChessPieceType.King)
@@ -169,6 +180,7 @@ public class BoardManager : MonoService
         _newPieceToBuy.transform.position = _centerPosition + Vector3.up * 5f;
         _newPieceToBuy.Init();
         _newPieceToBuy.Sprite.gameObject.layer = 2;
+        _newPieceToBuy.LightOn();
     }
     
 
@@ -410,6 +422,7 @@ public class BoardManager : MonoService
 
         // TODO: More initialisation required on the chess piece
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
+        piece.Sprite.sortingOrder = (_boardDepth - 1) - pos.Item1;
         piece.Team = team;
         piece.AssignedSquare = square;
         square.ChessPieceAssigned = piece;
@@ -609,5 +622,26 @@ public class BoardManager : MonoService
 
     private void CheckIndex((int x, int y) pos)
         => CheckIndex(pos.x, pos.y);
+
+    public void DisableAllPieceLights()
+    {
+        foreach (var p in ListofPieces)
+        {
+            if (p != SelectedUnit)
+            {
+                p.SetLightEnabled(false);
+            }
+            
+        }
+    }
+    
+    public void EnableAllPieceLights()
+    {
+        foreach (var p in ListofPieces)
+        {
+            p.SetLightEnabled(true);
+            
+        }
+    }
 
 }

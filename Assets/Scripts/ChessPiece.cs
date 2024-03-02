@@ -163,6 +163,10 @@ public class ChessPiece : MonoBehaviour
     private float _animateSpeed;
     public Team Team;
 
+    [SerializeField] private Light _light;
+    [SerializeField] private float _lightIntensity = 3f;
+    private Tween _tweenLight;
+
     // private Vector2 _position;
     // private IndexCode _indexCodePosition;
     //
@@ -246,11 +250,18 @@ public class ChessPiece : MonoBehaviour
     
     public void Init()
     {
-        
         //Fetch Data as assigned in inspector
         _data = GetStartData(PieceType);
+
+        if (Team == Team.Friendly)
+        {
+            Sprite.sprite = _data.Sprite;
+        }
+        else
+        {
+            Sprite.sprite = _data.EnemySprite;
+        }
         
-        Sprite.sprite = _data.Sprite;
         Speed = _data.DefaultSpeed;
         BaseRelativeMoveset = _data.BaseRelativeMoveset;
         Range = _data.DefaultRange; // Has to be retrieved after BaseRelativeMoveSet as it updates the moveset on this set method
@@ -379,37 +390,6 @@ public class ChessPiece : MonoBehaviour
         return tiles; 
     }
 
-    
-    // public List<BoardSquare> GetAbsoluteMovesetTiles()
-    // {
-    //     List<BoardSquare> tiles = new List<BoardSquare>();
-    //
-    //     List < Vector2 > movesetVectors = GetAbsoluteMovesetVectors();
-    //     
-    //     //int baseDirections = BaseRelativeMoveset.Count;
-    //
-    //     for (int i = 1; i < movesetVectors.Count; i++)
-    //     {
-    //         int rangeOffset = i % Range;
-    //         
-    //         BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)movesetVectors[i].x,(int)movesetVectors[i].y));
-    //         if (tile != null)
-    //         {
-    //             if (tile.ChessPieceAssigned == null)
-    //             {
-    //                 tiles.Add(tile);
-    //             }
-    //             else
-    //             {
-    //                 tiles.Add(tile);
-    //                 i += rangeOffset;
-    //             }
-    //           
-    //         }
-    //     }
-    //     return tiles;
-    // }
-
     void Start()
     {
         _animateSpeed = GlobalGameAssets.Instance.ChessPieceAnimateSpeed;
@@ -484,6 +464,7 @@ public class ChessPiece : MonoBehaviour
         s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
         s.AppendCallback(() =>
         {
+            Sprite.sortingOrder = 7 - square.IndexX + 1;
             OnMoveEndLogic(square);
 
         });
@@ -518,6 +499,7 @@ public class ChessPiece : MonoBehaviour
                 {
                     Debug.Log($"-------------------------- {ToString(this)} ---- START -------------------------\n");
                 }
+                LightOn();
                 TimelineNode.HighlightNode();
                 UpdateMoveset();
                 HighlightTiles(PossibleInteractableTiles, 0.2f);
@@ -535,6 +517,7 @@ public class ChessPiece : MonoBehaviour
                 Killed();
                 break;
             case ChessPieceState.END:
+                LightOff();
                 UpdateMoveset();
                 if (GlobalDebug.Instance.ShowCombatMessageLogs)
                 {
@@ -667,6 +650,7 @@ public class ChessPiece : MonoBehaviour
     //Selected State Logic
     private void Selected()
     {
+        LightOn();
         ServiceLocator.GetService<CameraManager>().FocusTile(this);
         if(Team == Team.Friendly) _upgradeButtonUIController.Show();
         _audioManager.Value.PlaySound(Sound.ENEMY_Activate, gameObject);
@@ -675,6 +659,7 @@ public class ChessPiece : MonoBehaviour
     //Deselect State Logic
     private void Deselected()
     {
+        LightOff();
         if(Team == Team.Friendly) _upgradeButtonUIController.Hide();
     }
 
@@ -758,6 +743,26 @@ public class ChessPiece : MonoBehaviour
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
+    }
+
+    public void LightOn()
+    {
+        _tweenLight?.Kill();
+        //_light.color = Color.white;
+        _light.color = GlobalGameAssets.Instance.HighlightColor;
+        _light.DOIntensity(_lightIntensity, 0.5f);
+    }
+    
+    public void LightOff()
+    {
+        _light.color = Color.white;
+        _tweenLight?.Kill();
+        _light.DOIntensity(0.5f, 0.5f);
+    }
+
+    public void SetLightEnabled(bool flag)
+    {
+        _light.gameObject.SetActive(flag);
     }
 
 }

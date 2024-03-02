@@ -92,6 +92,7 @@ public class AudioManager : MonoService
             case Sound.UI_UpgradeSuccess: return RandomClip(data.UI_UpgradeSuccess);
             case Sound.UI_CameraMove: return RandomClip(data.UI_CameraMove);
             case Sound.UI_Deny: return RandomClip(data.UI_Deny);
+            case Sound.Lightning: return RandomClip(data.Lightning);
 
             case Sound.ENEMY_Move: return RandomClip(data.EnemyMove);
             case Sound.ENEMY_Activate: return RandomClip(data.EnemyActivate);
