@@ -9,7 +9,7 @@ public class GameStateManager : MonoService
 
     private GameState _gameState;
     private float _stateChangeTime;
-    private int _turnCount;
+    private int _turnCount = 0;
     private EasyService<TransitionController> _transitionController;
     private EasyService<ExecutionOrderManager> _executionOrderManager;
     private EasyService<EnemySpawner> _enemySpawner;
@@ -57,9 +57,13 @@ public class GameStateManager : MonoService
                 case GameState.START:
                     break;
                 case GameState.SPAWN:
+                   
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
+                    _turnCount++;
+                    _hudManager.Value.SetTurnCounter(_turnCount);
+                    
                     _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _scoreManager.Value.UpdateStats();
                     break;
@@ -89,7 +93,7 @@ public class GameStateManager : MonoService
     void Start()
     {
         GameState = GameState.PREP;
-        _executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
+        //_executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
     }
 
     void Update()

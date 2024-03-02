@@ -9,6 +9,7 @@ using UnityEngine.UI;
 public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
+    public TextMeshProUGUI TurnCounter;
     public GameObject StatsPanel;
     public GameObject LosePrompt;
     public GameObject WinPrompt;
@@ -64,6 +65,11 @@ public class HUDManager : MonoService
     private void OnDestroy()
     {
         UnSubscribeCurrencyEvents();
+    }
+
+    public void SetTurnCounter(int turn)
+    {
+        TurnCounter.text = $"ROUND {turn}";
     }
 
 }
