@@ -13,8 +13,7 @@ public class EnemySpawner : MonoService
     private IndexCode[][] _boardRows;
     
     // Settings
-    public int MaxTurnsWithoutSpawning = 4;
-    private int _lastTurnWithSpawns = 0;
+    public int InitialNumberOfSpawns = 6;
     
     // Useful
     Random random = new Random();
@@ -28,77 +27,32 @@ public class EnemySpawner : MonoService
     {
         // Variables
         int turnNumber = _gameStateManager.Value.GetTurnNumber();
-        // Are there going to be spawns this turn?
-        bool spawnThisTurn = GetSpawningBool(turnNumber);
-        
-        Debug.Log($"Executing Spawning. Turn number {turnNumber}");
-        
-        if (spawnThisTurn)
-        {
-            Array pieceValues = Enum.GetValues(typeof(ChessPieceType));
-            ChessPieceType randomPiece = (ChessPieceType)pieceValues.GetValue(random.Next(pieceValues.Length));
-            int rowForSpawning = random.Next(5, 7);
-            int columnForSpawning = random.Next(0, _boardManager.Value.GetBoardDimensions()[0]);
-            IndexCode position = _boardRows[rowForSpawning][columnForSpawning];
 
-            Debug.Log($"Spawning enemy chess piece of type {randomPiece}, on IndexCode {position}");
-            
-            // Create chess piece. If the board square is already occupied, loop until a valid board square is found.
-            ChessPiece piece = null;
-            int counter = 0;
-            while (piece == null)
+        // Initial spawning
+        if (turnNumber == 1)
+        {
+            SpawnInitialPieces();
+        }
+        else
+        {
+            // Get number of spawns
+            int spawnsThisTurn = GetSpawningUnitNumber(turnNumber);
+        
+            Debug.Log($"Executing Spawning. Turn number {turnNumber}");
+            if (spawnsThisTurn > 0)
             {
-                counter++;
-                piece = SpawnEnemy(randomPiece, position);
-                
-                // Relocate chess piece position if it is not valid
-                rowForSpawning = random.Next(5, 7);
-                columnForSpawning = random.Next(0, _boardManager.Value.GetBoardDimensions()[0]);
-                position = _boardRows[rowForSpawning][columnForSpawning];
-                
-                // If all square boards are occupied, no spawning is done
-                // This prevents an infinite loop if all board squares have their pieces assigned
-                if (counter > 24)
+                for (int i = 0; i < spawnsThisTurn; i++)
                 {
-                    return;
+                    bool spawned = SpawnRandomlyOnBoard(true);
+                    if (!spawned)
+                    {
+                        Debug.LogError("Error loading initial spawns!");
+                    }
                 }
             }
-            
-            // Random upgrades
-            double rangeUpgradeChance = random.NextDouble();
-            double speedUpgradeChance = random.NextDouble();
-            // Only upgrade pieces after turn 10
-            if (turnNumber < 10)
-            {
-                // do nothing
-            }
-            else if (turnNumber < 25)
-            {
-                if (rangeUpgradeChance < 0.3)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
-            }
-            else if (turnNumber < 50)
-            {
-                if (rangeUpgradeChance < 0.6)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
-            }
-            else
-            {
-                // If turn is superior to 50, piece is upgraded by default
-                piece.Range++;
-                piece.Speed++;
-                
-                // Can be upgraded twice at this point
-                if (rangeUpgradeChance > 0.5)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
-            }
         }
+        
+        
 
         // Once spawning is finished, transition to preparation phase
         _gameStateManager.Value.GameState = GameState.PREP;
@@ -126,6 +80,16 @@ public class EnemySpawner : MonoService
         DebugRowIndexCodes();
     }
 
+    // Initial Spawns
+    public void SpawnInitialPieces()
+    {
+        Debug.Log($"Executing starting spawning. {InitialNumberOfSpawns} pieces will be spawned");
+        for (int i = 0; i < InitialNumberOfSpawns; i++)
+        {
+            SpawnRandomlyOnBoard(false);
+        }
+    }
+    
     
     // Debugs the rows in boardRows array. Helps to visualize if the rows are correctly setup
     private void DebugRowIndexCodes()
@@ -142,25 +106,20 @@ public class EnemySpawner : MonoService
     }
 
     // Returns how many enemy chess pieces will spawn this turn
-    private bool GetSpawningBool(int turnNumber)
+    private int GetSpawningUnitNumber(int turnNumber)
     {
-        bool SpawnByTurnExpiration =
-            _lastTurnWithSpawns + MaxTurnsWithoutSpawning < turnNumber;
-
-        // Spawning by expiration should be disabled on the first 5 turns
-        if (turnNumber < 5)
-        {
-            SpawnByTurnExpiration = false;
-        }
+        // Always spawn at least one unit
+        int numberOfSpawns = 1;
         
-        bool SpawnByChance = random.NextDouble() * 100 < GetSpawnChance(turnNumber);
+        // 30% Chance for a second spawn
+        if (random.NextDouble() * 100 < 30)
+            numberOfSpawns++;
 
-        if (SpawnByTurnExpiration || SpawnByChance)
-        {
-            return true;
-        }
+        // Third spawn chance is based on a quadratic function that increases with the turn number
+        if (random.NextDouble() * 100 < GetSpawnChance(turnNumber))
+            numberOfSpawns++;
 
-        return false;
+        return numberOfSpawns;
     }
 
     // Returns the spawn chance based on the turn. A mathematical formula is used
@@ -173,8 +132,6 @@ public class EnemySpawner : MonoService
 
     private ChessPiece SpawnEnemy(ChessPieceType pieceType, IndexCode indexCode)
     {
-        _lastTurnWithSpawns = _gameStateManager.Value.GetTurnNumber();
-
         BoardSquare tile = _boardManager.Value.GetTile(indexCode);
         BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXPrefab).GetComponent<BeamController>();
         beam.transform.position = tile.CenterSurfaceTransform.position;
@@ -182,5 +139,102 @@ public class EnemySpawner : MonoService
         beam.PlayVFX();
 
         return _boardManager.Value.CreatePiece(pieceType, indexCode, Team.Enemy);
+    }
+
+    private ChessPieceType GetRandomSpawningPiece()
+    {
+        // Get an array of all the ChessPiece types
+        Array pieceValues = Enum.GetValues(typeof(ChessPieceType));
+        ChessPieceType pieceType = (ChessPieceType)pieceValues.GetValue(random.Next(pieceValues.Length));
+
+        // If piece type is king, iterate until other ChessPieceType is found
+        while (pieceType == ChessPieceType.King)
+        {
+            pieceType = (ChessPieceType)pieceValues.GetValue(random.Next(pieceValues.Length));
+        }
+
+        return pieceType;
+    }
+
+    private bool SpawnRandomlyOnBoard(bool enableUpgrades)
+    {
+        int turnNumber = _gameStateManager.Value.GetTurnNumber();
+        ChessPieceType randomPiece = GetRandomSpawningPiece();
+        int rowForSpawning = random.Next(5, 7);
+        int columnForSpawning = random.Next(0, _boardManager.Value.GetBoardDimensions()[0]);
+        IndexCode position = _boardRows[rowForSpawning][columnForSpawning];
+                
+        // Create chess piece. If the board square is already occupied, loop until a valid board square is found.
+        ChessPiece piece = null;
+        int counter = 0;
+        while (piece == null)
+        {
+            counter++;
+            piece = SpawnEnemy(randomPiece, position);
+
+            if (piece)
+            {
+                Debug.Log($"Spawning enemy chess piece of type {randomPiece}, on IndexCode {position}");
+                // Avoid ChessPïece functions division by zero
+                piece.Range = 1;
+                piece.Speed = 1;
+                break;
+            }
+                    
+            // Relocate chess piece position if it is not valid
+            rowForSpawning = random.Next(5, 7);
+            columnForSpawning = random.Next(0, _boardManager.Value.GetBoardDimensions()[0]);
+            position = _boardRows[rowForSpawning][columnForSpawning];
+                    
+            // If all square boards are occupied, no spawning is done
+            // This prevents an infinite loop if all board squares have their pieces assigned
+            if (counter > 24)
+            {
+                // If no squares are available, do not spawn
+                Debug.Log("Enemy could not be created because there is not a valid board square.");
+                return false;
+            }
+        }
+        
+        if (piece && enableUpgrades)
+        {
+            Debug.Log("Applying upgrades to spawned piece.");
+            // Random upgrades
+            double rangeUpgradeChance = random.NextDouble();
+            double speedUpgradeChance = random.NextDouble();
+            // Only upgrade pieces after turn 3
+            if (turnNumber < 3)
+            {
+                // do nothing
+            }
+            else if (turnNumber < 10)
+            {
+                if (rangeUpgradeChance < 0.3)
+                    piece.Range++;
+                if (speedUpgradeChance < 0.5)
+                    piece.Speed++;
+            }
+            else if (turnNumber < 20)
+            {
+                if (rangeUpgradeChance < 0.6)
+                    piece.Range++;
+                if (speedUpgradeChance < 0.5)
+                    piece.Speed++;
+            }
+            else
+            {
+                // If turn is superior to 20, pieces are upgraded by default
+                piece.Range++;
+                piece.Speed++;
+                    
+                // Can be upgraded twice at this point
+                if (rangeUpgradeChance > 0.5)
+                    piece.Range++;
+                if (speedUpgradeChance < 0.5)
+                    piece.Speed++;
+            } 
+        }
+
+        return true;
     }
 }
