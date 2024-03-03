@@ -16,7 +16,6 @@ public class AudioData : ScriptableObject
     public List<AudioClip> UI_UpgradeSuccess;
     public List<AudioClip> UI_CameraMove;
     public List<AudioClip> UI_Deny;
-    
 
 
     [Header("Gameplay")]
@@ -24,6 +23,7 @@ public class AudioData : ScriptableObject
     public List<AudioClip> ReturnCameraTopDownSound;
     public List<AudioClip> SuccessfulSound;
     public List<AudioClip> FailSound;
+    public List<AudioClip> Lightning;
     
     [Header("Enemies")]
     public List<AudioClip> EnemyActivate;
@@ -49,6 +49,7 @@ public enum Sound
     UI_UpgradeSuccess,
     UI_CameraMove,
     UI_Deny,
+    Lightning,
     
     ENEMY_Move,
     ENEMY_Activate

@@ -39,4 +39,8 @@ MonoBehaviour:
     type: 3}
   FloatingCurrencyUIPrefab: {fileID: 2198709723387822324, guid: 9b74c946628317043a00a215f0a75b95,
     type: 3}
+  BeamVFXPrefab: {fileID: 9048785284962346927, guid: 100d64ba66268474b9b3c34d8549ff23,
+    type: 3}
+  BeamVFXShortPrefab: {fileID: 8790263891196841391, guid: 802e1bf47408a8d48b91a52c80131de7,
+    type: 3}
   ChessPieceAnimateSpeed: 0.5

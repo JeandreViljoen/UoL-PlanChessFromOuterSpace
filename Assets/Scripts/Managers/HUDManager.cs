@@ -9,9 +9,11 @@ using UnityEngine.UI;
 public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
+    public TextMeshProUGUI TurnCounter;
     public GameObject StatsPanel;
     public GameObject LosePrompt;
     public GameObject WinPrompt;
+    public GameObject DeployText;
     public KingController KingController;
     public ShopManagerScript ShopMenu;
     public UnitOrderTimelineController TimelineController;
@@ -64,4 +66,10 @@ public class HUDManager : MonoService
     {
         UnSubscribeCurrencyEvents();
     }
+
+    public void SetTurnCounter(int turn)
+    {
+        TurnCounter.text = $"ROUND {turn}";
+    }
+
 }

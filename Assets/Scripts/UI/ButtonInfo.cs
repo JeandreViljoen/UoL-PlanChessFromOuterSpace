@@ -23,6 +23,7 @@ public class ButtonInfo : MonoBehaviour
     private EasyService<CurrencyManager> _currencyManager;
     private EasyService<BoardManager> _boardManager;
     private EasyService<GameStateManager> _stateManager;
+    private EasyService<AudioManager> _audioManager;
 
     private Tween _tweenMove;
     private Vector3 _startPos;
@@ -51,7 +52,7 @@ public class ButtonInfo : MonoBehaviour
         
         _boardManager.Value.OnSuccessfulPurchase += ForceReset;
         _boardManager.Value.OnCancelledPurchase += ForceReset;
-        
+
         InitValues(); // Initialise starting values for button object
     }
 
@@ -62,6 +63,7 @@ public class ButtonInfo : MonoBehaviour
         {
             _boardManager.Value.EnableBuyingState(Type);
             StartCoroutine(DelayedSelectState());
+            _audioManager.Value.PlaySound(Sound.UI_Click, gameObject);
         }
         else
         {
@@ -83,6 +85,7 @@ public class ButtonInfo : MonoBehaviour
             return;
         }
         State = ButtonState.Highlighted;
+        _audioManager.Value.PlaySound(Sound.UI_Subtle, gameObject);
     }
     private void OnMouseExitBehaviour (PointerEventData _)
     {
@@ -119,7 +122,7 @@ public class ButtonInfo : MonoBehaviour
     {
         State = ButtonState.Base;
     }
-    
+
     private void InitValues()
     {
         State = ButtonState.Base;
@@ -162,7 +165,12 @@ public class ButtonInfo : MonoBehaviour
 
     private void OnDestroy()
     {
-        EventHandler.OnMouseDown -= TryBuy; // Always unsubscribe events
+        EventHandler.OnMouseDown -= TryBuy;
+        EventHandler.OnMouseEnter -= OnMouseEnterBehaviour;
+        EventHandler.OnMouseExit -= OnMouseExitBehaviour;
+        
+        _boardManager.Value.OnSuccessfulPurchase -= ForceReset;
+        _boardManager.Value.OnCancelledPurchase -= ForceReset;
     }
 
     private void HighlightButton()

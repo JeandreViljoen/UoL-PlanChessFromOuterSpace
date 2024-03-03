@@ -118,14 +118,12 @@ public class BoardSquare : MonoBehaviour
 
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            _boardManager.Value.TryBuyUnit();
+            //_boardManager.Value.TryBuyUnit();
         }
         else
         {
             _boardManager.Value.CancelBuyUnit();
         }
-
-       
     }
 
     void Start()
@@ -149,6 +147,22 @@ public class BoardSquare : MonoBehaviour
         }
         
         _bounceAnimateTween = transform.DOMove(transform.localPosition, 0.2f).SetEase(Ease.InOutSine);
+    }
+    
+    public void SetAudio(Team team)
+    {
+        AudioSource src = GetComponent<AudioSource>();
+
+        if (team == Team.Friendly)
+        {
+            src.volume = 1f;
+            src.pitch = 1f;
+        }
+        else
+        {
+            src.volume = 0.6f;
+            src.pitch = 0.5f;
+        }
     }
     
     void Update()

@@ -174,6 +174,13 @@ public class EnemySpawner : MonoService
     private ChessPiece SpawnEnemy(ChessPieceType pieceType, IndexCode indexCode)
     {
         _lastTurnWithSpawns = _gameStateManager.Value.GetTurnNumber();
+
+        BoardSquare tile = _boardManager.Value.GetTile(indexCode);
+        BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXPrefab).GetComponent<BeamController>();
+        beam.transform.position = tile.CenterSurfaceTransform.position;
+        beam.Order = 7 - tile.IndexX + 1;
+        beam.PlayVFX();
+
         return _boardManager.Value.CreatePiece(pieceType, indexCode, Team.Enemy);
     }
 }

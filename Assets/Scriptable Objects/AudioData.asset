@@ -55,6 +55,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b1fc30b277f01634cab8096618d28162, type: 3}
   FailSound:
   - {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
+  Lightning:
+  - {fileID: 8300000, guid: 358ed089946596c41a24f91a8b23dbcb, type: 3}
   EnemyActivate:
   - {fileID: 8300000, guid: f801b0f5ff935cc4abe65f8c2c078580, type: 3}
   - {fileID: 8300000, guid: 2d4f35039b28f2e4bb188d6ea119b34f, type: 3}

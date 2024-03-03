@@ -35,12 +35,12 @@ public class StatsUI : MonoBehaviour
     void Start()
     {
         gameObject.SetActive(false);
-        PawnIcon.sprite = GlobalGameAssets.Instance.PawnData.Sprite;
-        RookIcon.sprite = GlobalGameAssets.Instance.RookData.Sprite;
-        BishopIcon.sprite = GlobalGameAssets.Instance.BishopData.Sprite;
-        KnightIcon.sprite = GlobalGameAssets.Instance.KnightData.Sprite;
-        KingIcon.sprite = GlobalGameAssets.Instance.KingData.Sprite;
-        QueenIcon.sprite = GlobalGameAssets.Instance.QueenData.Sprite;
+        PawnIcon.sprite = GlobalGameAssets.Instance.PawnData.EnemySprite;
+        RookIcon.sprite = GlobalGameAssets.Instance.RookData.EnemySprite;
+        BishopIcon.sprite = GlobalGameAssets.Instance.BishopData.EnemySprite;
+        KnightIcon.sprite = GlobalGameAssets.Instance.KnightData.EnemySprite;
+        KingIcon.sprite = GlobalGameAssets.Instance.KingData.EnemySprite;
+        QueenIcon.sprite = GlobalGameAssets.Instance.QueenData.EnemySprite;
        
     }
 

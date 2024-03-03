@@ -77,7 +77,7 @@ public class ExecutionOrderManager : MonoService
             case GameState.START:
                 break;
             case GameState.PREP:
-                //StartPrep();
+                ServiceLocator.GetService<HUDManager>().ShopMenu.Show();
                 break;
             case GameState.COMBAT:
                 StartCombat();
@@ -105,6 +105,7 @@ public class ExecutionOrderManager : MonoService
                 break;
             case GameState.COMBAT:
                 _boardManager.Value.CancelBuyUnit();
+                ServiceLocator.GetService<HUDManager>().ShopMenu.Hide();
                 break;
             case GameState.WIN:
                 break;

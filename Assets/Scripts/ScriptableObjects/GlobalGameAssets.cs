@@ -37,6 +37,8 @@ public class GlobalGameAssets : ScriptableObjectSingleton<GlobalGameAssets>
 
    public GameObject FloatingCurrencyPrefab;
    public GameObject FloatingCurrencyUIPrefab;
+   public GameObject BeamVFXPrefab;
+   public GameObject BeamVFXShortPrefab;
 
    public float ChessPieceAnimateSpeed;
 
