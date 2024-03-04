@@ -199,9 +199,7 @@ public class EnemySpawner : MonoService
         if (piece && enableUpgrades)
         {
             Debug.Log("Applying upgrades to spawned piece.");
-            // Random upgrades
-            double rangeUpgradeChance = random.NextDouble();
-            double speedUpgradeChance = random.NextDouble();
+            // -- Random upgrades
             // Only upgrade pieces after turn 3
             if (turnNumber < 3)
             {
@@ -209,17 +207,16 @@ public class EnemySpawner : MonoService
             }
             else if (turnNumber < 10)
             {
-                if (rangeUpgradeChance < 0.3)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
+                // Increase speed and range by 0 or 1
+                RandomlyUpgradePiece(piece, 1, 1);
+            }
+            else if (turnNumber < 15)
+            {
+                RandomlyUpgradePiece(piece, 2, 2);
             }
             else if (turnNumber < 20)
             {
-                if (rangeUpgradeChance < 0.6)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
+                RandomlyUpgradePiece(piece, 3, 3);
             }
             else
             {
@@ -228,13 +225,19 @@ public class EnemySpawner : MonoService
                 piece.Speed++;
                     
                 // Can be upgraded twice at this point
-                if (rangeUpgradeChance > 0.5)
-                    piece.Range++;
-                if (speedUpgradeChance < 0.5)
-                    piece.Speed++;
+                RandomlyUpgradePiece(piece, 3, 3);
             } 
         }
 
         return true;
+    }
+
+    private void RandomlyUpgradePiece(ChessPiece chessPiece, int maximumRange, int maximumSpeed)
+    {
+        int rangeUpgrade = random.Next(0, maximumRange);
+        int speedUpgrade = random.Next(0, maximumSpeed);
+
+        chessPiece.Range += rangeUpgrade;
+        chessPiece.Speed += speedUpgrade;
     }
 }
