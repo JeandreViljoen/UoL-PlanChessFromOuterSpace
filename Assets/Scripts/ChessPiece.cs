@@ -127,6 +127,7 @@ public class ChessPiece : MonoBehaviour
     private EasyService<AudioManager> _audioManager;
     private EasyService<ScoreManager> _scoreManager;
     private EasyService<GameStateManager> _stateManager;
+    private EasyService<BoardManager> _boardManager;
 
     public int Range
     {
@@ -569,14 +570,16 @@ public class ChessPiece : MonoBehaviour
 
             State = ChessPieceState.ATTACK;
             dst.ChessPieceAssigned.State = ChessPieceState.DEAD;
-            MoveToBlock(dst);
+            //MoveToBlock(dst);
+            _boardManager.Value.MovePiece((AssignedSquare.IndexX, AssignedSquare.IndexZ), (dst.IndexX, dst.IndexZ));
         }
         else
         {
             if (GlobalDebug.Instance.ShowCombatMessageLogs)
                 Debug.Log($"\t\tMOVING to {dst.IndexCode}\n");
             State = ChessPieceState.MOVE;
-            MoveToBlock(dst);
+            //MoveToBlock(dst);
+            _boardManager.Value.MovePiece((AssignedSquare.IndexX, AssignedSquare.IndexZ), (dst.IndexX, dst.IndexZ));
         }
     }
 
