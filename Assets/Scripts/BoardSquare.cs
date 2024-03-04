@@ -25,7 +25,8 @@ public class BoardSquare : MonoBehaviour
         set
         {
             _chessPieceAssigned = value;
-            _chessPieceAssigned.AssignedSquare = this;
+            if (value != null)
+                _chessPieceAssigned.AssignedSquare = this;
         }
     }
 

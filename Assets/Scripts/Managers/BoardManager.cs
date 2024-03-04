@@ -556,6 +556,10 @@ public class BoardManager : MonoService
             Destroy(capture.gameObject);
         }
 
+        // clear previous board square chess piece reference
+        var srcTile = GetTile(src);
+        srcTile.Clear();
+        
         // do the logical move
         _pieces.Remove(src);
         _pieces.Add(dst, piece);
