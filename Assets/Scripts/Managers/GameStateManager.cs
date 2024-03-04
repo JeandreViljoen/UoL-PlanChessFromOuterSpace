@@ -57,12 +57,12 @@ public class GameStateManager : MonoService
                 case GameState.START:
                     break;
                 case GameState.SPAWN:
-                   
+                    _turnCount++;
+                    _hudManager.Value.SetTurnCounter(_turnCount);
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
-                    _turnCount++;
-                    _hudManager.Value.SetTurnCounter(_turnCount);
+                    
                     
                     _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _scoreManager.Value.UpdateStats();
@@ -92,7 +92,7 @@ public class GameStateManager : MonoService
 
     void Start()
     {
-        GameState = GameState.PREP;
+        GameState = GameState.SPAWN;
         //_executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
     }
 
