@@ -18,6 +18,7 @@ public class GameStateManager : MonoService
     private EasyService<CurrencyManager> _currencyManager;
 
     public bool HasPlacedKing = false;
+    public int TurnsToWin = 20;
 
 
 
@@ -57,7 +58,6 @@ public class GameStateManager : MonoService
                 case GameState.START:
                     break;
                 case GameState.SPAWN:
-                   
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
@@ -92,7 +92,7 @@ public class GameStateManager : MonoService
 
     void Start()
     {
-        GameState = GameState.PREP;
+        GameState = GameState.SPAWN;
         //_executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
     }
 
