@@ -18,6 +18,7 @@ public class GameStateManager : MonoService
     private EasyService<CurrencyManager> _currencyManager;
 
     public bool HasPlacedKing = false;
+    public int TurnsToWin = 20;
 
 
 
