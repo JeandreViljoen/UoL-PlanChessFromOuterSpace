@@ -61,6 +61,10 @@ public class StatsUI : MonoBehaviour
     {
 
         ScoreManager _scoreManager = ServiceLocator.GetService<ScoreManager>();
+        if (_scoreManager == null)
+        {
+            return;
+        }
         _scoreManager.UpdateStats();
         Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.GetPiecesDestroyed();
 

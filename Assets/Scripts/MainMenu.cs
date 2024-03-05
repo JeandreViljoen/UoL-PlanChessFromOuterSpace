@@ -14,7 +14,7 @@ public class MainMenu : MonoBehaviour
     public void OnOpenGame(){
         _audioManager.Value.PlaySound(Sound.GenericUIButton);
         SceneManager.LoadSceneAsync(1); //Loads scene 2 Test Board Manager
-        Debug.Log("Loads Game with scene 2"); 
+        Debug.Log("Loads Game with scene 1"); 
     }
 
     public void OnPauseGame(){
@@ -45,7 +45,7 @@ public class MainMenu : MonoBehaviour
 
     public void HoverButton()
     {
-        _audioManager.Value.PlaySound(Sound.HoverButton);
+        _audioManager.Value.PlaySound(Sound.UI_Hover);
     }
     
 }
