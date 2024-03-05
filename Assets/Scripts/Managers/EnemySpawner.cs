@@ -29,7 +29,7 @@ public class EnemySpawner : MonoService
         int turnNumber = _gameStateManager.Value.GetTurnNumber();
 
         // Initial spawning
-        if (turnNumber == 0)
+        if (turnNumber == 1)
         {
             SpawnInitialPieces();
         }
