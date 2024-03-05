@@ -59,6 +59,11 @@ public class ExecutionOrderManager : MonoService
         else
         {
             OnCombatComplete?.Invoke();
+            if (_stateManager.Value.GetTurnNumber() == _stateManager.Value.TurnsToWin)
+            {
+                _stateManager.Value.GameState = GameState.WIN;
+                return;
+            }
             _stateManager.Value.GameState = GameState.SPAWN;
         }
     }

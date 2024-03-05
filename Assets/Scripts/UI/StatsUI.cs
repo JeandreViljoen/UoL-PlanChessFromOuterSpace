@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class StatsUI : MonoBehaviour
 {
 
-    private EasyService<ScoreManager> _scoreManager;
+    //private EasyService<ScoreManager> _scoreManager;
 
     public TextMeshProUGUI PawnPiecesDestroyed;
     public TextMeshProUGUI RookPiecesDestroyed;
@@ -52,10 +52,6 @@ public class StatsUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_scoreManager.HasService() || PawnPiecesDestroyed == null)
-        {
-            return;
-        }
         UpdateStats();
     }
     
@@ -63,8 +59,10 @@ public class StatsUI : MonoBehaviour
 
     public void UpdateStats()
     {
-        _scoreManager.Value.UpdateStats();
-        Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.Value.GetPiecesDestroyed();
+
+        ScoreManager _scoreManager = ServiceLocator.GetService<ScoreManager>();
+        _scoreManager.UpdateStats();
+        Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.GetPiecesDestroyed();
 
         PawnPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Pawn]}x";
         RookPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Rook]}x";
@@ -72,10 +70,10 @@ public class StatsUI : MonoBehaviour
         KnightPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Knight]}x";
         KingPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.King]}x";
         QueenPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Queen]}x";
-        CurrencyText.text = $"You have earned {_scoreManager.Value.GetCurrencyEarned()} currency";
-        TimePlayedText.text = $"{_scoreManager.Value.GetTimePlayedString()}";
-        TurnsLastedText.text = $"You have been playing for {_scoreManager.Value.GetNumberOfTurns()} turns";
-        UnitsLostText.text = $"{_scoreManager.Value.GetUnitLostCount()} of your units have fallen in combat";
+        CurrencyText.text = $"You have earned {_scoreManager.GetCurrencyEarned()} currency";
+        TimePlayedText.text = $"{_scoreManager.GetTimePlayedString()}";
+        TurnsLastedText.text = $"You have been playing for {_scoreManager.GetNumberOfTurns()} turns";
+        UnitsLostText.text = $"{_scoreManager.GetUnitLostCount()} of your units have fallen in combat";
     }
     
     public void CloseUI()
