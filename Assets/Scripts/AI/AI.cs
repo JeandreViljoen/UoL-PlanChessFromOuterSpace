@@ -40,12 +40,27 @@ public class AI : MonoService
     private int Score(ChessPiece piece, BoardSquare dst)
     {
         int score = 0;
+        (int x, int y) dstPos = (dst.IndexX, dst.IndexZ);
 
-        // add capture score
+        // score based on distance to King
+        if (piece.Team == Team.Enemy)
+        {
+            (int x, int y) = currentBoard.Value.Pieces.First(
+                tile => tile.Value.PieceType == ChessPieceType.King
+                        && tile.Value.Team == Team.Friendly
+            ).Key;
+            int distance = Math.Max(
+                Math.Abs(x - dstPos.x),
+                Math.Abs(y - dstPos.y));
+            if (distance == 0) score += Balance.KingValue;
+            else score += 8 - distance;
+        }
+
+        // score piece capture
         var capture = dst.ChessPieceAssigned;
         if (capture)
         {
-            score = ScoreCapture(capture.PieceType);
+            score += ScoreCapture(capture.PieceType);
         }
 
         return score;
