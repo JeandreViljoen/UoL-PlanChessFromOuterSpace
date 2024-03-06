@@ -22,7 +22,7 @@ public class AI : MonoService
         this.moveQueue = moveQueue;
     }
 
-    private int ScoreCapture(ChessPieceType pieceType)
+    private float ScoreCapture(ChessPieceType pieceType)
     {
         switch (pieceType)
         {
@@ -37,9 +37,9 @@ public class AI : MonoService
         return 0;
     }
 
-    private int Score(ChessPiece piece, BoardSquare dst)
+    private float Score(ChessPiece piece, BoardSquare dst)
     {
-        int score = 0;
+        float score = 0;
         (int x, int y) dstPos = (dst.IndexX, dst.IndexZ);
 
         // score based on distance to King
@@ -92,12 +92,12 @@ public class AI : MonoService
 
         foreach (var dst in destinations)
         {
-            int score = Score(piece, dst);
+            float score = Score(piece, dst);
 
             moves.Add(new Move(dst, score));
         }
 
-        int highscore = moves.Reverse().First().score;
+        float highscore = moves.Reverse().First().score;
         var top = moves.Reverse().TakeWhile(m => m.score == highscore).ToArray();
 
         return top[Random.Range(0, top.Length)].destination;
@@ -106,9 +106,9 @@ public class AI : MonoService
     private struct Move : IComparable<Move>
     {
         public BoardSquare destination;
-        public int score;
+        public float score;
 
-        public Move(BoardSquare destination, int score)
+        public Move(BoardSquare destination, float score)
         {
             this.destination = destination;
             this.score = score;
