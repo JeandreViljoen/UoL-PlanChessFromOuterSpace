@@ -63,6 +63,16 @@ public class AI : MonoService
             score += ScoreCapture(capture.PieceType);
         }
 
+        // score based on danger
+        foreach (var enemy in currentBoard.Value.Pieces.Values.Where(
+            enemy => enemy.Team != piece.Team))
+        {
+            if (enemy.GetAllPossibleMovesetTiles().Contains(dst)) {
+                score -= ScoreCapture(piece.PieceType);
+                break;
+            }
+        }
+
         return score;
     }
 
