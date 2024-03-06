@@ -40,7 +40,7 @@ public class AI : MonoService
     private float Score(ChessPiece piece, BoardSquare dst)
     {
         float score = 0;
-        (int x, int y) dstPos = (dst.IndexX, dst.IndexZ);
+        (int x, int y) dstPos = dst.Position;
 
         // score based on distance to King
         if (piece.Team == Team.Enemy)
