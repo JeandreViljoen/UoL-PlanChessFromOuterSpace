@@ -74,10 +74,10 @@ public class StatsUI : MonoBehaviour
         KnightPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Knight]}x";
         KingPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.King]}x";
         QueenPiecesDestroyed.text = $"{_piecesDestroyed[ChessPieceType.Queen]}x";
-        CurrencyText.text = $"You have earned {_scoreManager.GetCurrencyEarned()} currency";
+        CurrencyText.text = $"You have earned <color=#ff2222ff>{_scoreManager.GetCurrencyEarned()}</color> currency";
         TimePlayedText.text = $"{_scoreManager.GetTimePlayedString()}";
-        TurnsLastedText.text = $"You have been playing for {_scoreManager.GetNumberOfTurns()} turns";
-        UnitsLostText.text = $"{_scoreManager.GetUnitLostCount()} of your units have fallen in combat";
+        TurnsLastedText.text = $"You have been playing for <color=#ff2222ff>{_scoreManager.GetNumberOfTurns()}</color> turns";
+        UnitsLostText.text = $"<color=#ff2222ff>{_scoreManager.GetUnitLostCount()}</color> of your units have fallen in combat";
     }
     
     public void CloseUI()
