@@ -82,8 +82,13 @@ public class ChessPiece : MonoBehaviour
                 _speedIconUIController.Speed = _speed;
                 UpdateLevel();
                 if(TimelineNode != null) TimelineNode.RefreshPiece();
-                ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
-                ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
+
+                if (!_boardManager.Value.IsBuying())
+                {
+                    ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+                    ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
+                }
+               
             }
         }
     }
