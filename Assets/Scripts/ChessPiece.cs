@@ -263,7 +263,7 @@ public class ChessPiece : MonoBehaviour
             Sprite.sprite = _data.Sprite;
             SpriteHighlights.sprite = _data.SpriteHighlights;
            Color hColor = GlobalGameAssets.Instance.HighlightColor;
-           hColor.a = 0.6f;
+           hColor.a = 0.3f;
            SpriteHighlights.color = hColor;
            SpriteHighlights.gameObject.SetActive(true);
 

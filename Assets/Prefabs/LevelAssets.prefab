@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 530811651}
   - component: {fileID: 530811650}
   - component: {fileID: 530811652}
+  - component: {fileID: 9155545090988997455}
   m_Layer: 0
-  m_Name: New Sprite
+  m_Name: SpaceShip
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,6 +98,20 @@ MonoBehaviour:
   Tilt: 1
   Rotate: 1
   RotateOffset: 10
+--- !u!114 &9155545090988997455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530811649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eb3faa3efd0be84ebddcea601f87f09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HoverHeight: 1
+  HoverSpeed: 5
 --- !u!1 &628780145
 GameObject:
   m_ObjectHideFlags: 0
