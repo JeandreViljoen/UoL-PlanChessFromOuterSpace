@@ -217,10 +217,9 @@ public class UnitOrderTimelineController : MonoService
 
     private IEnumerator DelayedKill(TimelineNode nodeToRemove)
     {
+        _nodes.Remove(nodeToRemove);
         nodeToRemove.KillAnimation(1f);
         yield return new WaitForSeconds(1.2f);
-        bool s = _nodes.Remove(nodeToRemove);
         RefreshTimelinePositions();
-        
     }
 }
