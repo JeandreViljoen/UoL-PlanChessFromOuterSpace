@@ -446,6 +446,7 @@ public class BoardManager : MonoService
         // TODO: More initialisation required on the chess piece
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
         piece.Sprite.sortingOrder = (_boardDepth - 1) - pos.Item1;
+        piece.SpriteHighlights.sortingOrder = (_boardDepth - 1) - pos.Item1 + 1;
         piece.Team = team;
         piece.AssignedSquare = square;
         square.ChessPieceAssigned = piece;

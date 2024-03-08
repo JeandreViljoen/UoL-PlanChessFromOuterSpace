@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c67fffe46a43d5240928dd8eac041d50, type: 3}
   m_Name: GlobalGameAssets
   m_EditorClassIdentifier: 
-  HighlightColor: {r: 0.9811321, g: 0.1804913, b: 0.18809627, a: 1}
+  HighlightColor: {r: 1, g: 0.1745283, b: 0.1745283, a: 1}
   CurrencyBalanceData: {fileID: 11400000, guid: 4777d843a85a72843956c38c71597eb7,
     type: 2}
   PawnData: {fileID: 11400000, guid: c8d4456e6c2df7445b9d6be92808ac54, type: 2}

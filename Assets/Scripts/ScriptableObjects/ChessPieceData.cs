@@ -7,7 +7,9 @@ public class ChessPieceData : ScriptableObject
 {
    public ChessPieceType PieceType;
    public Sprite Sprite;
+   public Sprite SpriteHighlights;
    public Sprite EnemySprite;
+   public Sprite EnemyPortrait;
    public Sprite Portrait;
    public int DefaultSpeed = 1;
    public int DefaultRange = 2;

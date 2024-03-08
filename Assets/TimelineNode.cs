@@ -51,7 +51,7 @@ public class TimelineNode : MonoBehaviour
         }
         else
         {
-            _portraitBorder.color = GlobalGameAssets.Instance.HighlightColor;
+            //_portraitBorder.color = GlobalGameAssets.Instance.HighlightColor;
         }
 
         
@@ -67,7 +67,7 @@ public class TimelineNode : MonoBehaviour
     private void InitPiece()
     {
         Piece.TimelineNode = this;
-        _portrait.sprite = Piece.Sprite.sprite;
+        _portrait.sprite = Piece.Portrait;
         _speedIcons.IconsToShow = Piece.Speed;
         _levelText.text = $"LEVEL {Piece.Level}";
         _levelText.color = Piece.Team == Team.Friendly

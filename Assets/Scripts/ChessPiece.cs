@@ -43,6 +43,8 @@ public class ChessPiece : MonoBehaviour
 // --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
     public SpriteRenderer Sprite;
+    public SpriteRenderer SpriteHighlights;
+    [HideInInspector] public Sprite Portrait;
 
     private ChessPieceState _state;
 
@@ -259,10 +261,19 @@ public class ChessPiece : MonoBehaviour
         if (Team == Team.Friendly)
         {
             Sprite.sprite = _data.Sprite;
+            SpriteHighlights.sprite = _data.SpriteHighlights;
+           Color hColor = GlobalGameAssets.Instance.HighlightColor;
+           hColor.a = 0.6f;
+           SpriteHighlights.color = hColor;
+           SpriteHighlights.gameObject.SetActive(true);
+
+           Portrait = _data.Portrait;
         }
         else
         {
             Sprite.sprite = _data.EnemySprite;
+            SpriteHighlights.gameObject.SetActive(false);
+            Portrait = _data.EnemyPortrait;
         }
         
         Speed = _data.DefaultSpeed;
@@ -407,7 +418,7 @@ public class ChessPiece : MonoBehaviour
     {
         if (Team == Team.Enemy)
         {
-            Sprite.color = GlobalDebug.Instance.EnemyTintColor;
+            //Sprite.color = GlobalDebug.Instance.EnemyTintColor;
         }
 
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += Highlight;
@@ -468,6 +479,7 @@ public class ChessPiece : MonoBehaviour
         s.AppendCallback(() =>
         {
             Sprite.sortingOrder = 7 - square.IndexX + 1;
+            SpriteHighlights.sortingOrder = 7 - square.IndexX + 2;
             OnMoveEndLogic(square);
 
         });

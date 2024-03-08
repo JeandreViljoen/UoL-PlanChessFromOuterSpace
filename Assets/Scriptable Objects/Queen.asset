@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Queen
   m_EditorClassIdentifier: 
   PieceType: 4
-  Sprite: {fileID: 21300000, guid: fae13aa1e9e486041ba9b579b953fbbc, type: 3}
+  Sprite: {fileID: 21300000, guid: 973da42c88862c0428220aecd44f205f, type: 3}
+  SpriteHighlights: {fileID: 21300000, guid: c38bc9fc8bec97045adeb67def4186a0, type: 3}
   EnemySprite: {fileID: 21300000, guid: da817ec77fb3da847927342a1fb448cc, type: 3}
-  Portrait: {fileID: 0}
+  EnemyPortrait: {fileID: 21300000, guid: 1b14c27dc9259d7498b360ea56f65ab9, type: 3}
+  Portrait: {fileID: 21300000, guid: 0031b04ac32ee8b43b395bea2a1cfb03, type: 3}
   DefaultSpeed: 1
   DefaultRange: 2
   BaseRelativeMoveset:
