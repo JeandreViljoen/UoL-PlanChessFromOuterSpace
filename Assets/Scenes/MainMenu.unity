@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.3069224, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -559,7 +559,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &231457786
 RectTransform:
   m_ObjectHideFlags: 0
@@ -750,7 +750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 281.8, y: -180}
+  m_AnchoredPosition: {x: 281.8, y: -102.25}
   m_SizeDelta: {x: 500, y: 176.65503}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &248973016
@@ -1108,10 +1108,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3853196680366887786, guid: efa5ecebf6f574042b1514c5cb25497c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 315415126}
+    - target: {fileID: 3853196680366887786, guid: efa5ecebf6f574042b1514c5cb25497c,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnOpenGame
+      objectReference: {fileID: 0}
     - target: {fileID: 7654046394634355910, guid: efa5ecebf6f574042b1514c5cb25497c,
         type: 3}
       propertyPath: m_Name
       value: HelpPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7654046394634355910, guid: efa5ecebf6f574042b1514c5cb25497c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8848090373377919071, guid: efa5ecebf6f574042b1514c5cb25497c,
         type: 3}
@@ -1180,8 +1195,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 366, y: -120}
-  m_SizeDelta: {x: 552.885, y: 566.8}
+  m_AnchoredPosition: {x: 366, y: -48.9}
+  m_SizeDelta: {x: 552.885, y: 424.59662}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &392004987
 MonoBehaviour:
@@ -2226,7 +2241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 281.8, y: 167}
+  m_AnchoredPosition: {x: 281.8, y: 88.328}
   m_SizeDelta: {x: 500, y: 176.65509}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1281114863
@@ -2272,8 +2287,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 315415126}
-        m_MethodName: OnOpenGame
+      - m_Target: {fileID: 318273470}
+        m_MethodName: ToggleMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
