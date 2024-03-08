@@ -115,17 +115,46 @@ public class BoardManager : MonoService
             beam.Order = 7 - _newPieceToBuy.AssignedSquare.IndexX + 1;
             beam.PlayVFX();
             
-            CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
+            ChessPiece piece = CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
             ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
             if (_unitToBuy == ChessPieceType.King)
             {
                 _gameStateManager.Value.HasPlacedKing = true;
+                _gameStateManager.Value.KingReference = piece;
                 ServiceLocator.GetService<HUDManager>().KingController.Disable();
             }
             OnSuccessfulPurchase?.Invoke();
         }
 
         CancelBuyUnit();
+    }
+
+    public event Action<ChessPiece> OnKingChecked;
+    public event Action OnNoKingChecked; 
+
+    public void CheckIfKingIsInCheck()
+    {
+        bool foundCheck = false;
+        
+        foreach (var piece in ListofPieces)
+        {
+            if (piece.Team == Team.Enemy)
+            {
+                foreach (var tile in piece.PossibleInteractableTiles)
+                {
+                    if (tile.ChessPieceAssigned != null && tile.ChessPieceAssigned.PieceType == ChessPieceType.King)
+                    {
+                        OnKingChecked?.Invoke(piece);
+                        foundCheck = true;
+                    }
+                }
+            }
+        }
+
+        if (!foundCheck)
+        {
+            OnNoKingChecked?.Invoke();
+        }
     }
 
     public void CancelBuyUnit()

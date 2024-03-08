@@ -19,7 +19,6 @@ public class HUDManager : MonoService
     public UnitOrderTimelineController TimelineController;
     public Image DimPanel;
     
-
     private EasyService<CurrencyManager> _currencyManager;
     void Start()
     {

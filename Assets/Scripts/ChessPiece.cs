@@ -95,6 +95,8 @@ public class ChessPiece : MonoBehaviour
     public int Level { get; private set; }
     public BoardSquare AssignedSquare;
 
+    private bool IsCheckingKing = false;
+
     private float UnitValue;// => Level, type
 
     private bool _isSelected;
@@ -424,11 +426,35 @@ public class ChessPiece : MonoBehaviour
     void Start()
     {
         _animateSpeed = GlobalGameAssets.Instance.ChessPieceAnimateSpeed;
-        //Init();
-
         _spritePosition = Sprite.transform.localPosition;
 
+        _boardManager.Value.OnKingChecked += CheckedLogic;
+        _boardManager.Value.OnNoKingChecked += NotCheckedLogic;
+        
         SetUpEventHandlers();
+    }
+
+    private void CheckedLogic(ChessPiece piece)
+    {
+        if (piece == this)
+        {
+            IsCheckingKing = true;
+            LightOn();
+            AssignedSquare.Highlight(Team.Enemy);
+        }
+
+        if (PieceType == ChessPieceType.King)
+        {
+            LightOn();
+            AssignedSquare.Highlight(Team.Friendly);
+        }
+    }
+
+    private void NotCheckedLogic()
+    {
+        IsCheckingKing = false;
+        LightOff();
+        AssignedSquare.UnHighlight();
     }
 
     private void SetUpEventHandlers()
@@ -749,18 +775,27 @@ public class ChessPiece : MonoBehaviour
     
     private void OnDestroy()
     {
+        
+        if (IsCheckingKing)
+        {
+            IsCheckingKing = false;
+            _boardManager.Value.CheckIfKingIsInCheck();
+        }
+        
         if (_upgradeButtonUIController != null && Team == Team.Friendly)
         {
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
         
+        _boardManager.Value.OnKingChecked -= CheckedLogic;
+        _boardManager.Value.OnNoKingChecked -= NotCheckedLogic;
+        
     }
 
     private void Killed()
     {
-        
-        
+
         if (Team == Team.Enemy)
         {
             int currency = _currencyManager.Value.RequestCaptureReward(this);
@@ -789,6 +824,10 @@ public class ChessPiece : MonoBehaviour
     
     public void LightOff()
     {
+        if (IsCheckingKing)
+        {
+            return;
+        }
         _light.color = Color.white;
         _tweenLight?.Kill();
         _light.DOIntensity(0.5f, 0.5f);
