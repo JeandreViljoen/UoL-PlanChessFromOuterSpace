@@ -81,7 +81,6 @@ public class ChessPiece : MonoBehaviour
             {
                 _speedIconUIController.Speed = _speed;
                 UpdateLevel();
-                if(TimelineNode != null) TimelineNode.RefreshPiece();
 
                 if (!_boardManager.Value.IsBuying())
                 {
@@ -217,7 +216,9 @@ public class ChessPiece : MonoBehaviour
     {
         //Takes into account Range and Speed to determine level
         //Will not return less than 1
-        Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+       // Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+       Level = Speed + (Range) - 1;
+        if(TimelineNode != null) TimelineNode.RefreshPiece();
     }
 
     //Handles Speed Upgrade Logic
