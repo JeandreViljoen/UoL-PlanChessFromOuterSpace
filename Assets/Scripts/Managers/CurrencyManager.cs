@@ -74,8 +74,9 @@ public class CurrencyManager : MonoService
 
     private void InitFloatingCurrency(int value)
     {
+        float xOffset = 60.0f;
         FloatingCurrency f = Instantiate(GlobalGameAssets.Instance.FloatingCurrencyUIPrefab.GetComponent<FloatingCurrency>(),  ServiceLocator.GetService<HUDManager>().CurrencyDisplay.transform);
-        f.transform.position = ServiceLocator.GetService<HUDManager>().CurrencyDisplay.transform.position + Vector3.right *100;
+        f.transform.position = ServiceLocator.GetService<HUDManager>().CurrencyDisplay.transform.position + Vector3.right * xOffset;
         f.InitUI(value);
     }
 
