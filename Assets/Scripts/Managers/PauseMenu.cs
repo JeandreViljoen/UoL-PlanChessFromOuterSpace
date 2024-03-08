@@ -31,17 +31,18 @@ public class PauseMenu : MonoBehaviour
     {
         gameObject.SetActive(true);
         Time.timeScale = 0;
+        AudioListener.pause = true;
         PauseMenuIn();
     }
     public void Home()
     {
+        Resume();
         SceneManager.LoadScene(0);
-
-        Time.timeScale = 1;
     }
 
     public void Resume()
     {
+        AudioListener.pause = false;
         PauseMenuOut();
         gameObject.SetActive(false);
         Time.timeScale = 1;
@@ -50,7 +51,7 @@ public class PauseMenu : MonoBehaviour
     public void Restart()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        Time.timeScale = 1;
+        Resume();
     }
 
     public void PauseMenuIn()
