@@ -11,6 +11,8 @@ public class AI : MonoService
 
     private EasyService<BoardManager> currentBoard;
 
+    private AIBalanceData Balance => GlobalGameAssets.Instance.AIBalanceData;
+
     /// <summary>
     /// Restart AI computation.
     /// </summary>
@@ -20,38 +22,58 @@ public class AI : MonoService
         this.moveQueue = moveQueue;
     }
 
-    private int ScoreCapture(ChessPieceType pieceType, AIBalanceData scores)
+    private float ScoreCapture(ChessPieceType pieceType)
     {
         switch (pieceType)
         {
-            case ChessPieceType.Pawn: return scores.PawnValue;
-            case ChessPieceType.Knight: return scores.KnightValue;
-            case ChessPieceType.Bishop: return scores.BishopValue;
-            case ChessPieceType.Rook: return scores.RookValue;
-            case ChessPieceType.Queen: return scores.QueenValue;
-            case ChessPieceType.King: return scores.KingValue;
+            case ChessPieceType.Pawn: return Balance.PawnValue;
+            case ChessPieceType.Knight: return Balance.KnightValue;
+            case ChessPieceType.Bishop: return Balance.BishopValue;
+            case ChessPieceType.Rook: return Balance.RookValue;
+            case ChessPieceType.Queen: return Balance.QueenValue;
+            case ChessPieceType.King: return Balance.KingValue;
         }
 
         return 0;
     }
 
-    private struct Move : IComparable<Move> {
-        public BoardSquare destination;
-        public int score;
+    private float Score(ChessPiece piece, BoardSquare dst)
+    {
+        float score = 0;
+        (int x, int y) dstPos = dst.Position;
 
-        public Move(BoardSquare destination, int score) {
-            this.destination = destination;
-            this.score = score;
-        }
-
-        public int CompareTo(Move other)
+        // score based on distance to King
+        if (piece.Team == Team.Enemy)
         {
-            int result = score.CompareTo(other.score);
-            if (result != 0) return result;
-            result = destination.IndexX.CompareTo(other.destination.IndexX);
-            if (result != 0) return result;
-            return destination.IndexZ.CompareTo(other.destination.IndexZ);
+            (int x, int y) = currentBoard.Value.Pieces.First(
+                tile => tile.Value.PieceType == ChessPieceType.King
+                        && tile.Value.Team == Team.Friendly
+            ).Key;
+            int distance = Math.Max(
+                Math.Abs(x - dstPos.x),
+                Math.Abs(y - dstPos.y));
+            if (distance == 0) score += Balance.KingValue;
+            else score += 8 - distance;
         }
+
+        // score piece capture
+        var capture = dst.ChessPieceAssigned;
+        if (capture)
+        {
+            score += ScoreCapture(capture.PieceType);
+        }
+
+        // score based on danger
+        foreach (var enemy in currentBoard.Value.Pieces.Values.Where(
+            enemy => enemy.Team != piece.Team))
+        {
+            if (enemy.GetAllPossibleMovesetTiles().Contains(dst)) {
+                score -= ScoreCapture(piece.PieceType);
+                break;
+            }
+        }
+
+        return score;
     }
 
     /// <summary>
@@ -66,27 +88,39 @@ public class AI : MonoService
         var piece = moveQueue.First();
         var destinations = piece.GetAllPossibleMovesetTiles();
 
-        var balanceData = GlobalGameAssets.Instance.AIBalanceData;
-
         var moves = new SortedSet<Move>();
 
-        var list = "";
         foreach (var dst in destinations)
         {
-            var capture = dst.ChessPieceAssigned;
-            int score = 0;
-
-            if (capture)
-            {
-                score = ScoreCapture(capture.PieceType, balanceData);
-            }
+            float score = Score(piece, dst);
 
             moves.Add(new Move(dst, score));
         }
 
-        int highscore = moves.Reverse().First().score;
+        float highscore = moves.Reverse().First().score;
         var top = moves.Reverse().TakeWhile(m => m.score == highscore).ToArray();
 
         return top[Random.Range(0, top.Length)].destination;
+    }
+
+    private struct Move : IComparable<Move>
+    {
+        public BoardSquare destination;
+        public float score;
+
+        public Move(BoardSquare destination, float score)
+        {
+            this.destination = destination;
+            this.score = score;
+        }
+
+        public int CompareTo(Move other)
+        {
+            int result = score.CompareTo(other.score);
+            if (result != 0) return result;
+            result = destination.IndexX.CompareTo(other.destination.IndexX);
+            if (result != 0) return result;
+            return destination.IndexZ.CompareTo(other.destination.IndexZ);
+        }
     }
 }

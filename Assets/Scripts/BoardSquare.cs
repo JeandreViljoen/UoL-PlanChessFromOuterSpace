@@ -15,6 +15,8 @@ public class BoardSquare : MonoBehaviour
     public int IndexX;
     public int IndexZ;
 
+    public (int x, int y) Position => (IndexX, IndexZ);
+
     private ChessPiece _chessPieceAssigned;
     public ChessPiece ChessPieceAssigned
     {
