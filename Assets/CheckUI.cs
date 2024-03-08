@@ -19,6 +19,7 @@ public class CheckUI : MonoBehaviour
 
         ServiceLocator.GetService<BoardManager>().OnKingChecked +=  Show;
         ServiceLocator.GetService<BoardManager>().OnNoKingChecked += Hide;
+        ServiceLocator.GetService<GameStateManager>().OnStateChanged += HideOnLose;
     }
 
     void Update()
@@ -42,5 +43,13 @@ public class CheckUI : MonoBehaviour
         
         _fadeSub?.Kill();
         _fadeSub = _sub.DOFade(0f, 0.2f);
+    }
+
+    private void HideOnLose(GameState state)
+    {
+        if (state == GameState.LOSE)
+        {
+            Hide();
+        }
     }
 }

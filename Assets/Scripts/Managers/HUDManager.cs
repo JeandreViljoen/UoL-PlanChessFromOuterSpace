@@ -10,6 +10,7 @@ public class HUDManager : MonoService
 {
     public TextMeshProUGUI CurrencyDisplay;
     public TextMeshProUGUI TurnCounter;
+    public TextMeshProUGUI CancelDeploymentText;
     public GameObject StatsPanel;
     public GameObject LosePrompt;
     public GameObject WinPrompt;
@@ -25,6 +26,7 @@ public class HUDManager : MonoService
         SubscribeCurrencyEvents();
         RefreshCurrencyDisplay(0);
         LosePrompt.SetActive(false);
+        CancelDeploymentText.gameObject.SetActive(false);
     }
 
     private void RefreshCurrencyDisplay(int amount)

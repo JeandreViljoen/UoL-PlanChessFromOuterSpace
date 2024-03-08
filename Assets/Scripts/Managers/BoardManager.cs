@@ -95,7 +95,8 @@ public class BoardManager : MonoService
         _isBuyingUnit = true;
         _unitToBuy = type;
         InitNewPieceToBuy(_unitToBuy);
-
+        ServiceLocator.GetService<HUDManager>().CancelDeploymentText.gameObject.SetActive(true);
+        
     }
 
     public bool IsBuying()
@@ -157,17 +158,23 @@ public class BoardManager : MonoService
         }
     }
 
+    private bool HasBeenInitToBoard = false;
+    
+    
     public void CancelBuyUnit()
     {
         if (!IsBuying())
         {
             return;
         }
-        _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+        if(HasBeenInitToBoard) _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+        HasBeenInitToBoard = false;
         Destroy(_newPieceToBuy.gameObject);
         _newPieceToBuy = null;
         DisableBuyingState();
+        ServiceLocator.GetService<HUDManager>().CancelDeploymentText.gameObject.SetActive(false);
         OnCancelledPurchase?.Invoke();
+        
     }
 
     public void DisableBuyingState()
@@ -179,6 +186,7 @@ public class BoardManager : MonoService
     {
         foreach (var tile in _boardSquares)
         {
+            //Limit placement column
             if (tile.IndexX > 1)
             {
                 return;
@@ -186,6 +194,8 @@ public class BoardManager : MonoService
             
             tile.OnUnitBuyHighlight += () =>
             {
+                HasBeenInitToBoard = true;
+                //UnHighlight previous tile
                 if (_newPieceToBuy!=null && _newPieceToBuy.AssignedSquare != null)
                 {
                     _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
@@ -245,7 +255,7 @@ public class BoardManager : MonoService
                 BuyingTilesAccesHighlight.SetActive(true);
             }
             
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
             {
                 CancelBuyUnit();
             }

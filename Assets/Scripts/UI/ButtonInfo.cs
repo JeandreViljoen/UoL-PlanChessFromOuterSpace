@@ -67,7 +67,7 @@ public class ButtonInfo : MonoBehaviour
         }
         else
         {
-            //Code for handling not enough currency
+            _audioManager.Value.PlaySound(Sound.UI_Deny, gameObject);
         }
         
     }
