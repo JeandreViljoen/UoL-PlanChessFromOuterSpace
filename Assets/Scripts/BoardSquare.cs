@@ -125,7 +125,7 @@ public class BoardSquare : MonoBehaviour
         }
         else
         {
-            _boardManager.Value.CancelBuyUnit();
+            //_boardManager.Value.CancelBuyUnit();
         }
     }
 

@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Knight
   m_EditorClassIdentifier: 
   PieceType: 1
-  Sprite: {fileID: 21300000, guid: 594b42b7e08b7164796f0fce5371209a, type: 3}
+  Sprite: {fileID: 21300000, guid: afd0eec334f682c4abd335ad497be159, type: 3}
+  SpriteHighlights: {fileID: 21300000, guid: 2b1fbff69d4d33e418564e94bf5b23bb, type: 3}
   EnemySprite: {fileID: 21300000, guid: f6a31f539046b3e4da8c4c249c699f8f, type: 3}
-  Portrait: {fileID: 0}
+  EnemyPortrait: {fileID: 21300000, guid: 795efc7444f92904992d33445f25661e, type: 3}
+  Portrait: {fileID: 21300000, guid: e563549601199bc40833ab3238a0e7b1, type: 3}
   DefaultSpeed: 1
   DefaultRange: 1
   BaseRelativeMoveset:

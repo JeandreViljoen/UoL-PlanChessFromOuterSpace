@@ -547,7 +547,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: e82675506f5b5b14c83ed767ec899fc3, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1159,7 +1159,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 7f4322b1bf6aa794689a4efffc1851d3, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -1419,7 +1419,7 @@ MonoBehaviour:
   KnightPiecesDestroyed: {fileID: 6538449899412876024}
   KingPiecesDestroyed: {fileID: 6538449900072710630}
   QueenPiecesDestroyed: {fileID: 6538449900754216152}
-  PawnIcon: {fileID: 6538449900854810687}
+  PawnIcon: {fileID: 6538449899662037247}
   RookIcon: {fileID: 6538449900574172371}
   BishopIcon: {fileID: 6538449899397357358}
   KnightIcon: {fileID: 6538449901126386831}
@@ -1765,7 +1765,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: c8a3fdfd19ced0941a38a1cfafcea47f, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2606,7 +2606,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 519b60c03dcf585438a06e0da118727b, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -3320,7 +3320,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 3b9540ec774b6994a8880b17be8fc478, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -4090,7 +4090,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 00e10710c8e3d0249ba27e47b069b4bd, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1

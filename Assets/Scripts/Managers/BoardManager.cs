@@ -95,7 +95,8 @@ public class BoardManager : MonoService
         _isBuyingUnit = true;
         _unitToBuy = type;
         InitNewPieceToBuy(_unitToBuy);
-
+        ServiceLocator.GetService<HUDManager>().CancelDeploymentText.gameObject.SetActive(true);
+        
     }
 
     public bool IsBuying()
@@ -115,11 +116,12 @@ public class BoardManager : MonoService
             beam.Order = 7 - _newPieceToBuy.AssignedSquare.IndexX + 1;
             beam.PlayVFX();
             
-            CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
+            ChessPiece piece = CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
             ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
             if (_unitToBuy == ChessPieceType.King)
             {
                 _gameStateManager.Value.HasPlacedKing = true;
+                _gameStateManager.Value.KingReference = piece;
                 ServiceLocator.GetService<HUDManager>().KingController.Disable();
             }
             OnSuccessfulPurchase?.Invoke();
@@ -128,17 +130,51 @@ public class BoardManager : MonoService
         CancelBuyUnit();
     }
 
+    public event Action<ChessPiece> OnKingChecked;
+    public event Action OnNoKingChecked; 
+
+    public void CheckIfKingIsInCheck()
+    {
+        bool foundCheck = false;
+        
+        foreach (var piece in ListofPieces)
+        {
+            if (piece.Team == Team.Enemy)
+            {
+                foreach (var tile in piece.PossibleInteractableTiles)
+                {
+                    if (tile.ChessPieceAssigned != null && tile.ChessPieceAssigned.PieceType == ChessPieceType.King)
+                    {
+                        OnKingChecked?.Invoke(piece);
+                        foundCheck = true;
+                    }
+                }
+            }
+        }
+
+        if (!foundCheck)
+        {
+            OnNoKingChecked?.Invoke();
+        }
+    }
+
+    private bool HasBeenInitToBoard = false;
+    
+    
     public void CancelBuyUnit()
     {
         if (!IsBuying())
         {
             return;
         }
-        _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+        if(HasBeenInitToBoard) _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
+        HasBeenInitToBoard = false;
         Destroy(_newPieceToBuy.gameObject);
         _newPieceToBuy = null;
         DisableBuyingState();
+        ServiceLocator.GetService<HUDManager>().CancelDeploymentText.gameObject.SetActive(false);
         OnCancelledPurchase?.Invoke();
+        
     }
 
     public void DisableBuyingState()
@@ -150,6 +186,7 @@ public class BoardManager : MonoService
     {
         foreach (var tile in _boardSquares)
         {
+            //Limit placement column
             if (tile.IndexX > 1)
             {
                 return;
@@ -157,6 +194,8 @@ public class BoardManager : MonoService
             
             tile.OnUnitBuyHighlight += () =>
             {
+                HasBeenInitToBoard = true;
+                //UnHighlight previous tile
                 if (_newPieceToBuy!=null && _newPieceToBuy.AssignedSquare != null)
                 {
                     _newPieceToBuy.UnHighlightTiles(_newPieceToBuy.LastHighlightedTiles);
@@ -216,7 +255,7 @@ public class BoardManager : MonoService
                 BuyingTilesAccesHighlight.SetActive(true);
             }
             
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
             {
                 CancelBuyUnit();
             }
@@ -446,6 +485,7 @@ public class BoardManager : MonoService
         // TODO: More initialisation required on the chess piece
         piece.gameObject.transform.position = square.CenterSurfaceTransform.position;
         piece.Sprite.sortingOrder = (_boardDepth - 1) - pos.Item1;
+        piece.SpriteHighlights.sortingOrder = (_boardDepth - 1) - pos.Item1 + 1;
         piece.Team = team;
         piece.AssignedSquare = square;
         square.ChessPieceAssigned = piece;

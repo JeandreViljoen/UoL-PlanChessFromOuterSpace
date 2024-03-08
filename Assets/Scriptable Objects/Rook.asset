@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Rook
   m_EditorClassIdentifier: 
   PieceType: 3
-  Sprite: {fileID: 21300000, guid: 3d91af479db740142ab05051f25a1d83, type: 3}
+  Sprite: {fileID: 21300000, guid: c39ec97b5a9f1c5419b0f342ee823256, type: 3}
+  SpriteHighlights: {fileID: 21300000, guid: 96d226e550fe53346b98cb45ea822057, type: 3}
   EnemySprite: {fileID: 21300000, guid: 42a4bee40cd8625488784a08997a3069, type: 3}
-  Portrait: {fileID: 0}
+  EnemyPortrait: {fileID: 21300000, guid: da670d8148d18bd48af245802bfb05e8, type: 3}
+  Portrait: {fileID: 21300000, guid: 336ab8948b9be0346b8924141ec4caf7, type: 3}
   DefaultSpeed: 1
   DefaultRange: 2
   BaseRelativeMoveset:

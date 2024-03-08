@@ -67,7 +67,7 @@ public class ButtonInfo : MonoBehaviour
         }
         else
         {
-            //Code for handling not enough currency
+            _audioManager.Value.PlaySound(Sound.UI_Deny, gameObject);
         }
         
     }
@@ -132,27 +132,27 @@ public class ButtonInfo : MonoBehaviour
         {
             case ChessPieceType.Pawn:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.PawnCost;
-                Sprite.sprite = GlobalGameAssets.Instance.PawnData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.PawnData.Portrait;
                 break;
             case ChessPieceType.Knight:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.KnightCost;
-                Sprite.sprite = GlobalGameAssets.Instance.KnightData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.KnightData.Portrait;
                 break;
             case ChessPieceType.Bishop:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.BishopCost;
-                Sprite.sprite = GlobalGameAssets.Instance.BishopData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.BishopData.Portrait;
                 break;
             case ChessPieceType.Rook:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.RookCost;
-                Sprite.sprite = GlobalGameAssets.Instance.RookData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.RookData.Portrait;
                 break;
             case ChessPieceType.Queen:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.QueenCost;
-                Sprite.sprite = GlobalGameAssets.Instance.QueenData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.QueenData.Portrait;
                 break;
             case ChessPieceType.King:
                 _price = GlobalGameAssets.Instance.CurrencyBalanceData.KingCost;
-                Sprite.sprite = GlobalGameAssets.Instance.KingData.Sprite;
+                Sprite.sprite = GlobalGameAssets.Instance.KingData.Portrait;
                 break;
             default:
                 throw new ArgumentOutOfRangeException();

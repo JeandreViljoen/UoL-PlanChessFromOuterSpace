@@ -16,6 +16,6 @@ MonoBehaviour:
   ShowGameState: 0
   PopulateBoardOnStart: 0
   ChanceToPopulateTile: 0.583
-  HighlightColor: {r: 0.3066038, g: 0.5207743, b: 1, a: 0.89411765}
-  EnemyTintColor: {r: 1, g: 1, b: 1, a: 1}
+  HighlightColor: {r: 1, g: 0.52218455, b: 0.1745283, a: 0.89411765}
+  EnemyTintColor: {r: 1, g: 0.1462264, b: 0.16366135, a: 1}
   ShowCombatMessageLogs: 1

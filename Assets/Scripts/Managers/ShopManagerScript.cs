@@ -10,7 +10,6 @@ using UnityEngine.EventSystems;
 
 public class ShopManagerScript : MonoService
 {
-    //public int[,] shopItems = new int [6,6];
     public TextMeshProUGUI CurrencyText;
 
     private EasyService<CurrencyManager> _currencyManager;
@@ -34,28 +33,6 @@ public class ShopManagerScript : MonoService
     {
         CurrencyText.text = "Currency: " + _currencyManager.Value.Currency;
     }
-    
-    
-    //Not needed anymore, as buttons themselves keep track of values and interactions
-    
-                //Enables purchase of new units and updating of currency balance
-                //public void Buy()
-                //{
-                    //GameObject ButtonRef = GameObject.FindGameObjectWithTag("Event").GetComponent<EventSystem>().currentSelectedGameObject;
-
-                    //_currencyManager.Value.TryRemoveCurrency(shopItems[2, ButtonRef.GetComponent<ButtonInfo>().ItemID]);
-                    
-                    // if(currencyBalance >= shopItems[2, ButtonRef.GetComponent<ButtonInfo>().ItemID])
-                    // {
-                    //     currencyBalance -= shopItems[2, ButtonRef.GetComponent<ButtonInfo>().ItemID];
-                    //     currencyTxt.text = "Currency: $"+_currencyManager.Value.Currency.ToString();
-                    //     
-                    //     //TO BE DONE
-                    //     //add insertion of selected game piece on the board
-                    //     //add updating of CurrencyManager Currency
-                    //     //add exiting from Shop Menu (with or without changes)
-                    // }
-                //}
 
     private void OnDestroy()
     {

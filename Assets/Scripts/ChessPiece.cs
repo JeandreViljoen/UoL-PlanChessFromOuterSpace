@@ -43,6 +43,8 @@ public class ChessPiece : MonoBehaviour
 // --------------- Member variables and data --------------- //
     public ChessPieceType PieceType;
     public SpriteRenderer Sprite;
+    public SpriteRenderer SpriteHighlights;
+    [HideInInspector] public Sprite Portrait;
 
     private ChessPieceState _state;
 
@@ -79,15 +81,21 @@ public class ChessPiece : MonoBehaviour
             {
                 _speedIconUIController.Speed = _speed;
                 UpdateLevel();
-                if(TimelineNode != null) TimelineNode.RefreshPiece();
-                ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
-                ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
+
+                if (!_boardManager.Value.IsBuying())
+                {
+                    ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
+                    ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
+                }
+               
             }
         }
     }
 
     public int Level { get; private set; }
     public BoardSquare AssignedSquare;
+
+    private bool IsCheckingKing = false;
 
     private float UnitValue;// => Level, type
 
@@ -120,6 +128,7 @@ public class ChessPiece : MonoBehaviour
     private Vector3 _spritePosition;
 
     private SpeedIconUIController _speedIconUIController;
+    [SerializeField] private RangeIconUIController _rangeIconUIController;
     private UpgradeButtonUIController _upgradeButtonUIController;
 
     private EasyService<CurrencyManager> _currencyManager;
@@ -138,6 +147,16 @@ public class ChessPiece : MonoBehaviour
         set
         {
             _range = value;
+            if (_rangeIconUIController == null)
+            {
+                _rangeIconUIController = GetComponentInChildren<RangeIconUIController>();
+            }
+
+            if (_rangeIconUIController != null)
+            {
+                _rangeIconUIController.Range = _range;
+            }
+
             if(AssignedSquare != null) UpdateMoveset();
             UpdateLevel();
         }
@@ -210,7 +229,9 @@ public class ChessPiece : MonoBehaviour
     {
         //Takes into account Range and Speed to determine level
         //Will not return less than 1
-        Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+       // Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+       Level = Speed + (Range) - 1;
+        if(TimelineNode != null) TimelineNode.RefreshPiece();
     }
 
     //Handles Speed Upgrade Logic
@@ -259,10 +280,19 @@ public class ChessPiece : MonoBehaviour
         if (Team == Team.Friendly)
         {
             Sprite.sprite = _data.Sprite;
+            SpriteHighlights.sprite = _data.SpriteHighlights;
+           Color hColor = GlobalGameAssets.Instance.HighlightColor;
+           hColor.a = 0.3f;
+           SpriteHighlights.color = hColor;
+           SpriteHighlights.gameObject.SetActive(true);
+
+           Portrait = _data.Portrait;
         }
         else
         {
             Sprite.sprite = _data.EnemySprite;
+            SpriteHighlights.gameObject.SetActive(false);
+            Portrait = _data.EnemyPortrait;
         }
         
         Speed = _data.DefaultSpeed;
@@ -396,18 +426,42 @@ public class ChessPiece : MonoBehaviour
     void Start()
     {
         _animateSpeed = GlobalGameAssets.Instance.ChessPieceAnimateSpeed;
-        //Init();
-
         _spritePosition = Sprite.transform.localPosition;
 
+        _boardManager.Value.OnKingChecked += CheckedLogic;
+        _boardManager.Value.OnNoKingChecked += NotCheckedLogic;
+        
         SetUpEventHandlers();
+    }
+
+    private void CheckedLogic(ChessPiece piece)
+    {
+        if (piece == this)
+        {
+            IsCheckingKing = true;
+            LightOn();
+            AssignedSquare.Highlight(Team.Enemy);
+        }
+
+        if (PieceType == ChessPieceType.King)
+        {
+            LightOn();
+            AssignedSquare.Highlight(Team.Friendly);
+        }
+    }
+
+    private void NotCheckedLogic()
+    {
+        IsCheckingKing = false;
+        LightOff();
+        AssignedSquare.UnHighlight();
     }
 
     private void SetUpEventHandlers()
     {
         if (Team == Team.Enemy)
         {
-            Sprite.color = GlobalDebug.Instance.EnemyTintColor;
+            //Sprite.color = GlobalDebug.Instance.EnemyTintColor;
         }
 
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseEnter += Highlight;
@@ -468,6 +522,7 @@ public class ChessPiece : MonoBehaviour
         s.AppendCallback(() =>
         {
             Sprite.sortingOrder = 7 - square.IndexX + 1;
+            SpriteHighlights.sortingOrder = 7 - square.IndexX + 2;
             OnMoveEndLogic(square);
 
         });
@@ -720,18 +775,27 @@ public class ChessPiece : MonoBehaviour
     
     private void OnDestroy()
     {
+        
+        if (IsCheckingKing)
+        {
+            IsCheckingKing = false;
+            _boardManager.Value.CheckIfKingIsInCheck();
+        }
+        
         if (_upgradeButtonUIController != null && Team == Team.Friendly)
         {
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
         
+        _boardManager.Value.OnKingChecked -= CheckedLogic;
+        _boardManager.Value.OnNoKingChecked -= NotCheckedLogic;
+        
     }
 
     private void Killed()
     {
-        
-        
+
         if (Team == Team.Enemy)
         {
             int currency = _currencyManager.Value.RequestCaptureReward(this);
@@ -760,6 +824,10 @@ public class ChessPiece : MonoBehaviour
     
     public void LightOff()
     {
+        if (IsCheckingKing)
+        {
+            return;
+        }
         _light.color = Color.white;
         _tweenLight?.Kill();
         _light.DOIntensity(0.5f, 0.5f);

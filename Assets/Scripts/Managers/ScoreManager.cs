@@ -55,15 +55,15 @@ public class ScoreManager : MonoService
 
         if (hours > 0)
         {
-            return $"You played a total of {hours} hours, {minutes} minutes and {seconds} seconds!";
+            return $"You played a total of <color=#ff2222ff>{hours}</color> hours, <color=#ff2222ff>{minutes}</color> minutes and <color=#ff2222ff>{seconds}</color> seconds!";
         }
         else if (minutes > 0)
         {
-            return $"You played a total of {minutes} minutes and {seconds} seconds!";
+            return $"You played a total of <color=#ff2222ff>{minutes}</color> minutes and <color=#ff2222ff>{seconds}</color> seconds!";
         }
         else
         {
-            return $"Your game lasted only {seconds} seconds!";
+            return $"Your game lasted only <color=#ff2222ff>{seconds}</color> seconds!";
         }
     }
 

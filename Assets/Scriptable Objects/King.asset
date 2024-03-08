@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: King
   m_EditorClassIdentifier: 
   PieceType: 5
-  Sprite: {fileID: 21300000, guid: 8eae385ddae9bc14cb4c0e45d7d72980, type: 3}
+  Sprite: {fileID: 21300000, guid: 2252dcca90d28904299afd00ca9d04b4, type: 3}
+  SpriteHighlights: {fileID: 21300000, guid: bd2758ead94a9d74c9279a01d4b3c1ea, type: 3}
   EnemySprite: {fileID: 21300000, guid: eedee8ef383ea634ba3a2bb079711aa1, type: 3}
-  Portrait: {fileID: 0}
+  EnemyPortrait: {fileID: 0}
+  Portrait: {fileID: 21300000, guid: d58026ff0e9f8e344aa56a9ab14d3500, type: 3}
   DefaultSpeed: 1
   DefaultRange: 1
   BaseRelativeMoveset:

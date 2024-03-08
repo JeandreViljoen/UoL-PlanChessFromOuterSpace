@@ -16,11 +16,12 @@ public class GameStateManager : MonoService
     private EasyService<ScoreManager> _scoreManager;
     private EasyService<HUDManager> _hudManager;
     private EasyService<CurrencyManager> _currencyManager;
+    private EasyService<BoardManager> _boardManager;
 
     public bool HasPlacedKing = false;
     public int TurnsToWin = 20;
 
-
+    public ChessPiece KingReference;
 
     public GameState GameState
     {
@@ -67,6 +68,7 @@ public class GameStateManager : MonoService
                     
                     _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _scoreManager.Value.UpdateStats();
+                    _boardManager.Value.CheckIfKingIsInCheck();
                     break;
                 case GameState.COMBAT:
                     break;
