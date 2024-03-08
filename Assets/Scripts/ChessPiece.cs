@@ -126,6 +126,7 @@ public class ChessPiece : MonoBehaviour
     private Vector3 _spritePosition;
 
     private SpeedIconUIController _speedIconUIController;
+    [SerializeField] private RangeIconUIController _rangeIconUIController;
     private UpgradeButtonUIController _upgradeButtonUIController;
 
     private EasyService<CurrencyManager> _currencyManager;
@@ -144,6 +145,16 @@ public class ChessPiece : MonoBehaviour
         set
         {
             _range = value;
+            if (_rangeIconUIController == null)
+            {
+                _rangeIconUIController = GetComponentInChildren<RangeIconUIController>();
+            }
+
+            if (_rangeIconUIController != null)
+            {
+                _rangeIconUIController.Range = _range;
+            }
+
             if(AssignedSquare != null) UpdateMoveset();
             UpdateLevel();
         }
