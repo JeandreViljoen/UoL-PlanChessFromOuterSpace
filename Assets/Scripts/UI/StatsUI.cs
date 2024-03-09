@@ -84,4 +84,9 @@ public class StatsUI : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void ToggleUI()
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
 }

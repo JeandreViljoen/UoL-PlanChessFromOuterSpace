@@ -29,6 +29,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Pause()
     {
+        ServiceLocator.GetService<MenuManager>().IsPaused = true;
         gameObject.SetActive(true);
         Time.timeScale = 0;
         AudioListener.pause = true;
@@ -42,6 +43,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
+        ServiceLocator.GetService<MenuManager>().IsPaused = false;
         AudioListener.pause = false;
         PauseMenuOut();
         gameObject.SetActive(false);
