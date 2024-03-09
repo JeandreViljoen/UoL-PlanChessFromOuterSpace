@@ -41,7 +41,7 @@ public class FloatingCurrency : MonoBehaviour
         TextFieldUI.text = value > 0 ? $"+{value}" : $"{value}";
 
         Sequence s = DOTween.Sequence();
-        s.Append(TextFieldUI.transform.DOLocalMove(TextFieldUI.transform.localPosition + Vector3.left * 100f, 1f).SetEase(Ease.OutSine));
+        s.Append(TextFieldUI.transform.DOLocalMove(TextFieldUI.transform.localPosition + Vector3.down * 100f, 1f).SetEase(Ease.OutSine));
         s.Append(TextFieldUI.DOFade(0f, 0.5f));
         s.AppendCallback(() => {
             Destroy(gameObject);

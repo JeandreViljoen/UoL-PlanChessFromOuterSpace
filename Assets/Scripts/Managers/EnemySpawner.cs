@@ -10,6 +10,7 @@ public class EnemySpawner : MonoService
     // Services
     private EasyService<GameStateManager> _gameStateManager;
     private EasyService<BoardManager> _boardManager;
+    private EasyService<AudioManager> _audioManager;
     private IndexCode[][] _boardRows;
     
     // Settings
@@ -52,7 +53,8 @@ public class EnemySpawner : MonoService
             }
         }
         
-        
+        // Spawning Sound
+        _audioManager.Value.PlaySound(Sound.Lightning, this.gameObject);
 
         // Once spawning is finished, transition to preparation phase
         _gameStateManager.Value.GameState = GameState.PREP;
