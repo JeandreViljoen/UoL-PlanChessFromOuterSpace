@@ -20,6 +20,11 @@ public class CheckUI : MonoBehaviour
         ServiceLocator.GetService<BoardManager>().OnKingChecked +=  Show;
         ServiceLocator.GetService<BoardManager>().OnNoKingChecked += Hide;
         ServiceLocator.GetService<GameStateManager>().OnStateChanged += HideOnLose;
+        ServiceLocator.GetService<CameraManager>().OnCameraFocus += (b) =>
+        {
+            Hide();
+        };
+        ServiceLocator.GetService<CameraManager>().OnCameraTopDown += RecheckCheck;
     }
 
     void Update()
@@ -51,5 +56,10 @@ public class CheckUI : MonoBehaviour
         {
             Hide();
         }
+    }
+    
+    private void RecheckCheck()
+    {
+        ServiceLocator.GetService<BoardManager>().CheckIfKingIsInCheck();
     }
 }

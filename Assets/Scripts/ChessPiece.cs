@@ -830,7 +830,7 @@ public class ChessPiece : MonoBehaviour
         }
         _light.color = Color.white;
         _tweenLight?.Kill();
-        _light.DOIntensity(0.5f, 0.5f);
+        _light.DOIntensity(0.0f, 0.5f);
     }
 
     public void SetLightEnabled(bool flag)
