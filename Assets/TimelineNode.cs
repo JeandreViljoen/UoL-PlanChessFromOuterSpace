@@ -76,7 +76,13 @@ public class TimelineNode : MonoBehaviour
         _levelText.color = Piece.Team == Team.Friendly
             ? GlobalGameAssets.Instance.HighlightColor
             : GlobalDebug.Instance.EnemyTintColor;
-        
+        if (Piece.PieceType == ChessPieceType.King)
+        {
+            _speedIcons.gameObject.SetActive(false);
+            _rangeIcons.gameObject.SetActive(false);
+            _levelText.text = $"KING";
+            _portraitBorder.color = new Color(1f,1f,1f, 0.05f);
+        }
     }
 
     public void MoveNode(Transform node, float speed)

@@ -80,6 +80,7 @@ public class ChessPiece : MonoBehaviour
             if (_speedIconUIController != null)
             {
                 _speedIconUIController.Speed = _speed;
+                if(PieceType == ChessPieceType.King) _speedIconUIController.gameObject.SetActive(false);
                 UpdateLevel();
 
                 if (!_boardManager.Value.IsBuying())
@@ -155,6 +156,7 @@ public class ChessPiece : MonoBehaviour
             if (_rangeIconUIController != null)
             {
                 _rangeIconUIController.Range = _range;
+                if(PieceType == ChessPieceType.King) _rangeIconUIController.gameObject.SetActive(false);
             }
 
             if(AssignedSquare != null) UpdateMoveset();
