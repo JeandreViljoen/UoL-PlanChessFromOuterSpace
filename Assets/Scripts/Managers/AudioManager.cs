@@ -59,6 +59,11 @@ public class AudioManager : MonoService
         source.clip = clip;
         source.Play();
     }
+
+    public void ChangeVolume(Single vol)
+    {
+        AudioListener.volume = vol;
+    }
     
     /// <summary>
     /// Play music of given music ID in parameters
