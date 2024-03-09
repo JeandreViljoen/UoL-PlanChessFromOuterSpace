@@ -115,8 +115,10 @@ public class BoardManager : MonoService
             beam.transform.position = _newPieceToBuy.AssignedSquare.CenterSurfaceTransform.position;
             beam.Order = 7 - _newPieceToBuy.AssignedSquare.IndexX + 1;
             beam.PlayVFX();
-            
+
             ChessPiece piece = CreatePiece(_newPieceToBuy.PieceType, _newPieceToBuy.AssignedSquare.IndexCode, Team.Friendly);
+            _audioManager.Value.PlaySound(Sound.GAME_FriendlySpawn);
+            
             ServiceLocator.GetService<CurrencyManager>().TryRemoveCurrency(cost);
             if (_unitToBuy == ChessPieceType.King)
             {

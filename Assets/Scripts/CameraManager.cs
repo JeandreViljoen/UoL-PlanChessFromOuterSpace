@@ -28,6 +28,8 @@ public class CameraManager : MonoService
     public float FocusXRotation;
     public float FocusFOV;
 
+    public GameObject Spaceship;
+
     private EasyService<AudioManager> _audioManager;
 
     public event Action<BoardSquare> OnCameraFocus;
@@ -89,6 +91,7 @@ public class CameraManager : MonoService
         _tweenFOV = _mainCam.DOFieldOfView(FocusFOV, TransitionSpeed).SetEase(Ease.InOutSine);
 
         _audioManager.Value.PlaySound(Sound.FocusTile, _mainCam.gameObject);
+        _audioManager.Value.PlaySound(Sound.GAME_Spaceship, Spaceship);
         OnCameraFocus?.Invoke(tile);
     }
 

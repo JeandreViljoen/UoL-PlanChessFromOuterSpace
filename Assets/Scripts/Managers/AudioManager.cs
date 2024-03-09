@@ -98,6 +98,15 @@ public class AudioManager : MonoService
             case Sound.UI_CameraMove: return RandomClip(data.UI_CameraMove);
             case Sound.UI_Deny: return RandomClip(data.UI_Deny);
             case Sound.Lightning: return RandomClip(data.Lightning);
+            
+            case Sound.GAME_Spaceship: return RandomClip(data.Spaceship);
+            case Sound.GAME_WIN: return RandomClip(data.Win);
+            case Sound.GAME_LOSE: return RandomClip(data.Lose);
+            case Sound.GAME_FriendlyDeath: return RandomClip(data.FriendlyDeath);
+            case Sound.GAME_FriendlySpawn: return RandomClip(data.FriendlySpawn);
+            case Sound.GAME_EnemyDeath: return RandomClip(data.EnemyDeath);
+            case Sound.GAME_EnemySpawn: return RandomClip(data.EnemySpawn);
+                
 
             case Sound.ENEMY_Move: return RandomClip(data.EnemyMove);
             case Sound.ENEMY_Activate: return RandomClip(data.EnemyActivate);

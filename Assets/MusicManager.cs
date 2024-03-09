@@ -9,6 +9,7 @@ public class MusicManager : MonoService
     public List<AudioSource> Layers;
     public AudioSource MenuMusic;
     public float TransitionTimes;
+    public float MusicVolume = 1f;
     [HideInInspector] public bool IsMusicEnabled = false;
     void Start()
     {
@@ -56,25 +57,25 @@ public class MusicManager : MonoService
     {
         MenuMusic.Play();
         _menuMusicTween?.Kill();
-        _menuMusicTween = MenuMusic.DOFade(1f, 1f);
+        _menuMusicTween = MenuMusic.DOFade(MusicVolume, 1f);
     }
 
     public void EnableBaseLayers()
     {
         _layer1Tween?.Kill();
-        _layer1Tween = Layers[0].DOFade(1f, TransitionTimes);
+        _layer1Tween = Layers[0].DOFade(MusicVolume, TransitionTimes);
         
         _layer2Tween?.Kill();
-        _layer2Tween = Layers[1].DOFade(1f, TransitionTimes);
+        _layer2Tween = Layers[1].DOFade(MusicVolume, TransitionTimes);
         
         _layer3Tween?.Kill();
-        _layer3Tween = Layers[2].DOFade(1f, TransitionTimes);
+        _layer3Tween = Layers[2].DOFade(MusicVolume, TransitionTimes);
         
         _layer4Tween?.Kill();
-        _layer4Tween = Layers[3].DOFade(1f, TransitionTimes);
+        _layer4Tween = Layers[3].DOFade(MusicVolume, TransitionTimes);
         
         _layer5Tween?.Kill();
-        _layer5Tween = Layers[4].DOFade(1f, TransitionTimes);
+        _layer5Tween = Layers[4].DOFade(MusicVolume, TransitionTimes);
     }
 
     public void SetDangerLayer(float amount)
@@ -88,8 +89,8 @@ public class MusicManager : MonoService
         _layer6Tween_combat?.Kill();
         _layer7Tween_combat_perc?.Kill();
         
-        _layer6Tween_combat = Layers[5].DOFade(1f, TransitionTimes);
-        _layer7Tween_combat_perc = Layers[6].DOFade(1f, TransitionTimes);
+        _layer6Tween_combat = Layers[5].DOFade(MusicVolume, TransitionTimes);
+        _layer7Tween_combat_perc = Layers[6].DOFade(MusicVolume, TransitionTimes);
     }
     
     public void DisableCombatLayers()

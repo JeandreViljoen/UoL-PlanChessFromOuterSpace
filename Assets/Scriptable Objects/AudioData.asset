@@ -57,6 +57,45 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 15535124745388f4ba6c5b6ecf1b1cb0, type: 3}
   Lightning:
   - {fileID: 8300000, guid: 358ed089946596c41a24f91a8b23dbcb, type: 3}
+  FriendlySpawn:
+  - {fileID: 8300000, guid: 563839301cb86724491f058670b426dd, type: 3}
+  - {fileID: 8300000, guid: f2c8ba3ecfd9bb949b985aa449e97865, type: 3}
+  - {fileID: 8300000, guid: ee9ed449f8539f04d827f734cb71dec5, type: 3}
+  - {fileID: 8300000, guid: c87bee70a257e654fb20058580368608, type: 3}
+  - {fileID: 8300000, guid: 865969a87b1f2b848ba9cfccea672b05, type: 3}
+  - {fileID: 8300000, guid: 8c4ae2fb256715a4a936bd1971bf7cb0, type: 3}
+  EnemySpawn:
+  - {fileID: 8300000, guid: 7f85c41a881bdf24ab3085653216743e, type: 3}
+  - {fileID: 8300000, guid: ddbf5f1d0eaf75744b96d380971fd961, type: 3}
+  - {fileID: 8300000, guid: 78df1a41ca01a964d9a6e7e90f295fa0, type: 3}
+  - {fileID: 8300000, guid: 36a1c7207c8444941b25126803d7a104, type: 3}
+  - {fileID: 8300000, guid: 7f8846f0c803c564390d4aa41b2255c4, type: 3}
+  - {fileID: 8300000, guid: 41e44fa264c00db4db5d07fb0c3fa5ad, type: 3}
+  FriendlyDeath:
+  - {fileID: 8300000, guid: d8c94d372cebfb84faa39f423413bbd5, type: 3}
+  - {fileID: 8300000, guid: c8cc33292fb9e1b489ab06dd75d3871e, type: 3}
+  - {fileID: 8300000, guid: 68e1ca7183139af47bd364478a603fbe, type: 3}
+  - {fileID: 8300000, guid: b06cfca83358418459c4f888dea50486, type: 3}
+  - {fileID: 8300000, guid: 590644cf158a6444092b8bcea7bd7876, type: 3}
+  - {fileID: 8300000, guid: b64e8f08578844049b5922a167b51b6a, type: 3}
+  EnemyDeath:
+  - {fileID: 8300000, guid: fdc9379e170268a4c9ff7ba9da733520, type: 3}
+  - {fileID: 8300000, guid: f95e73659201cca4fac190875396568f, type: 3}
+  - {fileID: 8300000, guid: ac5c5454d18323e4e8e345c948a631d4, type: 3}
+  - {fileID: 8300000, guid: 306b0d23cdf52f746ad0aabe43e58bb8, type: 3}
+  - {fileID: 8300000, guid: c82564e6eb5f1024ebd59c5c9c8f2a3e, type: 3}
+  - {fileID: 8300000, guid: c6d6c388f2bc552438c4df27f1c96b5e, type: 3}
+  Spaceship:
+  - {fileID: 8300000, guid: bcda95bbcb309564d8c08b29ad63db35, type: 3}
+  - {fileID: 8300000, guid: b96c2cee5e75b734b9f957bc3ea9fc66, type: 3}
+  - {fileID: 8300000, guid: 57eabfb3a7727964a9ee55fc2b4709d3, type: 3}
+  - {fileID: 8300000, guid: 7e66e7a3d97398345bae3e64cc8cba39, type: 3}
+  - {fileID: 8300000, guid: 4b698f48339a1f940a9b1316c8bb9acd, type: 3}
+  - {fileID: 8300000, guid: fd859f208051bd4448d0948a7d03932f, type: 3}
+  Win:
+  - {fileID: 8300000, guid: 3af262ff78d8eb64db95099301256e4b, type: 3}
+  Lose:
+  - {fileID: 8300000, guid: c7873303f0a12b9449fb8d4a7121ac14, type: 3}
   EnemyActivate:
   - {fileID: 8300000, guid: f801b0f5ff935cc4abe65f8c2c078580, type: 3}
   - {fileID: 8300000, guid: 2d4f35039b28f2e4bb188d6ea119b34f, type: 3}

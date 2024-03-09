@@ -892,20 +892,27 @@ public class ChessPiece : MonoBehaviour
 
     private void Killed()
     {
+        BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXDeathPrefab).GetComponent<BeamController>();
+        beam.transform.position = AssignedSquare.CenterSurfaceTransform.position;
+        beam.Order = 7 - AssignedSquare.IndexX + 1;
+        beam.PlayVFX();
 
         if (Team == Team.Enemy)
         {
             int currency = _currencyManager.Value.RequestCaptureReward(this);
             InitFloatingCurrency(currency);
             _scoreManager.Value.AddEnemyDestroyedToScore(this.PieceType);
+            _audioManager.Value.PlaySound(Sound.GAME_EnemyDeath, AssignedSquare.gameObject);
         }
         else
         {
+            _audioManager.Value.PlaySound(Sound.GAME_FriendlyDeath, AssignedSquare.gameObject);
             _scoreManager.Value.AlliedPieceDestroyed();
             if (PieceType == ChessPieceType.King)
             {
                 _stateManager.Value.GameState = GameState.LOSE;
             }
+            
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);

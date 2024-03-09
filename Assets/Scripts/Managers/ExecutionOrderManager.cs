@@ -118,8 +118,14 @@ public class ExecutionOrderManager : MonoService
                 ServiceLocator.GetService<HUDManager>().ShopMenu.Hide();
                 break;
             case GameState.WIN:
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
+                ServiceLocator.GetService<MusicManager>().SetDangerLayer(0f);
+                ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GAME_WIN);
                 break;
             case GameState.LOSE:
+                ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GAME_LOSE);
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
+                ServiceLocator.GetService<MusicManager>().SetDangerLayer(0f);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
