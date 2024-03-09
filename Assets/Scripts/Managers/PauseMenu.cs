@@ -27,6 +27,18 @@ public class PauseMenu : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (ServiceLocator.GetService<MenuManager>().IsPaused)
+            {
+                Resume();
+            }
+        }
+        
+    }
+
     public void Pause()
     {
         ServiceLocator.GetService<MenuManager>().IsPaused = true;

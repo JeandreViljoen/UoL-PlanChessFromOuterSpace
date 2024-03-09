@@ -35,6 +35,7 @@ public class CameraManager : MonoService
     public event Action<BoardSquare> OnCameraFocus;
     public event Action OnCameraTopDown;
     
+    private bool _isFocused = false;
     
     private void Awake()
     {
@@ -49,12 +50,21 @@ public class CameraManager : MonoService
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            ResetCameraPosition();
+            if (_isFocused)
+            {
+                ResetCameraPosition();
+            }
+            else
+            {
+                ServiceLocator.GetService<MenuManager>().PauseMenu.Pause();
+            }
+            
         }
     }
 
     public void ResetCameraPosition()
     {
+        _isFocused = false;
         LightsOn();
         _tweenPosition?.Kill();
         _tweenRotation?.Kill();
@@ -74,6 +84,7 @@ public class CameraManager : MonoService
 
     public void FocusTile(ChessPiece piece)
     {
+        _isFocused = true;
         LightsOff();
         BoardSquare tile = piece.AssignedSquare;
 
