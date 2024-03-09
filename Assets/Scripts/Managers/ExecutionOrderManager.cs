@@ -40,7 +40,8 @@ public class ExecutionOrderManager : MonoService
         _unitOrder.Clear();
         foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
-            .ThenBy(piece => piece.Team).ThenByDescending(piece => piece.Level))
+            .ThenBy(piece => piece.Team)
+            .ThenByDescending(piece => piece.Level))
         {
             _unitOrder.AddLast(piece);
         }
@@ -105,10 +106,14 @@ public class ExecutionOrderManager : MonoService
                 break;
             case GameState.START:
                 break;
+            case GameState.SPAWN:
+                break;
             case GameState.PREP:
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
                 StartPrep();
                 break;
             case GameState.COMBAT:
+                ServiceLocator.GetService<MusicManager>().EnableCombatLayers();
                 _boardManager.Value.CancelBuyUnit();
                 ServiceLocator.GetService<HUDManager>().ShopMenu.Hide();
                 break;

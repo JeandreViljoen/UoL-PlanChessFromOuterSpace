@@ -65,6 +65,7 @@ public class StatsUI : MonoBehaviour
         {
             return;
         }
+
         _scoreManager.UpdateStats();
         Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.GetPiecesDestroyed();
 

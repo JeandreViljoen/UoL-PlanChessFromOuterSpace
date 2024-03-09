@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class AudioManager : MonoService
 {
-    
+    public bool IsMainMenu = false;
     // --- AudioSource for playing audios
     public GameObject AudioObject;
     private AudioSource _soundEffectAudioSource;
@@ -27,7 +27,7 @@ public class AudioManager : MonoService
         _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>();
 
         // Init background music
-        PlayMusic(Music.Track1);
+        //PlayMusic(Music.Track1);
         
         _isInitialized = true;
     }

@@ -15,7 +15,7 @@ MonoBehaviour:
   StartCurrency: 150
   CurrencyEarnedPerRound: 50
   UpgradeCostIncrease: 50
-  AdditionalCurrencyRewardPerLevel: 5
+  AdditionalCurrencyRewardPerLevel: 10
   QueenReward: 50
   RookReward: 25
   KnightReward: 35
@@ -23,8 +23,8 @@ MonoBehaviour:
   PawnReward: 10
   KingReward: 0
   QueenCost: 150
-  RookCost: 75
-  KnightCost: 100
+  RookCost: 100
+  KnightCost: 75
   BishopCost: 75
   PawnCost: 50
   KingCost: 0
