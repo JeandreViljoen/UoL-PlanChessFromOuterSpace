@@ -40,7 +40,7 @@ public class ExecutionOrderManager : MonoService
         _unitOrder.Clear();
         foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
-            .ThenBy(piece => piece.Team))
+            .ThenBy(piece => piece.Team).ThenByDescending(piece => piece.Level))
         {
             _unitOrder.AddLast(piece);
         }

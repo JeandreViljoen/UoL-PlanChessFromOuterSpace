@@ -19,7 +19,7 @@ public class UnitOrderTimelineController : MonoService
     private List<TimelineNode> _nodes = new List<TimelineNode>();
 
     private int _nodeOffset;
-    private int _maxNodeOffset;
+    public int _maxNodeOffset;
 
     public int NodeOffset
     {
@@ -29,8 +29,9 @@ public class UnitOrderTimelineController : MonoService
         }
         set
         {
-            setMaxOffset();
             
+            setMaxOffset();
+
             int validatedOffset = 0;
             if (value > 0)
             {
@@ -47,7 +48,13 @@ public class UnitOrderTimelineController : MonoService
     {
         switch (ServiceLocator.GetService<GameStateManager>().GameState)
         {
+            case GameState.TRANSITION:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
             case GameState.START:
+                _maxNodeOffset = _nodes.Count - NodeSlots.Count;
+                break;
+            case GameState.SPAWN:
                 _maxNodeOffset = _nodes.Count - NodeSlots.Count;
                 break;
             case GameState.PREP:
@@ -65,7 +72,8 @@ public class UnitOrderTimelineController : MonoService
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        
+
+        if (_maxNodeOffset < 0) _maxNodeOffset = 0;
     }
 
     void Start()
@@ -94,7 +102,7 @@ public class UnitOrderTimelineController : MonoService
     public void InitTimeline()
     {
         ClearTimeline();
-        
+
         foreach (ChessPiece unit in _orderManager.Value.UnitOrder)
         {
             TimelineNode node = Instantiate(TimelineNodePrefab, transform).GetComponent<TimelineNode>();
@@ -120,8 +128,8 @@ public class UnitOrderTimelineController : MonoService
                 _nodes[i].MoveNode(NodeSlots[i], 0.5f);
                 yield return new WaitForSeconds(0.2f);
             }
-            
         }
+        NodeOffset = 0;
     }
 
     private void ClearTimeline()
@@ -172,9 +180,7 @@ public class UnitOrderTimelineController : MonoService
             {
                 _nodes.Remove(correctUnit.TimelineNode);
                 _nodes.Insert(i, correctUnit.TimelineNode);
-
-                //_nodes[i].Piece = correctUnit;
-                //correctUnit.TimelineNode = _nodes[i];
+                
             } 
         }
         RefreshTimelinePositions();
