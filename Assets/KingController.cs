@@ -20,6 +20,7 @@ public class KingController : MonoBehaviour
     void Start()
     {
         _tweenKingPrompt = _deployKingPrompt.DOFade(0f, 00001f).SetUpdate(true);
+        gameObject.SetActive(false);
     }
 
     

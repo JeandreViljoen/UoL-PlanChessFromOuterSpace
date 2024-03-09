@@ -27,6 +27,7 @@ public class HUDManager : MonoService
         RefreshCurrencyDisplay(0);
         LosePrompt.SetActive(false);
         CancelDeploymentText.gameObject.SetActive(false);
+        ServiceLocator.GetService<GameStateManager>().OnStateChanged += (state) => { if(state == GameState.PREP) KingController.gameObject.SetActive(true); };
     }
 
     private void RefreshCurrencyDisplay(int amount)

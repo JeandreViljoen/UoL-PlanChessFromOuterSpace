@@ -27,6 +27,7 @@ public class ShopManagerScript : MonoService
         //When currency added/removed, fire RefreshCurrencyField function
         _currencyManager.Value.OnCurrencyAdded += RefreshCurrencyField; 
         _currencyManager.Value.OnCurrencyRemoved += RefreshCurrencyField;
+        HideInstant();
     }
 
     void RefreshCurrencyField(int _)
@@ -51,5 +52,11 @@ public class ShopManagerScript : MonoService
     {
         _tweenMove.Kill();
         _tweenMove = transform.DOLocalMove(_showPos + Vector3.right * 500f, 0.2f).SetEase(Ease.InOutSine);
+    }
+    
+    public void HideInstant()
+    {
+        _tweenMove.Kill();
+        _tweenMove = transform.DOLocalMove(_showPos + Vector3.right * 500f, 0.00001f).SetEase(Ease.InOutSine);
     }
 }
