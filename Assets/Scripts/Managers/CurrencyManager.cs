@@ -21,6 +21,17 @@ public class CurrencyManager : MonoService
          
      }
 
+    private void Update()
+    {
+        if (GlobalDebug.Instance.AllowCheats)
+        {
+            if(Input.GetKeyDown(KeyCode.C))
+            {
+                AddCurrency(100);
+            }
+        }
+    }
+
     /// <summary>
     /// Adds currency.
     /// </summary>

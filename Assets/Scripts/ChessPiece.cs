@@ -319,8 +319,105 @@ public class ChessPiece : MonoBehaviour
         newMoves.Add(new Vector2(0,0));
         
         //TODO: Logic for other pieces.
-        
-        if (PieceType == ChessPieceType.King)
+        if (PieceType == ChessPieceType.Pawn)
+        {
+            if (Range == 1)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+
+            if (_range == 2)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range == 3)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range == 4)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range > 4)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+        }
+        else if (PieceType == ChessPieceType.King)
         {
             //TODO: KING logic 
         }
