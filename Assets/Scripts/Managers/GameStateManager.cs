@@ -66,7 +66,7 @@ public class GameStateManager : MonoService
                 case GameState.PREP:
                     
                     
-                    _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound); ;
+                    _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _boardManager.Value.CheckIfKingIsInCheck();
                     break;
                 case GameState.COMBAT:
