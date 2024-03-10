@@ -4784,6 +4784,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: DebugUI
       objectReference: {fileID: 0}
+    - target: {fileID: 256559306390298162, guid: fc81ee6fdb1211144acf13914dfff821,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 5981938756667312447, guid: fc81ee6fdb1211144acf13914dfff821, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fc81ee6fdb1211144acf13914dfff821, type: 3}
@@ -4808,6 +4813,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HUDManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453172, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 498679407633453173, guid: be40eae696d6ec94494a9284d19172af,
         type: 3}
