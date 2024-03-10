@@ -40,7 +40,8 @@ public class ExecutionOrderManager : MonoService
         _unitOrder.Clear();
         foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
-            .ThenBy(piece => piece.Team))
+            .ThenBy(piece => piece.Team)
+            .ThenByDescending(piece => piece.Level))
         {
             _unitOrder.AddLast(piece);
         }
@@ -105,16 +106,26 @@ public class ExecutionOrderManager : MonoService
                 break;
             case GameState.START:
                 break;
+            case GameState.SPAWN:
+                break;
             case GameState.PREP:
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
                 StartPrep();
                 break;
             case GameState.COMBAT:
+                ServiceLocator.GetService<MusicManager>().EnableCombatLayers();
                 _boardManager.Value.CancelBuyUnit();
                 ServiceLocator.GetService<HUDManager>().ShopMenu.Hide();
                 break;
             case GameState.WIN:
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
+                ServiceLocator.GetService<MusicManager>().SetDangerLayer(0f);
+                ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GAME_WIN);
                 break;
             case GameState.LOSE:
+                ServiceLocator.GetService<AudioManager>().PlaySound(Sound.GAME_LOSE);
+                ServiceLocator.GetService<MusicManager>().DisableCombatLayers();
+                ServiceLocator.GetService<MusicManager>().SetDangerLayer(0f);
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);

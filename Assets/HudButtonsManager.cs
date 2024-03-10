@@ -27,6 +27,9 @@ public class HudButtonsManager : MonoBehaviour
 
     public float ButtonHideSpeed = 0.15f;
 
+    public Sprite PauseIcon;
+    public Sprite PlayIcon;
+
     private void Awake()
     {
         _fightButtonStartPos = FightButton.transform.localPosition;
@@ -53,8 +56,17 @@ public class HudButtonsManager : MonoBehaviour
 
     void OnPauseButtonPressed()
     {
+        if (_menuManager.Value.IsPaused)
+        {
+            PauseButton.image.sprite = PauseIcon;
+            _menuManager.Value.PauseMenu.Resume();
+        }
+        else
+        {
+            PauseButton.image.sprite = PlayIcon;
+            _menuManager.Value.PauseMenu.Pause();
+        }
         _audioManager.Value.PlaySound(Sound.PauseButton, PauseButton.gameObject);
-        _menuManager.Value.PauseMenu.Pause();
     }
     
     void OnFightButtonPressed()

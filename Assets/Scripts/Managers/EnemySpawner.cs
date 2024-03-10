@@ -54,7 +54,7 @@ public class EnemySpawner : MonoService
         }
         
         // Spawning Sound
-        _audioManager.Value.PlaySound(Sound.Lightning, this.gameObject);
+        _audioManager.Value.PlaySound(Sound.GAME_EnemySpawn, this.gameObject);
 
         // Once spawning is finished, transition to preparation phase
         _gameStateManager.Value.GameState = GameState.PREP;

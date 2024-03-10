@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5083236225713538302}
   - component: {fileID: 1359040073038968300}
   - component: {fileID: 7230680473707038190}
-  - component: {fileID: 9148729791784837694}
   - component: {fileID: 7860424947888039071}
   m_Layer: 0
   m_Name: SpeedIcon
@@ -75,11 +74,11 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1676477277
-  m_SortingLayer: 3
-  m_SortingOrder: 0
+  m_SortingLayerID: -668679765
+  m_SortingLayer: 2
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 297cd3b4f2fe8bc4f8c9fbd9720908c9, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.6509804}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -101,19 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830807f84634b0649840d3c8cef3756e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!65 &9148729791784837694
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7506098704713042362}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 6.750001, y: 6, z: 0.20000003}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7860424947888039071
 MonoBehaviour:
   m_ObjectHideFlags: 0

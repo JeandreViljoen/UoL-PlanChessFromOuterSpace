@@ -8,10 +8,12 @@ public class GlobalDebug : ScriptableObjectSingleton<GlobalDebug>
    public bool ShowIndexCodes;
    public bool ShowGameState;
    public bool PopulateBoardOnStart;
+   public bool ShowNodeOffsetValues;
    [Range(0,1)] public float ChanceToPopulateTile;
 
    public Color HighlightColor;
    public Color EnemyTintColor;
 
    public bool ShowCombatMessageLogs;
+   public bool AllowCheats;
 }

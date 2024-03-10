@@ -65,6 +65,7 @@ public class StatsUI : MonoBehaviour
         {
             return;
         }
+
         _scoreManager.UpdateStats();
         Dictionary<ChessPieceType, int> _piecesDestroyed = _scoreManager.GetPiecesDestroyed();
 
@@ -83,5 +84,10 @@ public class StatsUI : MonoBehaviour
     public void CloseUI()
     {
         gameObject.SetActive(false);
+    }
+
+    public void ToggleUI()
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
     }
 }

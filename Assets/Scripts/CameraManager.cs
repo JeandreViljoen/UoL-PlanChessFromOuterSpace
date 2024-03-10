@@ -28,11 +28,14 @@ public class CameraManager : MonoService
     public float FocusXRotation;
     public float FocusFOV;
 
+    public GameObject Spaceship;
+
     private EasyService<AudioManager> _audioManager;
 
     public event Action<BoardSquare> OnCameraFocus;
     public event Action OnCameraTopDown;
     
+    private bool _isFocused = false;
     
     private void Awake()
     {
@@ -47,12 +50,21 @@ public class CameraManager : MonoService
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            ResetCameraPosition();
+            if (_isFocused)
+            {
+                ResetCameraPosition();
+            }
+            else
+            {
+                ServiceLocator.GetService<MenuManager>().PauseMenu.Pause();
+            }
+            
         }
     }
 
     public void ResetCameraPosition()
     {
+        _isFocused = false;
         LightsOn();
         _tweenPosition?.Kill();
         _tweenRotation?.Kill();
@@ -72,6 +84,7 @@ public class CameraManager : MonoService
 
     public void FocusTile(ChessPiece piece)
     {
+        _isFocused = true;
         LightsOff();
         BoardSquare tile = piece.AssignedSquare;
 
@@ -89,6 +102,7 @@ public class CameraManager : MonoService
         _tweenFOV = _mainCam.DOFieldOfView(FocusFOV, TransitionSpeed).SetEase(Ease.InOutSine);
 
         _audioManager.Value.PlaySound(Sound.FocusTile, _mainCam.gameObject);
+        _audioManager.Value.PlaySound(Sound.GAME_Spaceship, Spaceship);
         OnCameraFocus?.Invoke(tile);
     }
 

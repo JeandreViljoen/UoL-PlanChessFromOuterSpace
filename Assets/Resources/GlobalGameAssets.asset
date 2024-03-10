@@ -43,4 +43,6 @@ MonoBehaviour:
     type: 3}
   BeamVFXShortPrefab: {fileID: 8790263891196841391, guid: 802e1bf47408a8d48b91a52c80131de7,
     type: 3}
+  BeamVFXDeathPrefab: {fileID: 8309889200419173618, guid: f47733a541a80104ba51c81b07795ae1,
+    type: 3}
   ChessPieceAnimateSpeed: 0.5

@@ -25,6 +25,15 @@ public class AudioData : ScriptableObject
     public List<AudioClip> FailSound;
     public List<AudioClip> Lightning;
     
+    
+    public List<AudioClip> FriendlySpawn;
+    public List<AudioClip> EnemySpawn;
+    public List<AudioClip> FriendlyDeath;
+    public List<AudioClip> EnemyDeath;
+    public List<AudioClip> Spaceship;
+    public List<AudioClip> Win;
+    public List<AudioClip> Lose;
+    
     [Header("Enemies")]
     public List<AudioClip> EnemyActivate;
     public List<AudioClip> EnemyMove;
@@ -50,6 +59,15 @@ public enum Sound
     UI_CameraMove,
     UI_Deny,
     Lightning,
+    
+    GAME_FriendlySpawn,
+    GAME_FriendlyDeath,
+    GAME_EnemySpawn,
+    GAME_EnemyDeath,
+    GAME_Spaceship,
+    GAME_WIN,
+    GAME_LOSE,
+    
     
     ENEMY_Move,
     ENEMY_Activate

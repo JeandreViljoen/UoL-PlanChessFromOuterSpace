@@ -54,18 +54,18 @@ public class BeamController : MonoBehaviour
             beamRNG = Random.Range(0, _beamSprites.Count);
             floorRNG = Random.Range(0, _floorSprites.Count);
 
-            _beamRenderer.sprite = _beamSprites[beamRNG];
+            if(_beamSprites!= null && _beamSprites.Count > 0) _beamRenderer.sprite = _beamSprites[beamRNG];
             _floorRenderer.sprite = _floorSprites[floorRNG];
 
             colorRNG = Random.Range(0,2);
 
             if (colorRNG == 0)
             {
-                _beamRenderer.color = Color.white;
+                if(_beamSprites!= null && _beamSprites.Count > 0) _beamRenderer.color = Color.white;
             }
             else
             {
-                _beamRenderer.color = GlobalGameAssets.Instance.HighlightColor;
+                if(_beamSprites!= null && _beamSprites.Count > 0)  _beamRenderer.color = GlobalGameAssets.Instance.HighlightColor;
             }
             
             colorRNG = Random.Range(0,2);

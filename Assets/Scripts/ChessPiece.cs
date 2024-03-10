@@ -102,6 +102,7 @@ public class ChessPiece : MonoBehaviour
             if (_speedIconUIController != null)
             {
                 _speedIconUIController.Speed = _speed;
+                if(PieceType == ChessPieceType.King) _speedIconUIController.gameObject.SetActive(false);
                 UpdateLevel();
 
                 if (!_boardManager.Value.IsBuying())
@@ -135,9 +136,10 @@ public class ChessPiece : MonoBehaviour
             if (_rangeIconUIController != null)
             {
                 _rangeIconUIController.Range = _range;
+                if(PieceType == ChessPieceType.King) _rangeIconUIController.gameObject.SetActive(false);
             }
 
-            if (AssignedSquare != null) UpdateMoveset();
+            if(AssignedSquare != null) UpdateMoveset();
             UpdateLevel();
         }
     }
@@ -382,8 +384,105 @@ public class ChessPiece : MonoBehaviour
         newMoves.Add(new Vector2(0, 0));
 
         //TODO: Logic for other pieces.
+        if (PieceType == ChessPieceType.Pawn)
+        {
+            if (Range == 1)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
 
-        if (PieceType == ChessPieceType.King)
+            if (_range == 2)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range == 3)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -1; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range == 4)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+            
+            if (_range > 4)
+            {
+                foreach (var move in BaseRelativeMoveset)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+                
+                foreach (var move in _data.UniqueRelativeAttackSet)
+                {
+                    //Add a tile for the amount of "range"
+                    for (int i = 1; i <= _range -2; i++)
+                    {
+                        newMoves.Add(move * i);
+                    }
+                }
+            }
+        }
+        else if (PieceType == ChessPieceType.King)
         {
             //TODO: KING logic 
         }
@@ -860,20 +959,27 @@ public class ChessPiece : MonoBehaviour
     /// </summary>
     private void Killed()
     {
+        BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXDeathPrefab).GetComponent<BeamController>();
+        beam.transform.position = AssignedSquare.CenterSurfaceTransform.position;
+        beam.Order = 7 - AssignedSquare.IndexX + 1;
+        beam.PlayVFX();
 
         if (Team == Team.Enemy)
         {
             int currency = _currencyManager.Value.RequestCaptureReward(this);
             InitFloatingCurrency(currency);
             _scoreManager.Value.AddEnemyDestroyedToScore(this.PieceType);
+            _audioManager.Value.PlaySound(Sound.GAME_EnemyDeath, AssignedSquare.gameObject);
         }
         else
         {
+            _audioManager.Value.PlaySound(Sound.GAME_FriendlyDeath, AssignedSquare.gameObject);
             _scoreManager.Value.AlliedPieceDestroyed();
             if (PieceType == ChessPieceType.King)
             {
                 _stateManager.Value.GameState = GameState.LOSE;
             }
+            
         }
         ServiceLocator.GetService<BoardManager>().DestroyPiece(this);
         Destroy(gameObject);
@@ -895,7 +1001,7 @@ public class ChessPiece : MonoBehaviour
         }
         _light.color = Color.white;
         _tweenLight?.Kill();
-        _light.DOIntensity(0.5f, 0.5f);
+        _light.DOIntensity(0.0f, 0.5f);
     }
 
     public void SetLightEnabled(bool flag)

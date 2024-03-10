@@ -14,6 +14,7 @@ public class TimelineNode : MonoBehaviour
     [SerializeField] private Image _portraitBorder;
     [SerializeField] private Image _portrait;
     [SerializeField] private TimelineSpeedIcons _speedIcons;
+    [SerializeField] private TimelineRangeIcons _rangeIcons;
     [SerializeField] private TextMeshProUGUI _levelText;
     [SerializeField] private GameObject _panelsContainer;
      private Vector3 _panelsContainerBasePosition;
@@ -61,6 +62,7 @@ public class TimelineNode : MonoBehaviour
     public void RefreshPiece()
     {
         _speedIcons.IconsToShow = Piece.Speed;
+        _rangeIcons.IconsToShow = Piece.Range;
         _levelText.text = $"LEVEL {Piece.Level}";
     }
 
@@ -69,11 +71,18 @@ public class TimelineNode : MonoBehaviour
         Piece.TimelineNode = this;
         _portrait.sprite = Piece.Portrait;
         _speedIcons.IconsToShow = Piece.Speed;
+        _rangeIcons.IconsToShow = Piece.Range;
         _levelText.text = $"LEVEL {Piece.Level}";
         _levelText.color = Piece.Team == Team.Friendly
             ? GlobalGameAssets.Instance.HighlightColor
             : GlobalDebug.Instance.EnemyTintColor;
-        
+        if (Piece.PieceType == ChessPieceType.King)
+        {
+            _speedIcons.gameObject.SetActive(false);
+            _rangeIcons.gameObject.SetActive(false);
+            _levelText.text = $"KING";
+            _portraitBorder.color = new Color(1f,1f,1f, 0.05f);
+        }
     }
 
     public void MoveNode(Transform node, float speed)

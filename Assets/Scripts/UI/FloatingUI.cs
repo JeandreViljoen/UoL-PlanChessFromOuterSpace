@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class FloatingUI : MonoBehaviour
 {
-
     public float FloatScale = 2.0f;
     public float SpeedMultiplier = 0.5f;
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+   
     void Update()
     {
         float variatonInSize = Mathf.PingPong(Time.time * SpeedMultiplier, FloatScale) + 1;

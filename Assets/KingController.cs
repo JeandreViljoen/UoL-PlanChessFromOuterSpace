@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Services;
 using TMPro;
 using UnityEngine;
 
@@ -20,6 +21,7 @@ public class KingController : MonoBehaviour
     void Start()
     {
         _tweenKingPrompt = _deployKingPrompt.DOFade(0f, 00001f).SetUpdate(true);
+        gameObject.SetActive(false);
     }
 
     
@@ -30,6 +32,7 @@ public class KingController : MonoBehaviour
 
     public void ShowDeployKingPrompt()
     {
+        ServiceLocator.GetService<AudioManager>().PlaySound(Sound.UI_Deny);
         _tweenKingPrompt?.Kill();
         Sequence s = DOTween.Sequence();
         s.Append(_deployKingPrompt.DOFade(1f, 0.1f).SetEase(Ease.InOutSine));
