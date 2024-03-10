@@ -1,13 +1,15 @@
-﻿using System;using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Services;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
-// Enum containing all the possible chess pieces
+/// <summary>
+/// Denotes the type of a piece.
+/// </summary>
 public enum ChessPieceType
 {
     Pawn,
@@ -18,12 +20,24 @@ public enum ChessPieceType
     King
 }
 
+/// <summary>
+/// Denotes the team of a piece.
+/// </summary>
 public enum Team
 {
+    /// <summary>
+    /// The King and player-placed units.
+    /// </summary>
     Friendly,
+    /// <summary>
+    /// Computer-placed units.
+    /// </summary>
     Enemy
 }
 
+/// <summary>
+/// Denotes the state of a chess piece when moving.
+/// </summary>
 public enum ChessPieceState
 {
     INACTIVE,
@@ -33,21 +47,27 @@ public enum ChessPieceState
     ATTACK,
     DEAD,
     END
-
 }
 
+/// <summary>
+/// Represents an automatically controlled, chess-piece like unit.
+/// </summary>
 public class ChessPiece : MonoBehaviour
 {
-#region Properties
+    #region Properties
 
-// --------------- Member variables and data --------------- //
+    /// <summary>
+    /// The type of the piece.
+    /// </summary>
     public ChessPieceType PieceType;
-    public SpriteRenderer Sprite;
-    public SpriteRenderer SpriteHighlights;
-    [HideInInspector] public Sprite Portrait;
+    /// <summary>
+    /// The team of the piece.
+    /// </summary>
+    public Team Team;
 
-    private ChessPieceState _state;
-
+    /// <summary>
+    /// The current state of a chess piece.
+    /// </summary>
     public ChessPieceState State
     {
         get
@@ -60,9 +80,11 @@ public class ChessPiece : MonoBehaviour
             RunStateLogic(_state);
         }
     }
-    
-    private ChessPieceData _data;
-    private int _speed;
+    private ChessPieceState _state;
+
+    /// <summary>
+    /// Gets or sets the priority of the piece.
+    /// </summary>
     public int Speed
     {
         get
@@ -88,57 +110,15 @@ public class ChessPiece : MonoBehaviour
                     ServiceLocator.GetService<ExecutionOrderManager>().RefreshTimelineOrder();
                     ServiceLocator.GetService<UnitOrderTimelineController>().RefreshListIndices();
                 }
-               
+
             }
         }
     }
+    private int _speed;
 
-    public int Level { get; private set; }
-    public BoardSquare AssignedSquare;
-
-    private bool IsCheckingKing = false;
-
-    private float UnitValue;// => Level, type
-
-    private bool _isSelected;
-    public bool IsSelected
-    {
-        get
-        {
-            return _isSelected;
-        }
-        set
-        {
-            _isSelected = value;
-
-            if (_isSelected)
-            {
-                Selected();
-            }
-            else
-            {
-                Deselected();
-            }
-        }
-    }
-
-    private int _range;
-    private Coroutine _highlightRoutine;
-
-    private Tween _highlightMoveTween;
-    private Vector3 _spritePosition;
-
-    private SpeedIconUIController _speedIconUIController;
-    [SerializeField] private RangeIconUIController _rangeIconUIController;
-    private UpgradeButtonUIController _upgradeButtonUIController;
-
-    private EasyService<CurrencyManager> _currencyManager;
-    private EasyService<AI> _ai;
-    private EasyService<AudioManager> _audioManager;
-    private EasyService<ScoreManager> _scoreManager;
-    private EasyService<GameStateManager> _stateManager;
-    private EasyService<BoardManager> _boardManager;
-
+    /// <summary>
+    /// Gets or sets the move range of the piece.
+    /// </summary>
     public int Range
     {
         get
@@ -163,13 +143,46 @@ public class ChessPiece : MonoBehaviour
             UpdateLevel();
         }
     }
-    public List<Vector2> RelativeMoveset;
-    public List<Vector2> BaseRelativeMoveset;
-    private List<BoardSquare> _possibleInteractableTiles = new List<BoardSquare>();
-    public List<BoardSquare> LastHighlightedTiles = new List<BoardSquare>();
+    private int _range;
 
-    [HideInInspector] public TimelineNode TimelineNode;
+    /// <summary>
+    /// Gets the level of the piece.
+    /// </summary>
+    public int Level { get; private set; }
 
+    /// <summary>
+    /// Gets or sets if the piece is selected.
+    /// </summary>
+    public bool IsSelected
+    {
+        get
+        {
+            return _isSelected;
+        }
+        set
+        {
+            _isSelected = value;
+
+            if (_isSelected)
+            {
+                Selected();
+            }
+            else
+            {
+                Deselected();
+            }
+        }
+    }
+    private bool _isSelected;
+
+    /// <summary>
+    /// Intended for the piece value of the unit.
+    /// </summary>
+    private float UnitValue;// => Level, type
+
+    /// <summary>
+    /// Gets the tiles this piece can move to.
+    /// </summary>
     public List<BoardSquare> PossibleInteractableTiles
     {
         get
@@ -182,8 +195,43 @@ public class ChessPiece : MonoBehaviour
             _possibleInteractableTiles = value;
         }
     }
+    private List<BoardSquare> _possibleInteractableTiles = new List<BoardSquare>();
+
+    /// <summary>
+    /// Gets the possible moves of this piece relative to itself.
+    /// </summary>
+    public List<Vector2> RelativeMoveset;
+    public List<Vector2> BaseRelativeMoveset;
+    public List<BoardSquare> LastHighlightedTiles = new List<BoardSquare>();
+
+    public SpriteRenderer Sprite;
+    public SpriteRenderer SpriteHighlights;
+    [HideInInspector] public Sprite Portrait;
+
+    private ChessPieceData _data;
+
+    public BoardSquare AssignedSquare;
+
+    private bool IsCheckingKing = false;
+
+    private Coroutine _highlightRoutine;
+
+    private Tween _highlightMoveTween;
+    private Vector3 _spritePosition;
+
+    private SpeedIconUIController _speedIconUIController;
+    [SerializeField] private RangeIconUIController _rangeIconUIController;
+    private UpgradeButtonUIController _upgradeButtonUIController;
+
+    private EasyService<CurrencyManager> _currencyManager;
+    private EasyService<AI> _ai;
+    private EasyService<AudioManager> _audioManager;
+    private EasyService<ScoreManager> _scoreManager;
+    private EasyService<GameStateManager> _stateManager;
+    private EasyService<BoardManager> _boardManager;
+
+    [HideInInspector] public TimelineNode TimelineNode;
     private float _animateSpeed;
-    public Team Team;
 
     [SerializeField] private Light _light;
     [SerializeField] private float _lightIntensity = 3f;
@@ -215,9 +263,9 @@ public class ChessPiece : MonoBehaviour
         {
             return;
         }
-        
+
         _upgradeButtonUIController = GetComponentInChildren<UpgradeButtonUIController>();
-        if (_upgradeButtonUIController!= null)
+        if (_upgradeButtonUIController != null)
         {
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown += OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown += OnRangeUpgradePressed;
@@ -231,17 +279,20 @@ public class ChessPiece : MonoBehaviour
     {
         //Takes into account Range and Speed to determine level
         //Will not return less than 1
-       // Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
-       Level = Speed + (Range) - 1;
-        if(TimelineNode != null) TimelineNode.RefreshPiece();
+        // Level = Mathf.Max(1, (Range - 1) + (Speed - 1)); 
+        Level = Speed + (Range) - 1;
+        if (TimelineNode != null) TimelineNode.RefreshPiece();
     }
 
-    //Handles Speed Upgrade Logic
+    /// <summary>
+    /// Run when the upgrade speed button is clicked.
+    /// </summary>
+    /// <param name="_"></param>
     private void OnSpeedUpgradePressed(PointerEventData _)
     {
         //TODO: Validation checks & limits
-        
-        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.SpeedButton.Cost) )
+
+        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.SpeedButton.Cost))
         {
             Speed++;
             _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.SpeedButton.gameObject);
@@ -252,15 +303,18 @@ public class ChessPiece : MonoBehaviour
             //TODO: SHow feedback for not enough currency
             _audioManager.Value.PlaySound(Sound.UI_Deny, _upgradeButtonUIController.SpeedButton.gameObject);
         }
-        
+
     }
 
-    //Handles Range Upgrade Logic
+    /// <summary>
+    /// Run when the upgrade range button is clicked.
+    /// </summary>
+    /// <param name="_"></param>
     private void OnRangeUpgradePressed(PointerEventData _)
     {
         //TODO: Validation checks & limits
-        
-        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.RangeButton.Cost) )
+
+        if (_currencyManager.Value.TryRemoveCurrency(_upgradeButtonUIController.RangeButton.Cost))
         {
             Range++;
             _audioManager.Value.PlaySound(Sound.UI_UpgradeSuccess, _upgradeButtonUIController.RangeButton.gameObject);
@@ -271,9 +325,12 @@ public class ChessPiece : MonoBehaviour
             //TODO: SHow feedback for not enough currency
             _audioManager.Value.PlaySound(Sound.UI_Deny, _upgradeButtonUIController.RangeButton.gameObject);
         }
-        
+
     }
-    
+
+    /// <summary>
+    /// Initialize this piece.
+    /// </summary>
     public void Init()
     {
         //Fetch Data as assigned in inspector
@@ -283,12 +340,12 @@ public class ChessPiece : MonoBehaviour
         {
             Sprite.sprite = _data.Sprite;
             SpriteHighlights.sprite = _data.SpriteHighlights;
-           Color hColor = GlobalGameAssets.Instance.HighlightColor;
-           hColor.a = 0.3f;
-           SpriteHighlights.color = hColor;
-           SpriteHighlights.gameObject.SetActive(true);
+            Color hColor = GlobalGameAssets.Instance.HighlightColor;
+            hColor.a = 0.3f;
+            SpriteHighlights.color = hColor;
+            SpriteHighlights.gameObject.SetActive(true);
 
-           Portrait = _data.Portrait;
+            Portrait = _data.Portrait;
         }
         else
         {
@@ -296,7 +353,7 @@ public class ChessPiece : MonoBehaviour
             SpriteHighlights.gameObject.SetActive(false);
             Portrait = _data.EnemyPortrait;
         }
-        
+
         Speed = _data.DefaultSpeed;
         BaseRelativeMoveset = _data.BaseRelativeMoveset;
         Range = _data.DefaultRange; // Has to be retrieved after BaseRelativeMoveSet as it updates the moveset on this set method
@@ -309,17 +366,23 @@ public class ChessPiece : MonoBehaviour
         ServiceLocator.GetService<BoardManager>().SelectedUnit = pieceToSelect;
     }
 
+    /// <summary>
+    /// Force recalculation of the piece's moveset.
+    /// </summary>
     public void ForceUpdateMoveset()
     {
         UpdateMoveset();
     }
 
+    /// <summary>
+    /// Recalculate the piece's moveset.
+    /// </summary>
     private void UpdateMoveset()
     {
         List<Vector2> newMoves = new List<Vector2>();
         //Add bas tile
-        newMoves.Add(new Vector2(0,0));
-        
+        newMoves.Add(new Vector2(0, 0));
+
         //TODO: Logic for other pieces.
         if (PieceType == ChessPieceType.Pawn)
         {
@@ -444,7 +507,7 @@ public class ChessPiece : MonoBehaviour
     public List<Vector2> GetAbsoluteMovesetVectors()
     {
         List<Vector2> absoluteMoves = new List<Vector2>();
-        
+
         foreach (var relative in RelativeMoveset)
         {
             Vector2 position = new Vector2(AssignedSquare.IndexX, AssignedSquare.IndexZ);
@@ -454,7 +517,7 @@ public class ChessPiece : MonoBehaviour
             {
                 continue;
             }
-            
+
             absoluteMoves.Add(absolute);
         }
 
@@ -469,9 +532,9 @@ public class ChessPiece : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns a list of validated BoardSquares where this ChessPiece can move/attack.
+    /// Calculate a list of tiles this piece can move to.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>The list of tiles it can move to.</returns>
     public List<BoardSquare> GetAllPossibleMovesetTiles()
     {
         List<BoardSquare> tiles = new List<BoardSquare>();
@@ -482,7 +545,7 @@ public class ChessPiece : MonoBehaviour
             //(So the range does not extend beyond the blocked tiles)
             int rangeOffset = Range - (i % Range);
             if (rangeOffset == Range) rangeOffset = 0;
-            
+
             //Calculate the absolute position
             Vector2 position = new Vector2(AssignedSquare.IndexX, AssignedSquare.IndexZ);
             Vector2 absolute = RelativeMoveset[i] + position;
@@ -492,8 +555,8 @@ public class ChessPiece : MonoBehaviour
             if (absolute.x >= 0 && absolute.x <= 7 && absolute.y >= 0 && absolute.y <= 7)
             {
                 //Fetch tile at absolute position
-                BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)absolute.x,(int)absolute.y));
-                
+                BoardSquare tile = ServiceLocator.GetService<BoardManager>().GetTile(((int)absolute.x, (int)absolute.y));
+
                 if (tile != null)
                 {
                     //check own tile
@@ -510,7 +573,7 @@ public class ChessPiece : MonoBehaviour
                     else
                     {
                         //Add tile if different team, else dont add tile
-                        if (tile.ChessPieceAssigned.Team != Team) 
+                        if (tile.ChessPieceAssigned.Team != Team)
                         {
                             tiles.Add(tile);
                         }
@@ -519,7 +582,7 @@ public class ChessPiece : MonoBehaviour
                 }
             }
         }
-        return tiles; 
+        return tiles;
     }
 
     void Start()
@@ -529,10 +592,14 @@ public class ChessPiece : MonoBehaviour
 
         _boardManager.Value.OnKingChecked += CheckedLogic;
         _boardManager.Value.OnNoKingChecked += NotCheckedLogic;
-        
+
         SetUpEventHandlers();
     }
 
+    /// <summary>
+    /// Runs when the piece checks the king, and when the king is in check.
+    /// </summary>
+    /// <param name="piece"></param>
     private void CheckedLogic(ChessPiece piece)
     {
         if (piece == this)
@@ -549,6 +616,9 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Runs when the king ceases to be in check.
+    /// </summary>
     private void NotCheckedLogic()
     {
         IsCheckingKing = false;
@@ -571,7 +641,7 @@ public class ChessPiece : MonoBehaviour
         };
         Sprite.gameObject.GetComponent<MouseEventHandler>().OnMouseUp += (_) =>
         {
-           
+
         };
     }
 
@@ -582,7 +652,11 @@ public class ChessPiece : MonoBehaviour
         if (PieceType == ChessPieceType.King) return true;
         return false;
     }
-    
+
+    /// <summary>
+    /// Run when the piece is hovered over.
+    /// </summary>
+    /// <param name="_"></param>
     private void Highlight(PointerEventData _)
     {
         if (ValidateInteraction()) return;
@@ -595,6 +669,10 @@ public class ChessPiece : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Run when the mouse pointer leaves the piece.
+    /// </summary>
+    /// <param name="_"></param>
     private void UnHighlight(PointerEventData _)
     {
         UnHighlightTiles(PossibleInteractableTiles);
@@ -606,18 +684,18 @@ public class ChessPiece : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 
     /// <summary>
-    /// Moves Piece to given BoardSquare position in parameters
+    /// Move to the tile specified.
     /// </summary>
     /// <param name="BoardSquare"></param>
     public void MoveToBlock(BoardSquare square)
     {
         _audioManager.Value.PlaySound(Sound.ENEMY_Move, gameObject);
         Sequence s = DOTween.Sequence();
-        s.Append( transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine) );
+        s.Append(transform.DOMove(square.CenterSurfaceTransform.position, _animateSpeed).SetEase(Ease.InOutSine));
         s.AppendCallback(() =>
         {
             Sprite.sortingOrder = 7 - square.IndexX + 1;
@@ -634,12 +712,17 @@ public class ChessPiece : MonoBehaviour
         BoardSquare oldSquare = AssignedSquare;
         AssignedSquare = square;
         AssignedSquare.ChessPieceAssigned = this;
-        OnMoveEnd?.Invoke(square); 
-        
+        OnMoveEnd?.Invoke(square);
+
         oldSquare.ChessPieceAssigned = null;
-        
+
     }
 
+    /// <summary>
+    /// Execute the piece's turn.
+    /// </summary>
+    /// <param name="state"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public void RunStateLogic(ChessPieceState state)
     {
         switch (state)
@@ -684,9 +767,9 @@ public class ChessPiece : MonoBehaviour
                 OnEndState?.Invoke();
                 ServiceLocator.GetService<UnitOrderTimelineController>().NodeOffset++;
                 ServiceLocator.GetService<ExecutionOrderManager>().AdvanceQueue();
-                
+
                 State = ChessPieceState.INACTIVE;
-                
+
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(state), state, null);
@@ -698,6 +781,9 @@ public class ChessPiece : MonoBehaviour
         return $"{piece.GetSpeedRepresentation()} {piece.Team} {piece.PieceType} ({piece.AssignedSquare.IndexCode})";
     }
 
+    /// <summary>
+    /// Decide a tile to move to.
+    /// </summary>
     private void ValidateBestMove()
     {
         StartCoroutine(ValidateBestMoveDelayed());
@@ -705,14 +791,14 @@ public class ChessPiece : MonoBehaviour
 
     private IEnumerator ValidateBestMoveDelayed()
     {
-        if (PossibleInteractableTiles.Count < 1 )
+        if (PossibleInteractableTiles.Count < 1)
         {
             if (GlobalDebug.Instance.ShowCombatMessageLogs) Debug.Log("\t\tNo move choices. Staying put\n");
             yield return new WaitForSeconds(0.5f);
             OnMoveEnd?.Invoke(AssignedSquare);
             yield break;
         }
-    
+
         yield return new WaitForSeconds(0.5f);
         var dst = _ai.Value.RecommendMove();
         dst.TargetFlash();
@@ -742,43 +828,16 @@ public class ChessPiece : MonoBehaviour
         string s = "";
         for (int i = 0; i < _speed; i++)
         {
-            s +=(">");
+            s += (">");
         }
 
         return s;
     }
 
-    private void FalseSearchTiles(List<BoardSquare> tiles, float timePerTile)
-    {
-        _highlightMoveTween?.Kill();
-        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
-        _highlightRoutine = StartCoroutine(DelayedFalseSearch(tiles, timePerTile));
-        _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
-    }
-
-    private IEnumerator DelayedFalseSearch(List<BoardSquare> tiles, float delay)
-    {
-        foreach (var tile in tiles)
-        {
-            Sequence s = DOTween.Sequence();
-            s.AppendCallback(() => { tile.Highlight(Team); });
-            s.AppendInterval(delay*2);
-            
-            s.AppendCallback(() => { tile.UnHighlight(); });
-            //s.AppendInterval(delay/2);
-
-            yield return new WaitForSeconds(delay);
-        }
-
-        State = ChessPieceState.VALIDATE_BEST_MOVE;
-
-    }
-
-
     public static ChessPieceData GetStartData(ChessPieceType PieceType)
     {
         ChessPieceData data;
-        
+
         switch (PieceType)
         {
             case ChessPieceType.Pawn:
@@ -805,13 +864,13 @@ public class ChessPiece : MonoBehaviour
 
         return data;
     }
-    
+
     //Selected State Logic
     private void Selected()
     {
         LightOn();
         ServiceLocator.GetService<CameraManager>().FocusTile(this);
-        if(Team == Team.Friendly) _upgradeButtonUIController.Show();
+        if (Team == Team.Friendly) _upgradeButtonUIController.Show();
         _audioManager.Value.PlaySound(Sound.ENEMY_Activate, gameObject);
     }
 
@@ -819,7 +878,7 @@ public class ChessPiece : MonoBehaviour
     private void Deselected()
     {
         LightOff();
-        if(Team == Team.Friendly) _upgradeButtonUIController.Hide();
+        if (Team == Team.Friendly) _upgradeButtonUIController.Hide();
     }
 
     /// <summary>
@@ -828,7 +887,7 @@ public class ChessPiece : MonoBehaviour
     public void HighlightTiles(List<BoardSquare> tiles, float totalAnimTime)
     {
         _highlightMoveTween?.Kill();
-        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
+        if (_highlightRoutine != null) StopCoroutine(_highlightRoutine);
         _highlightRoutine = StartCoroutine(DelayedHighlight(tiles, totalAnimTime));
         _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition + Vector3.up * 0.01f, 0.2f).SetEase(Ease.InOutSine);
         LastHighlightedTiles = tiles;
@@ -838,11 +897,11 @@ public class ChessPiece : MonoBehaviour
     {
         float totalAnimationTime = totalAnimTime;
         float incrementTiming = totalAnimationTime / tiles.Count;
-        
+
         //Highlight own square
         AssignedSquare.Highlight(Team);
         yield return new WaitForSeconds(incrementTiming);
-        
+
         foreach (var tile in tiles)
         {
             tile.SetAudio(Team);
@@ -852,46 +911,52 @@ public class ChessPiece : MonoBehaviour
             yield return new WaitForSeconds(incrementTiming);
         }
     }
-    
+
     /// <summary>
-    /// UnHighlight a list of BoardSquare tiles given in parameters
+    /// Unhighlight a list of BoardSquare tiles given in parameters
     /// </summary>
     public void UnHighlightTiles(List<BoardSquare> tiles)
     {
         _highlightMoveTween?.Kill();
         _highlightMoveTween = Sprite.gameObject.transform.DOLocalMove(_spritePosition, 0.2f).SetEase(Ease.InOutSine);
-        
-        if(_highlightRoutine != null) StopCoroutine(_highlightRoutine);
-        
+
+        if (_highlightRoutine != null) StopCoroutine(_highlightRoutine);
+
         //UnHighlight own square
         AssignedSquare.UnHighlight();
-        
+
         foreach (var tile in tiles)
         {
             tile.UnHighlight();
         }
     }
-    
+
+    /// <summary>
+    /// Run on destruction of this piece.
+    /// </summary>
     private void OnDestroy()
     {
-        
+
         if (IsCheckingKing)
         {
             IsCheckingKing = false;
             _boardManager.Value.CheckIfKingIsInCheck();
         }
-        
+
         if (_upgradeButtonUIController != null && Team == Team.Friendly)
         {
             _upgradeButtonUIController.SpeedButton.EventHandler.OnMouseDown -= OnSpeedUpgradePressed;
             _upgradeButtonUIController.RangeButton.EventHandler.OnMouseDown -= OnRangeUpgradePressed;
         }
-        
+
         _boardManager.Value.OnKingChecked -= CheckedLogic;
         _boardManager.Value.OnNoKingChecked -= NotCheckedLogic;
-        
+
     }
 
+    /// <summary>
+    /// Run when the piece is killed.
+    /// </summary>
     private void Killed()
     {
         BeamController beam = Instantiate(GlobalGameAssets.Instance.BeamVFXDeathPrefab).GetComponent<BeamController>();
@@ -927,7 +992,7 @@ public class ChessPiece : MonoBehaviour
         _light.color = GlobalGameAssets.Instance.HighlightColor;
         _light.DOIntensity(_lightIntensity, 0.5f);
     }
-    
+
     public void LightOff()
     {
         if (IsCheckingKing)

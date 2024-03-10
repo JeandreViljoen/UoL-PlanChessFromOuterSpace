@@ -2,8 +2,10 @@
 
 namespace Services
 {
-    
-
+    /// <summary>
+    /// References an external singleton object in the scene.
+    /// </summary>
+    /// <typeparam name="T">The service to reference.</typeparam>
     public struct EasyService<T> where T: Service
     {
         private EasyService(T service)
@@ -11,12 +13,17 @@ namespace Services
             _value = service;
         }
 
-
+        /// <summary>
+        /// Force retrieval of the service object.
+        /// </summary>
         public void ForceGetService()
         {
             _value = ServiceLocator.GetService<T>();
         }
 
+        /// <summary>
+        /// Check if the service named exists in the current scene.
+        /// </summary>
         public bool HasService()
         {
             return IsAssigned || ServiceLocator.GetService<T>() != null;
@@ -24,7 +31,9 @@ namespace Services
 		
         public bool IsAssigned =>_value != null;
 
-        private T _value;
+        /// <summary>
+        /// Gets a reference to the service object.
+        /// </summary>
         public T Value
         {
             get
@@ -47,7 +56,8 @@ namespace Services
                 _value = value;
             }
         }
-		
+        private T _value;
+
         public static implicit operator T(EasyService<T> easy)
         {
             return easy.Value;
