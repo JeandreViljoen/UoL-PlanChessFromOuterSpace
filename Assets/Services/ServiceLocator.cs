@@ -4,6 +4,10 @@ using UnityEngine;
 
 namespace Services
 {
+    /// <summary>
+    /// Manages all services in the current scene and exposes them to
+    /// other scripts.
+    /// </summary>
     public static class ServiceLocator
     {
         private static List<Service> _services = new List<Service>();
@@ -21,6 +25,10 @@ namespace Services
             return default;
         }
 
+        /// <summary>
+        /// Add and expose a service.
+        /// </summary>
+        /// <param name="service">The service to add to the locater.</param>
         public static void AddService<T>(T service) where T : Service
         {
             foreach (Service existing in _services)
@@ -35,6 +43,11 @@ namespace Services
 
             _services.Add(service);
         }
+
+        /// <summary>
+        /// Remove a service from the locator.
+        /// </summary>
+        /// <param name="service">The service to remove from the locater.</param>
         public static void RemoveService(Service service)
         {
             for (int i = 0; i < _services.Count; i++)
