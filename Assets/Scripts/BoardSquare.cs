@@ -1,23 +1,45 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Services;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Represents a tile in the board.
+/// </summary>
 public class BoardSquare : MonoBehaviour
 {
-
-    // --------------- Member variables and data --------------- //
-    
+    /// <summary>
+    /// Get or set the position the tile represents.
+    /// </summary>
+    public (int x, int y) Position {
+        get => (IndexX, IndexZ);
+        set => (IndexX, IndexZ) = value;
+    }
     public int IndexX;
     public int IndexZ;
 
-    public (int x, int y) Position => (IndexX, IndexZ);
+    /// <summary>
+    /// Gets or sets the textual code of this tile.
+    /// </summary>
+    public IndexCode IndexCode
+    {
+        get
+        {
+            return _indexCode;
+        }
+        set
+        {
+            _indexCode = value;
+            IndexCodeTextField.text = _indexCode.ToString();
+        }
+    }
+    private IndexCode _indexCode;
 
-    private ChessPiece _chessPieceAssigned;
+    /// <summary>
+    /// The chess piece currently at this tile.
+    /// </summary>
     public ChessPiece ChessPieceAssigned
     {
         get
@@ -31,13 +53,13 @@ public class BoardSquare : MonoBehaviour
                 _chessPieceAssigned.AssignedSquare = this;
         }
     }
+    private ChessPiece _chessPieceAssigned;
 
+    /// <summary>
+    /// The text representation of the board's index.
+    /// </summary>
     public TextMeshPro IndexCodeTextField;
     public Transform CenterSurfaceTransform;
-    
-    private Tween _bounceAnimateTween;
-
-    private IndexCode _indexCode;
 
     public SpriteRenderer HighlightSprite;
     private Tween _tweenHighlightMove;
@@ -55,30 +77,32 @@ public class BoardSquare : MonoBehaviour
     public SpriteRenderer TargetSignalSprite;
     private Tween _tweenTargetFlash;
     
-
+    /// <summary>
+    /// The color of white tiles.
+    /// </summary>
     public Color WhiteTileColor;
+    /// <summary>
+    /// The color of black tiles.
+    /// </summary>
     public Color BlackTileColor;
 
     public MouseEventHandler EventHandler;
+    /// <summary>
+    /// The game board.
+    /// </summary>
     private EasyService<BoardManager> _boardManager;
 
+    /// <summary>
+    /// Fired on attempt to place a piece here.
+    /// </summary>
     public event Action<ChessPieceType> TrySpawnPiece;
     public event Action OnUnitBuyHighlight;
     public event Action OnUnitBuyUnHighlight;
 
-    public IndexCode IndexCode
-    {
-        get
-        {
-            return _indexCode;
-        }
-        set
-        {
-            _indexCode = value;
-            IndexCodeTextField.text = _indexCode.ToString();
-        }
-    }
-
+    /// <summary>
+    /// Sets the color of this tile.
+    /// </summary>
+    /// <param name="isWhiteTile">The color of this tile.</param>
     public void SetTileColor(bool isWhiteTile)
     {
         if (isWhiteTile)
@@ -148,10 +172,12 @@ public class BoardSquare : MonoBehaviour
         {
             IndexCodeTextField.gameObject.SetActive(false);
         }
-        
-        _bounceAnimateTween = transform.DOMove(transform.localPosition, 0.2f).SetEase(Ease.InOutSine);
     }
     
+    /// <summary>
+    /// Set the tiles's audio properties based on the piece's team.
+    /// </summary>
+    /// <param name="team">The team of the piece.</param>
     public void SetAudio(Team team)
     {
         AudioSource src = GetComponent<AudioSource>();
@@ -175,40 +201,50 @@ public class BoardSquare : MonoBehaviour
     
     // --------------- Public Functions and Methods ---------------
 
+    /// <summary>
+    /// Remove the chess piece from this tile.
+    /// </summary>
+    /// <remarks>
+    /// Unity uses manual object management for GameObjects, and you
+    /// are responsible for actually deleting it.
+    /// </remarks>
     public void Clear()
     {
         ChessPieceAssigned = null;
     }
-    
-    
-    // Returns the chess piece assigned to this board square
-    public ChessPiece GetChessPiece()
-    {
-        return ChessPieceAssigned.GetComponent<ChessPiece>();
-    }
 
-    // Returns true if there is no chess piece on this board square
+    /// <summary>
+    /// Check if tile tile is unoccupied.
+    /// </summary>
+    /// <returns>True if this tile is unoccupied.</returns>
     public bool IsEmpty()
     {
-        return (ChessPieceAssigned == null);
+        return ChessPieceAssigned == null;
     }
     
-    // Destroys the chess piece assigned to this board square, use cautiously
+    /// <summary>
+    /// Destroy the piece at this tile.
+    /// </summary>
+    /// <remarks>
+    /// You should ensure that there are no further references to the
+    /// chess piece being deleted before calling this function. Bad
+    /// things can occur otherwise.
+    /// </remarks>
     public void DestroyChessPiece()
     {
-        Debug.Log("Destroying chess piece assigned to board square with index [" + IndexX.ToString() + "," + IndexZ.ToString() + "]");
+        Debug.Log($"Destroying chess piece at tile [{IndexX}, {IndexZ}]");
         Destroy(ChessPieceAssigned);
     }
 
-    //Converts cartesian coordinates to index code. e.g. F7
+    /// <summary>
+    /// Update the index code of this piece.
+    /// </summary>
     public void SetIndexCodeFromCartesian()
     {
-        IndexCode indexCode;
-        
         //Build the string
         string indexCodeString = GetLetter(IndexZ) + GetNumberString(IndexX);
         //Convert to enum
-        bool successfulEnumConvert = Enum.TryParse(indexCodeString, out indexCode);
+        bool successfulEnumConvert = Enum.TryParse(indexCodeString, out IndexCode indexCode);
         
         if (!successfulEnumConvert)
         {
@@ -220,8 +256,12 @@ public class BoardSquare : MonoBehaviour
         
     }
 
-    //Returns corresponding Letter for Z
-    private string GetLetter(int z)
+    /// <summary>
+    /// Convert an internal file number to algebraic form.
+    /// </summary>
+    /// <param name="z">The 0-based index of the file.</param>
+    /// <returns>The algebraic notation of the file.</returns>
+    private static string GetLetter(int z)
     {
         string letter = "";
         
@@ -259,7 +299,11 @@ public class BoardSquare : MonoBehaviour
         return letter;
     }
 
-    //Returns to corresponding number for X
+    /// <summary>
+    /// Convert an internal rank number to algebraic form.
+    /// </summary>
+    /// <param name="x">The 0-based index of the rank.</param>
+    /// <returns>The algebraic notation of the rank.</returns>
     private string GetNumberString(int x)
     {
         if (x > 7)
@@ -271,6 +315,10 @@ public class BoardSquare : MonoBehaviour
         return (x + 1).ToString();
     }
 
+    /// <summary>
+    /// Highlight the tile.
+    /// </summary>
+    /// <param name="team">The team of the piece highlighted.</param>
     public void Highlight(Team team)
     {
         if (team == Team.Friendly)
@@ -291,7 +339,10 @@ public class BoardSquare : MonoBehaviour
         _tweenHighlightMove = HighlightSprite.transform.DOLocalMove(_highlightWorldPosition + Vector3.up*5f, 0.3f).SetEase(Ease.InOutSine, 3f);
         _tweenHighlightFade = HighlightSprite.DOFade(0.5f, 0.3f).SetEase(Ease.InOutSine, 3f);
     }
-    
+
+    /// <summary>
+    /// Stop highlighting the tile.
+    /// </summary>
     public void UnHighlight()
     {
         _tweenHighlightMove?.Kill();
@@ -302,6 +353,11 @@ public class BoardSquare : MonoBehaviour
         HideAttackSignal();
     }
 
+    /// <summary>
+    /// Show the capturable indicator if this tile has a piece that can
+    /// be captured by the piece specified.
+    /// </summary>
+    /// <param name="attackingPiece">The attacking piece.</param>
     public void EvaluateAttackSignal(ChessPiece attackingPiece)
     {
         if (attackingPiece == _chessPieceAssigned)
@@ -322,6 +378,9 @@ public class BoardSquare : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Shows the capturable indicator.
+    /// </summary>
     private void ShowAttackSignal()
     {
         _tweenAttackSignalFade?.Kill();
@@ -330,7 +389,10 @@ public class BoardSquare : MonoBehaviour
         _tweenAttackSignalMove = AttackSignalSprite.transform.DOLocalMove(_attackSignalPosition + Vector3.up*10f, 0.3f).SetEase(Ease.InOutSine);
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0.75f, 0.3f).SetEase(Ease.InOutSine);
     }
-    
+
+    /// <summary>
+    /// Hides the capturable indicator.
+    /// </summary>
     private void HideAttackSignal()
     {
         _tweenAttackSignalFade?.Kill();
@@ -340,6 +402,9 @@ public class BoardSquare : MonoBehaviour
         _tweenAttackSignalFade = AttackSignalSprite.DOFade(0f, 0.3f).SetEase(Ease.InOutSine);
     }
 
+    /// <summary>
+    /// Highlight the target a piece is moving to.
+    /// </summary>
     public void TargetFlash()
     {
         _tweenTargetFlash?.Kill();
