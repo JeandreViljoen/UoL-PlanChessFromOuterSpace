@@ -67,17 +67,19 @@ public class GameStateManager : MonoService
                     
                     
                     _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
-                    _scoreManager.Value.UpdateStats();
                     _boardManager.Value.CheckIfKingIsInCheck();
                     break;
                 case GameState.COMBAT:
+                    _scoreManager.Value.UpdateStats();
                     break;
                 case GameState.WIN:
+                    _scoreManager.Value.UpdateStats();
                     _hudManager.Value.WinPrompt.SetActive(true);
                     _hudManager.Value.DimPanel.gameObject.SetActive(true);
                     _hudManager.Value.StatsPanel.SetActive(true);
                     break;
                 case GameState.LOSE:
+                    _scoreManager.Value.UpdateStats();
                     _hudManager.Value.DimPanel.gameObject.SetActive(true);
                     _hudManager.Value.LosePrompt.SetActive(true);
                     _hudManager.Value.StatsPanel.SetActive(true);
