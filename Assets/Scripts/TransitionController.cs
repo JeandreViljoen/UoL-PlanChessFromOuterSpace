@@ -25,15 +25,8 @@ public class TransitionController : MonoService
         TransitionText.transform.localPosition = _startPos;
     }
 
-   
-    void Update()
-    {
-        
-    }
-
     public void Transition(GameState stateTransitioningTo, float preDelay = 0f, float holdDelay = 1f, float postDelay = 0.5f)
     {
-
         _tweenShow?.Kill();
         TransitionText.transform.localPosition = _startPos;
         SetText(stateTransitioningTo);
@@ -47,7 +40,6 @@ public class TransitionController : MonoService
         t.AppendInterval(postDelay);
         t.AppendCallback(() => { _stateManager.Value.GameState = stateTransitioningTo; });
         _tweenShow = t;
-
     }
 
     private void SetText(GameState stateTransitioningTo)

@@ -44,8 +44,7 @@ public class HudButtonsManager : MonoBehaviour
         PauseButton.onClick.AddListener(OnPauseButtonPressed);
         FightButton.onClick.AddListener(OnFightButtonPressed);
         ReturnButton.onClick.AddListener(OnReturnButtonPressed);
-
-        //_transitionController.Value.OnTransitionStart += TryShowFightButton;
+        
         _stateManager.Value.OnStateChanged += TryShowFightButton;
         _cameraManager.Value.OnCameraFocus += ShowBackButton;
         _cameraManager.Value.OnCameraTopDown += HideBackButton;
@@ -89,11 +88,6 @@ public class HudButtonsManager : MonoBehaviour
     {
         _cameraManager.Value.ResetCameraPosition();
         _audioManager.Value.PlaySound(Sound.UI_Click, ReturnButton.gameObject);
-    }
-    
-    void Update()
-    {
-        
     }
 
     private void TryShowFightButton(GameState state)

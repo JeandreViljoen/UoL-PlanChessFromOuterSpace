@@ -43,12 +43,6 @@ public class SetAutoHighlightColor : MonoBehaviour
         if (_text!= null)
         {
             _text.color = GlobalGameAssets.Instance.HighlightColor;
-           // _text.DOFade(OverrideOpacity, 0.00001f).SetUpdate(true);
         }
-    }
-    
-    void Update()
-    {
-        
     }
 }

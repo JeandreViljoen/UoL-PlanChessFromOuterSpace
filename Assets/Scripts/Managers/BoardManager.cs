@@ -48,6 +48,13 @@ public class BoardManager : MonoService
     private ChessPiece _newPieceToBuy;
 
     private ChessPiece _selectedUnit;
+    
+    // Tweens
+    private Tween _bounceAnimate;
+
+    // Services
+    private EasyService<GameStateManager> _gameStateManager;
+    private EasyService<AudioManager> _audioManager;
 
     public event Action OnSuccessfulPurchase;
     public event Action OnCancelledPurchase;
@@ -85,6 +92,10 @@ public class BoardManager : MonoService
         _selectedUnit = null;
     }
 
+    
+    /// <summary>
+    /// Sets Board manager to buying state
+    /// </summary>
     public void EnableBuyingState(ChessPieceType type)
     {
 
@@ -105,6 +116,9 @@ public class BoardManager : MonoService
     }
 
 
+    /// <summary>
+    /// Attempts to buy and place the selected unity on the board and update all related systems.
+    /// </summary>
     public void TryBuyUnit()
     {
         int cost = GlobalGameAssets.Instance.CurrencyBalanceData.GetChessPieceCost(_newPieceToBuy.PieceType);
@@ -135,6 +149,9 @@ public class BoardManager : MonoService
     public event Action<ChessPiece> OnKingChecked;
     public event Action OnNoKingChecked; 
 
+    /// <summary>
+    /// Returns a bool whether King is in danger
+    /// </summary>
     public void CheckIfKingIsInCheck()
     {
         bool foundCheck = false;
@@ -163,6 +180,9 @@ public class BoardManager : MonoService
     private bool HasBeenInitToBoard = false;
     
     
+    /// <summary>
+    /// Cancels the buy state and returns to normal functioning
+    /// </summary>
     public void CancelBuyUnit()
     {
         if (!IsBuying())
@@ -184,6 +204,9 @@ public class BoardManager : MonoService
         _isBuyingUnit = false;
     }
 
+    /// <summary>
+    /// Subscribes all tile behavior callbacks used during the Buy state.
+    /// </summary>
     private void SubscribeBuyEvents()
     {
         foreach (var tile in _boardSquares)
@@ -222,6 +245,9 @@ public class BoardManager : MonoService
         }
     }
 
+    /// <summary>
+    /// Creates a temporary piece to show where the piece is going to be placed on the board
+    /// </summary>
     private void InitNewPieceToBuy(ChessPieceType type)
     { 
         _newPieceToBuy = Instantiate(GlobalGameAssets.Instance.GetChessPiecePrefab(type)).GetComponent<ChessPiece>();
@@ -230,14 +256,6 @@ public class BoardManager : MonoService
         _newPieceToBuy.Sprite.gameObject.layer = 2;
         _newPieceToBuy.LightOn();
     }
-    
-
-    // Tweens
-    private Tween _bounceAnimate;
-
-    // Services
-    private EasyService<GameStateManager> _gameStateManager;
-    private EasyService<AudioManager> _audioManager;
 
     void Start()
     {
@@ -250,6 +268,7 @@ public class BoardManager : MonoService
 
     void Update()
     {
+        //Mouse check during buying state for Qol response
         if (_isBuyingUnit)
         {
             if (!BuyingTilesAccesHighlight.activeSelf)
@@ -316,14 +335,6 @@ public class BoardManager : MonoService
                 boardSquareComponent.name = $"TILE: {boardSquareComponent.IndexCode}";
                 _boardSquares.Add(boardSquareComponent);
 
-                // Add material to the square board
-                // MeshRenderer meshRenderer = squareBoard.GetComponent<MeshRenderer>();
-                // if (materialIteration >= _materialsArray.Length)
-                //     materialIteration = 0;
-                // Material materialToApply = _materialsArray[materialIteration];
-                // meshRenderer.material = materialToApply;
-                //  materialIteration++;
-
                 // Update new X position
                 squareBoardPosition.x += squareBoardSize.x;
             }
@@ -339,6 +350,9 @@ public class BoardManager : MonoService
         
     }
 
+    /// <summary>
+    /// Debug related code
+    /// </summary>
     private void ExecuteDebugCode()
     {
         if (GlobalDebug.Instance.PopulateBoardOnStart)

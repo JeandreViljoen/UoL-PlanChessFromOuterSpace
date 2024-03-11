@@ -24,12 +24,6 @@ public class KingController : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    
-    void Update()
-    {
-        
-    }
-
     public void ShowDeployKingPrompt()
     {
         ServiceLocator.GetService<AudioManager>().PlaySound(Sound.UI_Deny);

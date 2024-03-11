@@ -29,13 +29,6 @@ public class ScoreManager : MonoService
         SetInitialValues();
     }
 
-   
-    void Update()
-    {
-        
-    }
-
-    
     // Public Methods
     public void AddEnemyDestroyedToScore(ChessPieceType pieceType)
     {

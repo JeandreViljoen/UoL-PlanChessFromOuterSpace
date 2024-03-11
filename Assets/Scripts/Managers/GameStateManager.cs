@@ -23,6 +23,10 @@ public class GameStateManager : MonoService
 
     public ChessPiece KingReference;
 
+    /// <summary>
+    /// Logic for game state changed events. Setting a state will automatically fire all necessary events
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     public GameState GameState
     {
         get
@@ -64,8 +68,6 @@ public class GameStateManager : MonoService
                     _enemySpawner.Value.ExecuteSpawning();
                     break;
                 case GameState.PREP:
-                    
-                    
                     _currencyManager.Value.AddCurrency(GlobalGameAssets.Instance.CurrencyBalanceData.CurrencyEarnedPerRound);
                     _boardManager.Value.CheckIfKingIsInCheck();
                     break;
@@ -98,14 +100,8 @@ public class GameStateManager : MonoService
     void Start()
     {
         GameState = GameState.SPAWN;
-        //_executionOrderManager.Value.OnTimeLineInit += IncreaseTurnCount;
     }
-
-    void Update()
-    {
-        
-    }
-
+    
     public float GetTimeSinceStateChange()
     {
         return Time.time - _stateChangeTime;
@@ -123,7 +119,6 @@ public class GameStateManager : MonoService
 }
 
 
-
 public enum GameState
 {
     START,
@@ -135,23 +130,3 @@ public enum GameState
     TRANSITION
 }
 
-/*
-TODO:
-Set up data objects for different chess pieces and figure out movement mechanics + range upgrades
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*/

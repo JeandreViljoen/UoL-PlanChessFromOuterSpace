@@ -32,14 +32,24 @@ public class BeamController : MonoBehaviour
     public event Action OnFinished;
     public event Action OnDestroyed;
 
+    /// <summary>
+    /// Logic to animate the lighting beams
+    /// </summary>
+    /// <returns></returns>
     public void PlayVFX()
     {
         StartCoroutine(VFXLoop());
     }
-
+    
+    /// <summary>
+    /// Logic to animate the lighting beams
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator VFXLoop()
     {
         ServiceLocator.GetService<AudioManager>().PlaySound(Sound.Lightning, gameObject);
+        
+        //scope variables used for randomisation
         int beamRNG = 0;
         int floorRNG = 0;
         int colorRNG = 0;
@@ -49,14 +59,17 @@ public class BeamController : MonoBehaviour
         float lightStartIntensity = _light.intensity;
         float lightStartSize = _light.range;
 
+        //For each defined number of cycles
         for (int i = 0; i < _cycles; i++)
         {
+            //pick a random sprite
             beamRNG = Random.Range(0, _beamSprites.Count);
             floorRNG = Random.Range(0, _floorSprites.Count);
 
             if(_beamSprites!= null && _beamSprites.Count > 0) _beamRenderer.sprite = _beamSprites[beamRNG];
             _floorRenderer.sprite = _floorSprites[floorRNG];
 
+            //pick a random color
             colorRNG = Random.Range(0,2);
 
             if (colorRNG == 0)
@@ -81,9 +94,11 @@ public class BeamController : MonoBehaviour
 
             lightRNG = Random.Range(0f, 0.5f);
 
-            
+            //Flash lights randomly
             _light.intensity = lightStartIntensity + lightRNG;
             _light.range = lightStartSize + lightRNG*4;
+            
+            //Wait time between cycles
             yield return new WaitForSeconds(_cycleSpeed);
         }
         OnFinished?.Invoke();

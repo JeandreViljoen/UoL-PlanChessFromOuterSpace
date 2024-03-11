@@ -21,6 +21,9 @@ public class UnitOrderTimelineController : MonoService
     private int _nodeOffset;
     public int _maxNodeOffset;
 
+    /// <summary>
+    /// Depicts the position of scroll in the timeline
+    /// </summary>
     public int NodeOffset
     {
         get
@@ -99,6 +102,9 @@ public class UnitOrderTimelineController : MonoService
        
     }
 
+    /// <summary>
+    /// Startup and refresh of full timeline
+    /// </summary>
     public void InitTimeline()
     {
         ClearTimeline();
@@ -143,6 +149,10 @@ public class UnitOrderTimelineController : MonoService
         _nodes.Clear();
     }
 
+    
+    /// <summary>
+    /// Refresh timeline positions depending on the NodeOffset (Used to scroll)
+    /// </summary>
     public void RefreshTimelinePositions()
     {
         for (int i = 0; i < _nodes.Count; i++)
@@ -165,6 +175,10 @@ public class UnitOrderTimelineController : MonoService
         }
     }
 
+    
+    /// <summary>
+    /// A kind of refresh for the timeline, but without clearing the list. Instead it reorders objects if theyve gone out of sync due to being killed or upgraded.
+    /// </summary>
     public void RefreshListIndices()
     {
         if (_stateManager.Value.GameState != GameState.PREP)
@@ -186,6 +200,10 @@ public class UnitOrderTimelineController : MonoService
         RefreshTimelinePositions();
     }
 
+    /// <summary>
+    /// Adds a new timeline node and initialise related variables
+    /// </summary>
+    /// <param name="piece"></param>
     public void AddNode(ChessPiece piece)
     {
         TimelineNode node = Instantiate(TimelineNodePrefab, transform).GetComponent<TimelineNode>();
@@ -216,6 +234,10 @@ public class UnitOrderTimelineController : MonoService
         }
     }
     
+    /// <summary>
+    /// Removes a timeline node from the given parameter
+    /// </summary>
+    /// <param name="nodeToRemove"></param>
     public void RemoveTimelineNode(TimelineNode nodeToRemove)
     {
         StartCoroutine(DelayedKill(nodeToRemove));

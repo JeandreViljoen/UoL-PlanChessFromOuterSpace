@@ -8,11 +8,7 @@ public class MenuManager : MonoService
 {
     public PauseMenu PauseMenu;
     public bool IsPaused = false;
-    void Start()
-    {
-        
-    }
-
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.M)) // On Hitting the escape key the MainMenu shows up

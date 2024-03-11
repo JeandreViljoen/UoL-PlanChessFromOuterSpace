@@ -37,6 +37,7 @@ public class ExecutionOrderManager : MonoService
     {
         if (_unitOrder == null) _unitOrder = new LinkedList<ChessPiece>();
         
+        //Orders the board pieces using certain conditions
         _unitOrder.Clear();
         foreach (var piece in _boardManager.Value.ListofPieces
             .OrderByDescending(piece => piece.Speed)
@@ -49,6 +50,9 @@ public class ExecutionOrderManager : MonoService
         OnTimeLineRefresh?.Invoke();
     }
 
+    /// <summary>
+    /// Advances the active unit by one during combat phase.
+    /// </summary>
     public void AdvanceQueue()
     {
         _currentActiveUnit = _currentActiveUnit.Next;
@@ -98,6 +102,11 @@ public class ExecutionOrderManager : MonoService
 
     }
 
+    /// <summary>
+    /// Additional logic to fire during state transitions (as opposed to state changes)
+    /// </summary>
+    /// <param name="state"></param>
+    /// <exception cref="ArgumentOutOfRangeException"></exception>
     private void StateTransitionLogic(GameState state)
     {
         switch (state)
@@ -146,7 +155,6 @@ public class ExecutionOrderManager : MonoService
     {
         RefreshTimelineOrder();
         OnTimeLineInit?.Invoke();
-        //TODO: SHow shop
 
     }
 }

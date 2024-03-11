@@ -36,7 +36,6 @@ public class PauseMenu : MonoBehaviour
                 Resume();
             }
         }
-        
     }
 
     public void Pause()

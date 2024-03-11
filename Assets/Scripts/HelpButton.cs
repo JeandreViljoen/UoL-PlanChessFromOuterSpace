@@ -7,23 +7,8 @@ using TMPro;
 
 public class HelpButton : MonoBehaviour
 {
-    // Start is called before the first frame update
-
-    
-    void Start()
+    public void Helptext()
     {
-        
-       
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-public void Helptext()
-    {
-        Debug.Log("I am Help");
         gameObject.SetActive(!gameObject.activeSelf);
     }
     

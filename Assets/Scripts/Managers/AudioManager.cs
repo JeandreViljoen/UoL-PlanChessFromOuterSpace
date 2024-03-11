@@ -26,9 +26,6 @@ public class AudioManager : MonoService
         _soundEffectAudioSource = AudioObject.transform.Find("SoundEffectAudio").GetComponent<AudioSource>();
         _backgroundMusicAudioSource = AudioObject.transform.Find("BackgroundAudio").GetComponent<AudioSource>();
 
-        // Init background music
-        //PlayMusic(Music.Track1);
-        
         _isInitialized = true;
     }
 

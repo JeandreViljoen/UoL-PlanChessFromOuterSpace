@@ -6,8 +6,6 @@ using UnityEngine;
 public class SpeedIconUIController : MonoBehaviour
 {
     public GameObject SpeedIconPrefab;
-    //private LayoutGroup3D _layout;
-    //public List<GameObject> SpeedIcons;
 
     private int _speed;
     public int Speed
@@ -23,31 +21,8 @@ public class SpeedIconUIController : MonoBehaviour
         }
     }
     
-    void Start()
-    {
-        //_layout = GetComponent<LayoutGroup3D>();
-    }
-
-    void Update()
-    {
-        
-    }
-
     void UpdateUI()
     {
-        
-        // for (int i = 0; i < SpeedIcons.Count; i++)
-        // {
-        //     if (i < _speed)
-        //     {
-        //         SpeedIcons[i].gameObject.SetActive(true);
-        //     }
-        //     else
-        //     {
-        //         SpeedIcons[i].gameObject.SetActive(false);
-        //     }
-        // }
-        
         int delta = _speed - transform.childCount;
         
         if (delta > 0)
@@ -64,7 +39,6 @@ public class SpeedIconUIController : MonoBehaviour
                 Destroy(transform.GetChild(transform.childCount-1).gameObject);
             }
         }
-
     }
     
     

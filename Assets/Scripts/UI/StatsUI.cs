@@ -45,18 +45,10 @@ public class StatsUI : MonoBehaviour
        
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnEnable()
     {
         UpdateStats();
     }
-    
-    
 
     public void UpdateStats()
     {

@@ -37,14 +37,7 @@ public class UpgradeButton : MonoBehaviour
     private Tween _tweenHighlightRotate;
     private Tween _tweenPriceMove;
     private Vector3 _priceStartPos;
-
     private Vector3 _startScale;
-
-    private void OnEnable()
-    {
-        
-        
-    }
 
     private void Awake()
     {
@@ -61,11 +54,6 @@ public class UpgradeButton : MonoBehaviour
         _startScale = transform.localScale;
         
         BackGround.color = GlobalGameAssets.Instance.HighlightColor;
-    }
-    
-    void Update()
-    {
-        
     }
 
     private void OnHighlight(PointerEventData _)

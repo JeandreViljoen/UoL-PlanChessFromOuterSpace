@@ -22,18 +22,12 @@ public class StateTextOverlay : MonoBehaviour
             _gameStateManager.Value.OnStateChanged += UpdateState;
             UpdateState(_gameStateManager.Value.GameState);
         }
-        
     }
 
     private void UpdateState(GameState state)
     {
         gameObject.SetActive(true);
         _textField.text = "STATE: <color=#AAFFAAAA>" + state.ToString() + "</color>";
-    }
-    
-    void Update()
-    {
-        
     }
 
     private void OnDestroy()

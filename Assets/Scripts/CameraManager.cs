@@ -42,10 +42,6 @@ public class CameraManager : MonoService
         _mainCam = Camera.main;
     }
 
-    void Start()
-    {
-    }
-    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -62,6 +58,9 @@ public class CameraManager : MonoService
         }
     }
 
+    /// <summary>
+    /// Resets The camera position to top-down view
+    /// </summary>
     public void ResetCameraPosition()
     {
         _isFocused = false;
@@ -75,13 +74,15 @@ public class CameraManager : MonoService
         _tweenFOV = _mainCam.DOFieldOfView(ResetFOV, TransitionSpeed).SetEase(Ease.InOutSine);
 
         ServiceLocator.GetService<BoardManager>().SelectedUnit = null;
-        //ServiceLocator.GetService<BoardManager>().EnableAllPieceLights();
         _audioManager.Value.PlaySound(Sound.UI_CameraMove, _mainCam.gameObject);
         OnCameraTopDown?.Invoke();
         
-
     }
 
+    /// <summary>
+    /// Focus a the camera on the given BoardSquare in parameters
+    /// </summary>
+    /// <param name="piece"></param>
     public void FocusTile(ChessPiece piece)
     {
         _isFocused = true;
@@ -90,9 +91,7 @@ public class CameraManager : MonoService
 
         Vector3 focusPosition = new Vector3(tile.IndexZ, FocusHeight, tile.IndexX - 0.6f);
         Vector3 focusRotation = new Vector3(FocusXRotation, 0f, 0f);
-        
-        //ServiceLocator.GetService<BoardManager>().DisableAllPieceLights();
-        
+
         _tweenPosition?.Kill();
         _tweenRotation?.Kill();
         _tweenFOV?.Kill();

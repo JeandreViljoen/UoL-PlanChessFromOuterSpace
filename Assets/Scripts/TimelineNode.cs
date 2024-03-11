@@ -27,17 +27,11 @@ public class TimelineNode : MonoBehaviour
 
     private Transform _assignedNode;
     private bool _isDying = false;
-    
-    void Start()
-    {
-        
-    }
 
-    void Update()
-    {
-        
-    }
-
+    /// <summary>
+    /// Assigns a reference to a chess piece on the game board and then fully initialises other references and dependencies
+    /// </summary>
+    /// <param name="piece"></param>
     public void SetPiece(ChessPiece piece)
     {
         Piece = piece;
@@ -50,15 +44,13 @@ public class TimelineNode : MonoBehaviour
             _portraitBorder.color = GlobalDebug.Instance.EnemyTintColor;
             _portraitBorder.DOFade(0.3f, 0.00001f);
         }
-        else
-        {
-            //_portraitBorder.color = GlobalGameAssets.Instance.HighlightColor;
-        }
 
-        
         SetUpEventHandlers();
     }
 
+    /// <summary>
+    /// Refresh the node UI to update latest values
+    /// </summary>
     public void RefreshPiece()
     {
         _speedIcons.IconsToShow = Piece.Speed;
@@ -66,6 +58,9 @@ public class TimelineNode : MonoBehaviour
         _levelText.text = $"LEVEL {Piece.Level}";
     }
 
+    /// <summary>
+    /// Baseline logic for initialisation
+    /// </summary>
     private void InitPiece()
     {
         Piece.TimelineNode = this;
@@ -85,12 +80,16 @@ public class TimelineNode : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Animates moving the node to a given position
+    /// </summary>
+    /// <param name="node"></param>
+    /// <param name="speed"></param>
     public void MoveNode(Transform node, float speed)
     {
         _moveTween?.Kill();
         Sequence s = DOTween.Sequence();
         s.Append(transform.DOLocalMove(node.localPosition, speed).SetEase(Ease.InOutSine));
-        //s.AppendCallback(() => { _panelsContainerBasePosition = node.localPosition; });
         _moveTween = s;
     }
     
@@ -159,10 +158,6 @@ public class TimelineNode : MonoBehaviour
         _tweenBulletpointScale = _bulletpoint.transform.DOScale(Vector3.one *1.2f, killTime);
         k.Append( _panelsContainer.transform.DOLocalMove(_panelsContainerBasePosition + Vector3.right*100f, killTime).SetEase(Ease.InOutSine));
         k.AppendCallback(() => { Destroy(gameObject);});
-
-
-
-
     }
     
 }

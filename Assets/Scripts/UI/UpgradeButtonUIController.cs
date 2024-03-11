@@ -26,13 +26,6 @@ public class UpgradeButtonUIController : MonoBehaviour
         _cameraManager.Value.OnCameraTopDown += Hide;
         Hide();
     }
-
-
-    void Update()
-    {
-
-    }
-
     public void Show()
     {
         RefreshCosts();
@@ -48,26 +41,6 @@ public class UpgradeButtonUIController : MonoBehaviour
         RangeButton.gameObject.SetActive(false);
         Button3.gameObject.SetActive(false);
     }
-
-//     public void SubscribeToButtonPress(ButtonType type, Action<PointerEventData> callback)
-//     {
-//         switch (type)
-//         {
-//             case ButtonType.SPEED:
-//                 SpeedButton.OnMouseDown += callback;
-//                 break;
-//             case ButtonType.RANGE:
-//                 RangeButton.OnMouseDown += callback;
-//                 break;
-//             case ButtonType.BUTTON3:
-//                 Button3.OnMouseDown += callback;
-//                 break;
-//             default:
-//                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
-//         }
-//     }
-// }
-
 
     private void OnDestroy()
     {

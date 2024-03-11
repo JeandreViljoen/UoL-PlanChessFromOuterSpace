@@ -23,14 +23,8 @@ public class MusicManager : MonoService
             ServiceLocator.GetService<BoardManager>().OnKingChecked += (c) => { SetDangerLayer(0.5f); };
             ServiceLocator.GetService<BoardManager>().OnNoKingChecked += () => { SetDangerLayer(0f); };
         }
-       
     }
-    
-    void Update()
-    {
-        
-    }
-    
+
     private Tween _menuMusicTween;
     private Tween _layer1Tween;
     private Tween _layer2Tween;
@@ -41,6 +35,9 @@ public class MusicManager : MonoService
     private Tween _layer7Tween_combat_perc;
     private Tween _layer8Tween_danger;
 
+    /// <summary>
+    /// Play game music
+    /// </summary>
     public void PlayGameMusic()
     {
     
@@ -53,6 +50,9 @@ public class MusicManager : MonoService
         IsMusicEnabled = true;
     }
 
+    /// <summary>
+    /// Play main menu music
+    /// </summary>
     public void PlayMenuMusic()
     {
         MenuMusic.Play();
@@ -60,6 +60,9 @@ public class MusicManager : MonoService
         _menuMusicTween = MenuMusic.DOFade(MusicVolume, 1f);
     }
 
+    /// <summary>
+    /// Enables all the base layers in the music
+    /// </summary>
     public void EnableBaseLayers()
     {
         _layer1Tween?.Kill();
@@ -78,12 +81,19 @@ public class MusicManager : MonoService
         _layer5Tween = Layers[4].DOFade(MusicVolume, TransitionTimes);
     }
 
+    /// <summary>
+    /// Sets volume for Danger music layer (shepherd tone)
+    /// </summary>
+    /// <param name="amount"></param>
     public void SetDangerLayer(float amount)
     {
         _layer8Tween_danger?.Kill();
         _layer8Tween_danger = Layers[7].DOFade(amount, TransitionTimes);
     }
 
+    /// <summary>
+    /// Enables all combat state defined layers
+    /// </summary>
     public void EnableCombatLayers()
     {
         _layer6Tween_combat?.Kill();
@@ -93,6 +103,9 @@ public class MusicManager : MonoService
         _layer7Tween_combat_perc = Layers[6].DOFade(MusicVolume, TransitionTimes);
     }
     
+    /// <summary>
+    /// Disables all combat state defined layers
+    /// </summary>
     public void DisableCombatLayers()
     {
         _layer6Tween_combat?.Kill();

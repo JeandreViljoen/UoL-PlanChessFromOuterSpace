@@ -22,15 +22,6 @@ public class TimelineSpeedIcons : MonoBehaviour
         }
     }
 
-    void Start()
-    {
-    }
-
-    void Update()
-    {
-        
-    }
-
     private void SetIcons(int value)
     {
         for (int i = 0; i < SpeedIcons.Count; i++)

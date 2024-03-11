@@ -27,11 +27,6 @@ public class CheckUI : MonoBehaviour
         ServiceLocator.GetService<CameraManager>().OnCameraTopDown += RecheckCheck;
     }
 
-    void Update()
-    {
-        
-    }
-
     public void Show(ChessPiece _)
     {
         _fadeHeader?.Kill();

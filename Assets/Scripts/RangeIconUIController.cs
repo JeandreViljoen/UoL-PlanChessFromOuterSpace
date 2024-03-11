@@ -5,7 +5,6 @@ using UnityEngine;
 public class RangeIconUIController : MonoBehaviour
 {
     public GameObject RangeIconPrefab;
-    //public List<GameObject> RangeIcons;
 
     private int _range;
     public int Range
@@ -23,17 +22,6 @@ public class RangeIconUIController : MonoBehaviour
 
     void UpdateUI()
     {
-        // for (int i = 0; i < RangeIcons.Count; i++)
-        // {
-        //     if (i < _range)
-        //     {
-        //         RangeIcons[i].gameObject.SetActive(true);
-        //     }
-        //     else
-        //     {
-        //         RangeIcons[i].gameObject.SetActive(false);
-        //     }
-        // }
         int delta = _range - transform.childCount;
         
         if (delta > 0)

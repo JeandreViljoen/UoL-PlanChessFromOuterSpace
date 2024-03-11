@@ -237,21 +237,6 @@ public class ChessPiece : MonoBehaviour
     [SerializeField] private float _lightIntensity = 3f;
     private Tween _tweenLight;
 
-    // private Vector2 _position;
-    // private IndexCode _indexCodePosition;
-    //
-    // public IndexCode IndexCodePosition
-    // {
-    //     get
-    //     {
-    //         return _indexCodePosition;
-    //     }
-    //     set
-    //     {
-    //         _indexCodePosition = value;
-    //     }
-    // }
-
     public event Action OnEndState;
     public event Action<BoardSquare> OnMoveEnd;
     public event Action StateLogicCompleted;
@@ -988,7 +973,6 @@ public class ChessPiece : MonoBehaviour
     public void LightOn()
     {
         _tweenLight?.Kill();
-        //_light.color = Color.white;
         _light.color = GlobalGameAssets.Instance.HighlightColor;
         _light.DOIntensity(_lightIntensity, 0.5f);
     }

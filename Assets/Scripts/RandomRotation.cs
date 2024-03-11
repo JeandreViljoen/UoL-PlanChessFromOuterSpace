@@ -17,11 +17,5 @@ public class RandomRotation : MonoBehaviour
         
         transform.Rotate(Vector3.forward, rng*DegreeIncrement);
     }
-
-    
-    void Update()
-    {
-        
-    }
 }
 

@@ -4924,6 +4924,36 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_ScaleFactor
+      value: 0.65
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_ScreenMatchMode
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_DefaultSpriteDPI
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_FallbackScreenDPI
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 498679407633453175, guid: be40eae696d6ec94494a9284d19172af,
+        type: 3}
+      propertyPath: m_MatchWidthOrHeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 541932090568897098, guid: be40eae696d6ec94494a9284d19172af,
         type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
